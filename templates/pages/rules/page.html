@@ -2,7 +2,7 @@
 to Play{% endblock %} {% block content %}
 <div class="rules-container p-12">
     <div
-        class="flex flex-row gap-6 items-center border-b-[#2b74a8] border-b-4 pb-6 mb-6"
+        class="flex flex-row gap-6 items-center border-b-[#dddddd]/25 border-b-4 pb-6 mb-6"
     >
         <a
             href="/"
@@ -15,7 +15,7 @@ to Play{% endblock %} {% block content %}
         </h1>
     </div>
 
-    <div class="p-4 border-b-[#2b74a8] border-b-4 pb-6 mb-6">
+    <div class="p-4 border-b-[#dddddd]/25 border-b-4 pb-6 mb-6">
         <div class="flex flex-col gap-12">
             <div class="lucida-bright flex flex-col gap-3 tracking-normal">
                 <div
@@ -58,7 +58,7 @@ to Play{% endblock %} {% block content %}
                 >
                     <div class="text-xl flex flex-col gap-3">
                         <h1 class="harry-potter text-7xl mb-6">
-                            $pecial Cards
+                            $pecial Card$
                         </h1>
                         <h1>
                             20 Special cards: 4 per house (Hallows, Shield,
@@ -114,7 +114,7 @@ to Play{% endblock %} {% block content %}
         </div>
     </div>
 
-    <div class="p-4 border-b-[#2b74a8] border-b-4 pb-6 mb-6">
+    <div class="p-4 border-b-[#dddddd]/25 border-b-4 pb-6 mb-6">
         <div class="flex flex-col gap-12">
             <div class="lucida-bright flex flex-col gap-3 tracking-normal">
                 <div
@@ -182,7 +182,7 @@ to Play{% endblock %} {% block content %}
         </div>
     </div>
 
-    <div class="p-4 border-b-[#2b74a8] border-b-4 pb-6 mb-6">
+    <div class="p-4 border-b-[#dddddd]/25 border-b-4 pb-6 mb-6">
         <div class="flex flex-col gap-12">
             <div class="text-center">
                 <h1 class="harry-potter text-7xl">
@@ -271,7 +271,7 @@ to Play{% endblock %} {% block content %}
                         class="flex flex-row justify-between py-8 px-16 items-center"
                     >
                         <div class="text-xl flex flex-col gap-3 w-1/2">
-                            <h1 class="harry-potter text-7xl">
+                            <h1 class="harry-potter text-7xl mb-6">
                                 H<span class="text-5xl">ɸ</span>u$e Effect
                             </h1>
                             <h1 class="leading-relaxed">
@@ -306,6 +306,101 @@ to Play{% endblock %} {% block content %}
                             />
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4">
+        <div class="flex flex-col gap-12">
+            <div class="lucida-bright flex flex-col gap-3 tracking-normal">
+                <div
+                    class="flex flex-row gap-32 justify-between py-8 px-16 items-center"
+                >
+                    <div class="flex flex-col gap-4 w-2/3">
+                        <h1 class="harry-potter text-7xl mb-6">
+                            $tarting a New R<span class="text-5xl">ɸ</span>und
+                        </h1>
+                        <div class="flex flex-row gap-16">
+                            <div
+                                class="text-xl flex flex-col gap-3 leading-relaxed"
+                            >
+                                <h1>
+                                    Move all cards in round discard pile to the
+                                    bottom of the leftover deck.
+                                </h1>
+                                <h1>Reset current sum = 0.</h1>
+                                <h1>
+                                    Draw a new starting card from leftover deck
+                                    (as above).
+                                </h1>
+                                <h1>
+                                    Players do not draw new hands unless
+                                    specified above — they keep playing with
+                                    cards in hand until they need to draw from
+                                    personal deck.
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    <img
+                        src="/static/cards/z_base_card.png"
+                        alt="Target Icon"
+                        class="w-1/5 h-1/5 object-fit mr-16"
+                    />
+                </div>
+            </div>
+
+            <div class="lucida-bright flex flex-col gap-3 tracking-normal">
+                <div
+                    class="flex flex-row-reverse gap-32 justify-between py-8 px-16 items-center"
+                >
+                    <div class="flex flex-col gap-4 w-2/3">
+                        <h1 class="harry-potter text-7xl mb-6">
+                            Drawing Card$ int<span class="text-5xl">ɸ</span> Hand
+                        </h1>
+                        <div class="flex flex-row gap-16">
+                            <div
+                                class="text-xl flex flex-col gap-3 leading-relaxed"
+                            >
+                                <h1>
+                                   Whenever a card is played from your hand, pick the top card from your personal deck into your hand.
+                                </h1>
+                                <h1>If personal deck runs out, you cannot draw more — last cards in hand are your final plays, hinting that you are closer to victory.</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <img
+                        src="/static/icons/z_random_square.png"
+                        alt="Target Icon"
+                        class="w-1/5 h-1/5 object-fit mr-16"
+                    />
+                </div>
+            </div>
+
+            <div class="lucida-bright flex flex-col gap-3 tracking-normal">
+                <div
+                    class="flex flex-row gap-32 justify-between py-8 px-16 items-center"
+                >
+                    <div class="flex flex-col gap-4 w-2/3">
+                        <h1 class="harry-potter text-7xl mb-6">
+                            Winning the Game
+                        </h1>
+                        <div class="flex flex-row gap-16">
+                            <div
+                                class="text-xl flex flex-col gap-3 leading-relaxed"
+                            >
+                                <h1>
+                                   The first player to play all cards from their personal deck and hand wins immediately.
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    <img
+                        src="/static/icons/color_alpha.png"
+                        alt="Target Icon"
+                        class="w-1/5 h-1/5 object-fit mr-16"
+                    />
                 </div>
             </div>
         </div>
