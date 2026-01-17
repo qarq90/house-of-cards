@@ -14,20 +14,27 @@
     - Mirror – Add the same number as the last played number card.
     - Shift – Swap one hand card with the top card of your deck.
 
+  - House Effect: The game will track which house card a player has played. If the same house card is played 3 consecutive times
+  in the same round by the same player, the player can remove/discard one of the two cards in thier hands back in to the leftover deck (not personal deck).
+
+<br>
+
+---
+
 ### Setup
 
 1. Choose player count (2–4).
-2. Set limit based on players (suggestion):  
+2. Set limit based on players:  
    - 2 players → limit = 15  
    - 3 players → limit = 21  
    - 4 players → limit = 25
-3. Deal each player x cards (suggestion):  
+3. Distribute each player x cards:  
    - 2 players → x = 15 each  
    - 3 players → x = 12 each  
    - 4 players → x = 10 each  
    The rest form the leftover deck.
-4. Each player looks at their cards once, memorizes them, then places them face down as their personal deck.
-5. Each player shuffles their personal deck and draws the top two cards to form their hand. The rest stay face down beside them.
+4. Each player looks at their cards once, then shuffles and places them face down as their personal deck.
+5. Finally each player draws the top two cards to form their hand. The rest stay face down beside them.
 
 <br>
 
@@ -43,11 +50,12 @@
 
 - Sum < limit: Next player plays.
 - Sum = limit:  
-  → All other players draw 2 cards each from leftover deck without looking and add them to their personal deck.  
-  → The player who exactly hit limit may reshuffle their personal deck but will not draw 2 new cards, instead after shuffling will pick two from their set (rest remain face down).  
+  → All other players draw extra 2 cards each from leftover deck without looking and add them to their personal deck.  
+  → The player who exactly hit limit may choose reshuffle their personal deck but will not draw 2 new cards, instead after shuffling will pick two from their set (rest remain face down).  
   → New round begins.
 - Sum > limit:  
   → The player who exceeded draws cards equal to the value they just played from leftover deck, adds them to personal deck.  
+  → This player can may choose reshuffle their personal deck, and after shuffling will pick two from their set (rest remain face down).
   → New round begins.
 
 <br>
@@ -67,8 +75,8 @@
 
 ### Drawing Cards into Hand
 
-- When your hand is empty, draw 2 cards from the top of your personal deck into hand.
-- If personal deck runs out, you cannot draw more — last cards in hand are your final plays.
+- Whenever a card is played from your hand, pick the top card from your personal deck into your hand.
+- If personal deck runs out, you cannot draw more — last cards in hand are your final plays, hinting that you are closer to victory.
 
 <br>
 
@@ -77,4 +85,3 @@
 ### Winning
 
 - The first player to play all cards from their personal deck and hand wins immediately.
-- Alternatively, if multiple players finish, the one with fewer penalty cards wins? (But your rules simply state: “the player can exit when their cards finish” — so first to empty their cards wins.)
