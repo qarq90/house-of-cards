@@ -10,7 +10,12 @@ module.exports = {
             colors: {
                 bg: "var(--bg)",
                 fg: "var(--fg)",
-                ac: "var(--ac)"
+                ac: "var(--ac)",
+
+                gf: "var(--gf)",
+                hf: "var(--hf)",
+                rn: "var(--rn)",
+                sl: "var(--sl)",
             },
         },
     },

@@ -3,19 +3,18 @@
 ### Components
 
 - Total 100 cards divided into Numericals and Specials.
+    - 80 Numerical cards: 4 houses (Griffon, Ravenclaw, Hufflepuff, Slytherin).
+        - Each house has 2 copies of numbers 0–9.
 
-  - 80 Numerical cards: 4 houses (Griffon, Raven, Hufflepuff, Slytherin).
-    - Each house has 2 copies of numbers 0–9.
+    - 20 Special cards: 4 per house (Hallows, Shield, Echo, Mirror, Swap)
+        - Hallows – Instantly hit the limit; others draw two, you reshuffle.
+        - Shield – Cancels the effect of Echo or Mirror just played.
+        - Echo – Next number card played counts double toward the sum.
+        - Mirror – Add the same number as the last played number card.
+        - Swap – Swap one hand card with the top card of your deck.
 
-  - 20 Special cards: 4 per house (Hallows, Shield, Echo, Mirror, Swap)
-    - Hallows – Instantly hit the limit; others draw two, you reshuffle.
-    - Shield – Cancels the effect of Echo or Mirror just played.
-    - Echo – Next number card played counts double toward the sum.
-    - Mirror – Add the same number as the last played number card.
-    - Shift – Swap one hand card with the top card of your deck.
-
-  - House Effect: The game will track which house card a player has played. If the same house card is played 3 consecutive times
-  in the same round by the same player, the player can remove/discard one of the two cards in thier hands back in to the leftover deck (not personal deck).
+    - House Effect: The game will track which house card a player has played. If the same house card is played 3 consecutive times
+      in the same round by the same player, the player can remove/discard one of the two cards in thier hands back in to the leftover deck (not personal deck).
 
 <br>
 
@@ -24,15 +23,15 @@
 ### Setup
 
 1. Choose player count (2–4).
-2. Set limit based on players:  
-   - 2 players → limit = 15  
-   - 3 players → limit = 21  
-   - 4 players → limit = 25
-3. Distribute each player x cards:  
-   - 2 players → x = 15 each  
-   - 3 players → x = 12 each  
-   - 4 players → x = 10 each  
-   The rest form the leftover deck.
+2. Set limit based on players:
+    - 2 players → limit = 15
+    - 3 players → limit = 21
+    - 4 players → limit = 25
+3. Distribute each player x cards:
+    - 2 players → x = 15 each
+    - 3 players → x = 12 each
+    - 4 players → x = 10 each  
+      The rest form the leftover deck.
 4. Each player looks at their cards once, then shuffles and places them face down as their personal deck.
 5. Finally each player draws the top two cards to form their hand. The rest stay face down beside them.
 

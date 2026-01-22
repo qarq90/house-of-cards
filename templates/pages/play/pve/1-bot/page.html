@@ -1,10 +1,15 @@
 {% extends 'layouts/home_layout.html' %} {% block title %}House of Cards |
-PvP{% endblock %} {% block content %}
+PvE{% endblock %} {% block content %}
 <div class="non-game-container">
-    <h1 class="harry-potter title tracking-widest">P<span class="text-8xl">V</span>P</h1>
+    <h1 class="harry-potter title tracking-widest">P<span class="text-8xl">V</span>E</h1>
     <div class="flex flex-col gap-6 items-center justify-center">
         <a
-            href="/"
+            href="/play/pve/1-bot/game"
+            class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest"
+            >Start Game</a
+        >
+        <a
+            href="/play/pve"
             class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest"
             >Go Back</a
         >

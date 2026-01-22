@@ -1,3 +1,5 @@
+import random
+
 griffon_cards = [
     {"house": "griffon", "name": "0", "value": 0, "src": "../static/cards/gryffindor_0_1.png"},
     {"house": "griffon", "name": "0", "value": 0, "src": "../static/cards/gryffindor_0_2.png"},
@@ -110,39 +112,34 @@ slytherin_cards = [
     {"house": "slytherin", "name": "swap", "value": 0, "src": "../static/cards/slytherin_swap.png"},
 ]
 
-def getShuffledDeck():
-    import random
+
+def get_player_deck():
     completeDeck = griffon_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
     newDeck = []
     for i in range(0, 11):
         newDeck.append(completeDeck.pop(random.randint(0, len(completeDeck)-1)))
     return newDeck
-       
-       
-player_A_cards = getShuffledDeck()
-player_B_cards = getShuffledDeck()
-player_C_cards = getShuffledDeck()
-player_D_cards = getShuffledDeck()
 
-print("Player A Cards:", player_A_cards, end='\n\n')
-print("Player B Cards:", player_B_cards, end='\n\n')    
-print("Player C Cards:", player_C_cards, end='\n\n')
-print("Player D Cards:", player_D_cards)
 
-def getHouseProbabilities(player_cards):
-    griffon_count = sum(1 for card in player_cards if card["house"] == "griffon")
-    hufflepuff_count = sum(1 for card in player_cards if card["house"] == "hufflepuff")
-    ravenclaw_count = sum(1 for card in player_cards if card["house"] == "ravenclaw")
-    slytherin_count = sum(1 for card in player_cards if card["house"] == "slytherin")
-    total_cards = len(player_cards)
-    return {
-        "griffon": griffon_count / total_cards,
-        "hufflepuff": hufflepuff_count / total_cards,
-        "ravenclaw": ravenclaw_count / total_cards,
-        "slytherin": slytherin_count / total_cards,
-    }
+class House():
+    GRYFFINDOR = "gryffindor"
+    HUFFLEPUFF = "hufflepuff"
+    RAVENCLAW = "ravenclaw"
+    SLYTHERIN = "slytherin"
+
+
+class CardType():
+    NUMERICAL = "numerical"
+    HALLOWS = "hallows"
+    ECHO = "echo"
+    MIRROR = "mirror"
+    SHIELD = "shield"
+    SWAP = "swap"
     
-print("\nPlayer A House Probabilities:", getHouseProbabilities(player_A_cards))
-print("Player B House Probabilities:", getHouseProbabilities(player_B_cards))   
-print("Player C House Probabilities:", getHouseProbabilities(player_C_cards))
-print("Player D House Probabilities:", getHouseProbabilities(player_D_cards))
+
+class Player():
+    def __init__(self, name):
+        self.name = name
+        self.personal_deck = get_player_deck()
+        self.hand = []
+        self.cards_left = len(self.personal_deck) + len(self.hand)
