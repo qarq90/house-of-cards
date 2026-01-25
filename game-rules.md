@@ -3,7 +3,7 @@
 ### Components
 
 - Total 100 cards divided into Numericals and Specials.
-    - 80 Numerical cards: 4 houses (Griffon, Ravenclaw, Hufflepuff, Slytherin).
+    - 80 Numerical cards: 4 houses (gryffindor, Ravenclaw, Hufflepuff, Slytherin).
         - Each house has 2 copies of numbers 0–9.
 
     - 20 Special cards: 4 per house (Hallows, Shield, Echo, Mirror, Swap)

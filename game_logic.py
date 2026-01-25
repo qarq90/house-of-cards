@@ -6,7 +6,7 @@ import json
 
 class House(Enum):
     """The four houses in the game."""
-    GRIFFON = "griffon"
+    gryffindor = "gryffindor"
     RAVEN = "ravenclaw"  # Note: Your card list uses "ravenclaw"
     HUFFLEPUFF = "hufflepuff"
     SLYTHERIN = "slytherin"
@@ -191,17 +191,17 @@ class HouseOfCardsGame:
     def _load_all_cards(self) -> List[Card]:
         """Load all 100 cards from the card lists."""
         # Import card data from your existing lists
-        from card_lists import griffon_cards, hufflepuff_cards, ravenclaw_cards, slytherin_cards
+        from card_lists import gryffindor_cards, hufflepuff_cards, ravenclaw_cards, slytherin_cards
         
         house_map = {
-            "griffon": House.GRIFFON,
+            "gryffindor": House.gryffindor,
             "hufflepuff": House.HUFFLEPUFF,
             "ravenclaw": House.RAVEN,
             "slytherin": House.SLYTHERIN
         }
         
         all_cards = []
-        all_cards_dicts = griffon_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
+        all_cards_dicts = gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
         
         for card_dict in all_cards_dicts:
             house = house_map[card_dict["house"]]

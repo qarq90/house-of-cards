@@ -1,9 +1,44 @@
-{% extends 'layouts/home_layout.html' %} {% block title %}House of Cards |
-PvE | 1 Bot | Game{% endblock %} {% block content %}
-<div class="non-game-container">
-    <h1 class="harry-potter title tracking-widest">P<span class="text-8xl">V</span>E</h1>
-    <div class="flex flex-col gap-6 items-center justify-center">
-        
+{% extends 'layouts/game_layout.html' %} {% block title %}House of Cards | PvE |
+1 Bot | Game{% endblock %} {% block content %}
+<div class="game-container">
+  <div class="flex flex-col justify-center items-center gap-4 rotate-180">
+    <h1>{{ bot.name }}</h1>
+    <div class="flex flex-row gap-6 items-center justify-center">
+      {% for card in bot_1_cards %}
+      <div class="card">
+        <img src="{{ card.src }}" alt="{{ card.house }} {{ card.name }}" />
+      </div>
+      {% endfor %}
     </div>
+  </div>
+  <div class="relative w-full h-64">
+    <img
+      src="../../../../../../static/cards/z_base_card.png"
+      alt="random_card"
+      class="rotate-90 absolute -left-32 top-1/2 transform -translate-y-1/2 scale-[35%]"
+    />
+
+    <h1
+      class="harry-potter title tracking-widest absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
+      0
+    </h1>
+
+    <h1
+      class="harry-potter title tracking-widest absolute top-1/2 right-0 transform -translate-y-1/2"
+    >
+      $
+    </h1>
+  </div>
+  <div class="flex flex-col justify-center items-center gap-4">
+    <h1>Player Cards</h1>
+    <div class="flex flex-row gap-6 items-center justify-center">
+      {% for card in player_cards %}
+      <div class="card">
+        <img src="{{ card.src }}" alt="{{ card.house }} {{ card.name }}" />
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}

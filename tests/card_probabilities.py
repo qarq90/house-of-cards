@@ -1,29 +1,29 @@
-griffon_cards = [
-    {"house": "griffon", "name": "0", "value": 0, "src": "../static/cards/gryffindor_0_1.png"},
-    {"house": "griffon", "name": "0", "value": 0, "src": "../static/cards/gryffindor_0_2.png"},
-    {"house": "griffon", "name": "1", "value": 1, "src": "../static/cards/gryffindor_1_1.png"},
-    {"house": "griffon", "name": "1", "value": 1, "src": "../static/cards/gryffindor_1_2.png"},
-    {"house": "griffon", "name": "2", "value": 2, "src": "../static/cards/gryffindor_2_1.png"},
-    {"house": "griffon", "name": "2", "value": 2, "src": "../static/cards/gryffindor_2_2.png"},
-    {"house": "griffon", "name": "3", "value": 3, "src": "../static/cards/gryffindor_3_1.png"},
-    {"house": "griffon", "name": "3", "value": 3, "src": "../static/cards/gryffindor_3_2.png"},
-    {"house": "griffon", "name": "4", "value": 4, "src": "../static/cards/gryffindor_4_1.png"},
-    {"house": "griffon", "name": "4", "value": 4, "src": "../static/cards/gryffindor_4_2.png"},
-    {"house": "griffon", "name": "5", "value": 5, "src": "../static/cards/gryffindor_5_1.png"},
-    {"house": "griffon", "name": "5", "value": 5, "src": "../static/cards/gryffindor_5_2.png"},
-    {"house": "griffon", "name": "6", "value": 6, "src": "../static/cards/gryffindor_6_1.png"},
-    {"house": "griffon", "name": "6", "value": 6, "src": "../static/cards/gryffindor_6_2.png"},
-    {"house": "griffon", "name": "7", "value": 7, "src": "../static/cards/gryffindor_7_1.png"},
-    {"house": "griffon", "name": "7", "value": 7, "src": "../static/cards/gryffindor_7_2.png"},
-    {"house": "griffon", "name": "8", "value": 8, "src": "../static/cards/gryffindor_8_1.png"},
-    {"house": "griffon", "name": "8", "value": 8, "src": "../static/cards/gryffindor_8_2.png"},
-    {"house": "griffon", "name": "9", "value": 9, "src": "../static/cards/gryffindor_9_1.png"},
-    {"house": "griffon", "name": "9", "value": 9, "src": "../static/cards/gryffindor_9_2.png"},
-    {"house": "griffon", "name": "mirror", "value": 0, "src": "../static/cards/gryffindor_mirror.png"},
-    {"house": "griffon", "name": "hallows", "value": 0, "src": "../static/cards/gryffindor_hallows.png"},
-    {"house": "griffon", "name": "echo", "value": 0, "src": "../static/cards/gryffindor_echo.png"},
-    {"house": "griffon", "name": "shield", "value": 0, "src": "../static/cards/gryffindor_shield.png"},
-    {"house": "griffon", "name": "swap", "value": 0, "src": "../static/cards/gryffindor_swap.png"},
+gryffindor_cards = [
+    {"house": "gryffindor", "name": "0", "value": 0, "src": "../static/cards/gryffindor_0_1.png"},
+    {"house": "gryffindor", "name": "0", "value": 0, "src": "../static/cards/gryffindor_0_2.png"},
+    {"house": "gryffindor", "name": "1", "value": 1, "src": "../static/cards/gryffindor_1_1.png"},
+    {"house": "gryffindor", "name": "1", "value": 1, "src": "../static/cards/gryffindor_1_2.png"},
+    {"house": "gryffindor", "name": "2", "value": 2, "src": "../static/cards/gryffindor_2_1.png"},
+    {"house": "gryffindor", "name": "2", "value": 2, "src": "../static/cards/gryffindor_2_2.png"},
+    {"house": "gryffindor", "name": "3", "value": 3, "src": "../static/cards/gryffindor_3_1.png"},
+    {"house": "gryffindor", "name": "3", "value": 3, "src": "../static/cards/gryffindor_3_2.png"},
+    {"house": "gryffindor", "name": "4", "value": 4, "src": "../static/cards/gryffindor_4_1.png"},
+    {"house": "gryffindor", "name": "4", "value": 4, "src": "../static/cards/gryffindor_4_2.png"},
+    {"house": "gryffindor", "name": "5", "value": 5, "src": "../static/cards/gryffindor_5_1.png"},
+    {"house": "gryffindor", "name": "5", "value": 5, "src": "../static/cards/gryffindor_5_2.png"},
+    {"house": "gryffindor", "name": "6", "value": 6, "src": "../static/cards/gryffindor_6_1.png"},
+    {"house": "gryffindor", "name": "6", "value": 6, "src": "../static/cards/gryffindor_6_2.png"},
+    {"house": "gryffindor", "name": "7", "value": 7, "src": "../static/cards/gryffindor_7_1.png"},
+    {"house": "gryffindor", "name": "7", "value": 7, "src": "../static/cards/gryffindor_7_2.png"},
+    {"house": "gryffindor", "name": "8", "value": 8, "src": "../static/cards/gryffindor_8_1.png"},
+    {"house": "gryffindor", "name": "8", "value": 8, "src": "../static/cards/gryffindor_8_2.png"},
+    {"house": "gryffindor", "name": "9", "value": 9, "src": "../static/cards/gryffindor_9_1.png"},
+    {"house": "gryffindor", "name": "9", "value": 9, "src": "../static/cards/gryffindor_9_2.png"},
+    {"house": "gryffindor", "name": "mirror", "value": 0, "src": "../static/cards/gryffindor_mirror.png"},
+    {"house": "gryffindor", "name": "hallows", "value": 0, "src": "../static/cards/gryffindor_hallows.png"},
+    {"house": "gryffindor", "name": "echo", "value": 0, "src": "../static/cards/gryffindor_echo.png"},
+    {"house": "gryffindor", "name": "shield", "value": 0, "src": "../static/cards/gryffindor_shield.png"},
+    {"house": "gryffindor", "name": "swap", "value": 0, "src": "../static/cards/gryffindor_swap.png"},
 ]
 
 hufflepuff_cards = [
@@ -112,7 +112,7 @@ slytherin_cards = [
 
 def getShuffledDeck():
     import random
-    completeDeck = griffon_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
+    completeDeck = gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
     newDeck = []
     for i in range(0, 11):
         newDeck.append(completeDeck.pop(random.randint(0, len(completeDeck)-1)))
@@ -130,13 +130,13 @@ print("Player C Cards:", player_C_cards, end='\n\n')
 print("Player D Cards:", player_D_cards)
 
 def getHouseProbabilities(player_cards):
-    griffon_count = sum(1 for card in player_cards if card["house"] == "griffon")
+    gryffindor_count = sum(1 for card in player_cards if card["house"] == "gryffindor")
     hufflepuff_count = sum(1 for card in player_cards if card["house"] == "hufflepuff")
     ravenclaw_count = sum(1 for card in player_cards if card["house"] == "ravenclaw")
     slytherin_count = sum(1 for card in player_cards if card["house"] == "slytherin")
     total_cards = len(player_cards)
     return {
-        "griffon": griffon_count / total_cards,
+        "gryffindor": gryffindor_count / total_cards,
         "hufflepuff": hufflepuff_count / total_cards,
         "ravenclaw": ravenclaw_count / total_cards,
         "slytherin": slytherin_count / total_cards,

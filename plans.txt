@@ -1,3 +1,5 @@
-Dobby
-Hedwig
-Scabbers
+Bots
+    Dobby
+    Hedwig
+    Scabbers
+    Crookshanks
