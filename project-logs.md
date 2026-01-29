@@ -11,3 +11,4 @@
 | 22/01/2026 | Code           | Created game pages                    |
 | 24/01/2026 | Bots           | Rules Page 1.5, Designed Bots         |
 | 25/01/2026 | Deployed       | URL: https://tipu.pythonanywhere.com/ |
+| 26/01/2026 | Designing      | Added a line to distinguish 6 and 9   |

@@ -52,6 +52,13 @@ a {
     font-weight: 700;
 }
 
+.heading {
+    color: var(--fg);
+    font-size: 3rem;
+    line-height: 1;
+    font-weight: 700;
+}
+
 .button-link {
     width: fit-content;
     padding: 0.75rem 1.5rem;

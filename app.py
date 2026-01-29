@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, session
 import json
 import random
 import uuid
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = '170105245166'
@@ -159,8 +160,10 @@ def get_personal_deck(number_of_cards):
         newDeck.append(all_cards.pop(random.randint(0, len(all_cards) -1)))
     return newDeck
 
+
 @app.route('/')
 def home():
+    session.clear()
     return render_template('index.html')
 
 
@@ -178,19 +181,39 @@ def play_pve():
 def play_pve_1_bot():
     return render_template('pages/play/pve/1-bot/page.html')
 
+
 @app.route('/play/pve/1-bot/game')
 def play_pve_1_bot_game():
-    player_cards = get_personal_deck(10)
-    bot_1_cards = get_personal_deck(10)
-    bot = bots[0]
+    session.clear()
 
-    leftover_cards = []
+    session.update({
+            'player': {
+                'name': "Hitler",
+                'cards': get_personal_deck(10)
+            },
+            'bot_dobby': {
+                'name': "Dobby",
+                'cards': get_personal_deck(10)
+            }
+        })
+    
+    botInteger = random.randint(1,4)
+    botName = ""
+    botImageSrc = ""
+    if botInteger == 1:
+        botName = "Dobby"
+        botImageSrc = "/static/icons/x_color_dobby.png"
+    if botInteger == 2:
+        botName = "Scabbers"
+        botImageSrc = "/static/icons/x_color_scabbers.png"
+    if botInteger == 3:
+        botName = "Hedwig"
+        botImageSrc = "/static/icons/x_color_Hedwig.png"
+    if botInteger == 4:
+        botName = "Crookshanks"
+        botImageSrc = "/static/icons/x_color_crookshanks.png"
 
-    for card in all_cards:
-        if card not in player_cards and card not in bot_1_cards:
-            leftover_cards.append(card)
-
-    return render_template('pages/play/pve/1-bot/game/page.html', player_cards = player_cards, bot = bot, bot_1_cards = bot_1_cards, leftover_cards = leftover_cards)
+    return render_template('pages/play/pve/1-bot/game/page.html', playerRecievedCards = session["player"]["cards"], bot1Name = botName , bot1ImageSrc = botImageSrc, botRecievedCards = session["bot_dobby"]["cards"])
 
 
 @app.route('/play/pve/2-bot')
@@ -205,7 +228,7 @@ def play_pve_2_bot_game():
 
 @app.route('/play/pve/3-bot')
 def play_pve_3_bot():
-    return render_template('pages/play/pve/3-bot/page.html')
+    return render_template('pages/play/pve/2-bot/game/page.html')
 
 
 @app.route('/play/pve/3-bot/game')
