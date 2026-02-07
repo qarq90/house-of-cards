@@ -1,0 +1,203 @@
+{% extends 'layouts/game_layout.html' %} {% block title %}House of Cards | PvE |
+1 Bot | Game{% endblock %} {% block content %}
+<div
+    id="timer-indicator"
+    class="fixed top-0 left-0 w-full h-3 bg-[var(--bg)] z-[999999999]"
+>
+    &nbsp;
+</div>
+<div
+    id="timer-indicator-bg"
+    class="fixed top-0 left-0 w-full h-3 bg-[var(--fg)] z-[99999999]"
+>
+    &nbsp;
+</div>
+
+<!-- Dobby -->
+<div
+    id="bot_dobby"
+    class="w-96 flex flex-row absolute top-7 right-7 items-center gap-3"
+>
+    <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
+        <p
+            id="bot_dobby_name"
+            class="harry-potter text-4xl heading tracking-widest"
+        >
+            {{ bots.dobby.name }}
+        </p>
+        <img
+            id="bot_dobby_icon"
+            src="{{ bots.dobby.image_src }}"
+            alt="bot_dobby_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_dobby_deck"
+        class="flex flex-col-reverse justify-center items-center gap-4 w-1/2"
+    >
+        <p class="harry-potter heading tracking-widest">
+            {{ bots.dobby.cards|length }} left
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="rotate-180 w-[170.666px] h-[238.666px]"
+        />
+    </div>
+</div>
+
+<!-- Crookshanks -->
+<div
+    id="bot_crookshanks"
+    class="w-96 flex flex-row-reverse absolute top-7 left-7 items-center gap-3"
+>
+    <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
+        <p
+            id="bot_crookshanks_name"
+            class="harry-potter text-4xl heading tracking-widest"
+        >
+            {{ bots.crookshanks.name }}
+        </p>
+        <img
+            id="bot_crookshanks_icon"
+            src="{{ bots.crookshanks.image_src }}"
+            alt="bot_crookshanks_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_crookshanks_deck"
+        class="flex flex-col-reverse justify-center items-center gap-4 w-1/2"
+    >
+        <p class="harry-potter heading tracking-widest">
+            {{ bots.crookshanks.cards|length }} left
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="rotate-180 w-[170.666px] h-[238.666px]"
+        />
+    </div>
+</div>
+
+<!-- Hedwig -->
+<div
+    id="bot_hedwig"
+    class="w-96 flex flex-row absolute bottom-7 right-7 items-center gap-3"
+>
+    <div
+        class="relative flex flex-col-reverse gap-4 items-center justify-center w-1/2"
+    >
+        <p
+            id="bot_hedwig_name"
+            class="harry-potter text-4xl heading tracking-widest"
+        >
+            {{ bots.hedwig.name }}
+        </p>
+        <img
+            id="bot_hedwig_icon"
+            src="{{ bots.hedwig.image_src }}"
+            alt="bot_hedwig_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_hedwig_deck"
+        class="flex flex-col justify-center items-center gap-4 w-1/2"
+    >
+        <p class="harry-potter heading tracking-widest">
+            {{ bots.hedwig.cards|length }} left
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="rotate-180 w-[170.666px] h-[238.666px]"
+        />
+    </div>
+</div>
+
+<!-- Trevor -->
+<div
+    id="bot_trevor"
+    class="w-96 flex flex-row-reverse absolute bottom-7 left-7 items-center gap-3"
+>
+    <div
+        class="relative flex flex-col-reverse gap-4 items-center justify-center w-1/2"
+    >
+        <p
+            id="bot_trevor_name"
+            class="harry-potter text-4xl heading tracking-widest"
+        >
+            {{ bots.trevor.name }}
+        </p>
+        <img
+            id="bot_trevor_icon"
+            src="{{ bots.trevor.image_src }}"
+            alt="bot_trevor_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_trevor_deck"
+        class="flex flex-col justify-center items-center gap-4 w-1/2"
+    >
+        <p class="harry-potter heading tracking-widest">
+            {{ bots.trevor.cards|length }} left
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="rotate-180 w-[170.666px] h-[238.666px]"
+        />
+    </div>
+</div>
+
+<!-- ------------------------------------------------------------------------------------------- -->
+
+<div class="game-container">
+    <div class="relative w-full h-64">
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="rotate-90 absolute left-12 top-1/2 transform -translate-y-1/2 w-[187.733px] h-[262.533px]"
+        />
+
+        <h1
+            id="currentValue"
+            class="harry-potter text-8xl tracking-widest absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        >
+            0
+        </h1>
+
+        <h1
+            id="targetValue"
+            class="harry-potter text-8xl tracking-widest absolute top-1/2 right-0 transform -translate-y-1/2"
+        >
+            -->27<--
+        </h1>
+    </div>
+
+    <div
+        id="bot_dobby_hand_cards"
+        class="hidden flex-row gap-8 justify-center items-center absolute top-0 left-0 w-full"
+    ></div>
+
+    <div
+        id="bot_hedwig_hand_cards"
+        class="hidden flex-row gap-8 justify-center items-center absolute top-0 left-0 w-full"
+    ></div>
+
+    <div
+        id="bot_scabbers_hand_cards"
+        class="hidden flex-row gap-8 justify-center items-center absolute top-0 left-0 w-full"
+    ></div>
+
+    <div
+        id="bot_crookshanks_hand_cards"
+        class="hidden flex-row gap-8 justify-center items-center absolute top-0 left-0 w-full"
+    ></div>
+
+    <script src="../../../../../../static/scripts/simulate.js"></script>
+    {% endblock %}
+</div>

@@ -6,7 +6,7 @@ let gameStarted = false;
 let playerTurn = true;
 let timerInterval = null;
 
-const totalTime = 200; // Increased to 5 seconds for gameplay
+const totalTime = 5000; // Increased to 5 seconds for gameplay
 
 let playerHandCardsElements = [];
 let botHandCardsElements = [];
@@ -496,9 +496,10 @@ function moveText() {
         });
 
         // Show game elements
-        document.getElementById("bot-icon").style.display = "flex";
-        document.getElementById("player-cards-stack").style.display = "flex";
-        document.getElementById("bots-cards-stack").style.display = "flex";
+        document.getElementById("bot").style.display = "flex";
+        document.getElementById("player").style.display = "flex";
+        document.getElementById("player-deck").style.display = "flex";
+        document.getElementById("bot-deck").style.display = "flex";
         document.getElementById("bot-hand-cards").style.display = "flex";
         document.getElementById("player-hand-cards").style.display = "flex";
 

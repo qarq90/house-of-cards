@@ -3,6 +3,7 @@ import json
 import random
 import uuid
 from datetime import datetime
+import random
 
 app = Flask(__name__)
 app.secret_key = '170105245166'
@@ -153,7 +154,6 @@ bots = [
 ]
 
 def get_personal_deck(number_of_cards):
-    import random
     all_cards = gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
     newDeck = []
     for i in range(0, number_of_cards):
@@ -239,6 +239,35 @@ def play_pve_3_bot_game():
 @app.route('/play/pvp')
 def play_pvp():
     return render_template('pages/play/pvp/page.html')
+
+
+@app.route('/play/simulate')
+def play_simulate():
+    
+    bots = {
+        'dobby': {
+            'name': "Dobby",
+            'image_src': "/static/icons/x_color_dobby.png",
+            'cards': get_personal_deck(10)
+        },
+        'trevor': {
+            'name': "Trevor",
+            'image_src': "/static/icons/x_color_trevor.png",
+            'cards': get_personal_deck(10)
+        },
+        'hedwig': {
+            'name': "Hedwig",
+            'image_src': "/static/icons/x_color_hedwig.png",
+            'cards': get_personal_deck(10)
+        },
+        'crookshanks': {
+            'name': "Crookshanks",
+            'image_src': "/static/icons/x_color_crookshanks.png",
+            'cards': get_personal_deck(10)
+        }
+    }
+    
+    return render_template('pages/play/simulate/page.html', bots=bots)
 
 
 if __name__ == '__main__':

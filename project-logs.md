@@ -13,3 +13,4 @@
 | 25/01/2026 | Deployed       | URL: https://tipu.pythonanywhere.com/ |
 | 26/01/2026 | Designing      | Added a line to distinguish 6 and 9   |
 | 26/01/2026 | Code           | Game Layout                           |
+| 08/02/2026 | Designing      | Bot Trevor                            |
