@@ -1,9 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
     // ============ Constants =====================================================================================================================================
 
+    // ============ Constants =====================================================================================================================================
+
     const timerIndicator = document.getElementById("timer-indicator");
     const timerIndicatorBG = document.getElementById("timer-indicator-bg");
     const totalTime = 5000;
+
+    const currentValueElement = document.getElementById("current_value");
+    const targetValueElement = document.getElementById("target_value");
+    const currentRoundElement = document.getElementById("current_round");
 
     const leftoverDeckElement = document.querySelectorAll(".leftover_deck");
 
@@ -26,6 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const botTrevorHandElement = document.getElementById(
         "bot_trevor_hand_cards",
     );
+
+    // ============ Constants =====================================================================================================================================
 
     // ============ Constants =====================================================================================================================================
 
@@ -668,8 +676,12 @@ document.addEventListener("DOMContentLoaded", () => {
         },
     ];
 
-    let allCards =
-        gryffindorCards + hufflepuffCards + ravenclawCards + slytherinCards;
+    let allCards = [
+        ...gryffindorCards,
+        ...hufflepuffCards,
+        ...ravenclawCards,
+        ...slytherinCards,
+    ];
 
     let leftoverDeck = [];
 
@@ -727,6 +739,48 @@ document.addEventListener("DOMContentLoaded", () => {
         return shuffled.slice(0, 2);
     }
 
+    function createPersonalDeck(cardElements) {
+        return Array.from(cardElements).map((card) => {
+            const img = card.querySelector("img");
+            return {
+                element: card,
+                img: img,
+                used: false,
+                data: {
+                    id: generateRandomString(),
+                    name: img ? img.dataset.cardName : "unknown",
+                    house: img ? img.dataset.cardHouse : "unknown",
+                    src: img ? img.src : "",
+                    value:
+                        img && img.dataset.cardValue
+                            ? parseInt(img.dataset.cardValue)
+                            : 0,
+                },
+            };
+        });
+    }
+
+    function displayBotHand(hand, containerElement, prefix, rotate) {
+        if (!containerElement) return;
+
+        containerElement.innerHTML = "";
+
+        hand.forEach((card) => {
+            if (!card || !card.data) return;
+
+            const cardElement = document.createElement("img");
+            cardElement.src = card.data.src;
+            cardElement.id = `${prefix}_${card.data.id}`;
+            cardElement.alt = `${card.data.house} ${card.data.name}`;
+            cardElement.classList.add("w-[170.666px]", "h-[238.666px]");
+
+            if (rotate) {
+                cardElement.classList.add("rotate-180");
+            }
+
+            containerElement.appendChild(cardElement);
+        });
+    }
     // ============ Helper Funtions =====================================================================================================================================
 
     // ============ Helper Funtions =====================================================================================================================================
@@ -736,139 +790,50 @@ document.addEventListener("DOMContentLoaded", () => {
     // ============ Game Logic =====================================================================================================================================
 
     function startGame() {
-        leftoverCards = Array.from(leftoverDeckElement).map((card) => ({
-            element: card,
-            img: card.querySelector("img"),
-            used: false,
-            data: {
-                id: generateRandomString(),
-                name: card.querySelector("img").dataset.cardName,
-                house: card.querySelector("img").dataset.cardHouse,
-                src: card.querySelector("img").src,
-                value:
-                    parseInt(card.querySelector("img").dataset.cardValue) || 0,
-            },
-        }));
-
-        botDobbyCards = Array.from(botDobbyCardsElements).map((card) => ({
-            element: card,
-            img: card.querySelector("img"),
-            used: false,
-            data: {
-                id: generateRandomString(),
-                name: card.querySelector("img").dataset.cardName,
-                house: card.querySelector("img").dataset.cardHouse,
-                src: card.querySelector("img").src,
-                value:
-                    parseInt(card.querySelector("img").dataset.cardValue) || 0,
-            },
-        }));
-
-        botCrookshanksCards = Array.from(botCrookshanksCardsElements).map(
-            (card) => ({
-                element: card,
-                img: card.querySelector("img"),
-                used: false,
-                data: {
-                    id: generateRandomString(),
-                    name: card.querySelector("img").dataset.cardName,
-                    house: card.querySelector("img").dataset.cardHouse,
-                    src: card.querySelector("img").src,
-                    value:
-                        parseInt(card.querySelector("img").dataset.cardValue) ||
-                        0,
-                },
-            }),
-        );
-
-        botHedwigCards = Array.from(botHedwigCardsElements).map((card) => ({
-            element: card,
-            img: card.querySelector("img"),
-            used: false,
-            data: {
-                id: generateRandomString(),
-                name: card.querySelector("img").dataset.cardName,
-                house: card.querySelector("img").dataset.cardHouse,
-                src: card.querySelector("img").src,
-                value:
-                    parseInt(card.querySelector("img").dataset.cardValue) || 0,
-            },
-        }));
-
-        botTrevorCards = Array.from(botTrevorCardsElements).map((card) => ({
-            element: card,
-            img: card.querySelector("img"),
-            used: false,
-            data: {
-                id: generateRandomString(),
-                name: card.querySelector("img").dataset.cardName,
-                house: card.querySelector("img").dataset.cardHouse,
-                src: card.querySelector("img").src,
-                value:
-                    parseInt(card.querySelector("img").dataset.cardValue) || 0,
-            },
-        }));
+        leftoverCards = createPersonalDeck(leftoverDeckElement);
+        botDobbyCards = createPersonalDeck(botDobbyCardsElements);
+        botCrookshanksCards = createPersonalDeck(botCrookshanksCardsElements);
+        botHedwigCards = createPersonalDeck(botHedwigCardsElements);
+        botTrevorCards = createPersonalDeck(botTrevorCardsElements);
 
         botDobbyHand = getTwoRandomCards(botDobbyCards);
         botCrookshanksHand = getTwoRandomCards(botCrookshanksCards);
         botHedwigHand = getTwoRandomCards(botHedwigCards);
         botTrevorHand = getTwoRandomCards(botTrevorCards);
 
-        for (let card of botDobbyHand) {
-            const cardElement = document.createElement("img");
-            cardElement.src = card.data.src;
-            cardElement.id = `bot_dobby_card_${card.data.id}`;
-            cardElement.alt = `${card.data.house} ${card.data.name}`;
-            cardElement.classList.add(
-                "w-[170.666px]",
-                "h-[238.666px]",
-                "rotate-180",
-            );
-            if (botDobbyHandElement)
-                botDobbyHandElement.appendChild(cardElement);
-        }
+        displayBotHand(
+            botDobbyHand,
+            botDobbyHandElement,
+            "bot_dobby_card",
+            true,
+        );
+        displayBotHand(
+            botCrookshanksHand,
+            botCrookshanksHandElement,
+            "bot_crookshanks_card",
+            true,
+        );
+        displayBotHand(
+            botHedwigHand,
+            botHedwigHandElement,
+            "bot_hedwig_card",
+            false,
+        );
+        displayBotHand(
+            botTrevorHand,
+            botTrevorHandElement,
+            "bot_trevor_card",
+            false,
+        );
 
-        for (let card of botCrookshanksHand) {
-            const cardElement = document.createElement("img");
-            cardElement.src = card.data.src;
-            cardElement.id = `bot_crookshanks_card_${card.data.id}`;
-            cardElement.alt = `${card.data.house} ${card.data.name}`;
-            cardElement.classList.add(
-                "w-[170.666px]",
-                "h-[238.666px]",
-                "rotate-180",
-            );
-            if (botCrookshanksHandElement)
-                botCrookshanksHandElement.appendChild(cardElement);
-        }
-
-        for (let card of botHedwigHand) {
-            const cardElement = document.createElement("img");
-            cardElement.src = card.data.src;
-            cardElement.id = `bot_hedwig_card_${card.data.id}`;
-            cardElement.alt = `${card.data.house} ${card.data.name}`;
-            cardElement.classList.add("w-[170.666px]", "h-[238.666px]");
-            if (botHedwigHandElement)
-                botHedwigHandElement.appendChild(cardElement);
-        }
-
-        for (let card of botTrevorHand) {
-            const cardElement = document.createElement("img");
-            cardElement.src = card.data.src;
-            cardElement.id = `bot_trevor_card_${card.data.id}`;
-            cardElement.alt = `${card.data.house} ${card.data.name}`;
-            cardElement.classList.add("w-[170.666px]", "h-[238.666px]");
-            if (botTrevorHandElement)
-                botTrevorHandElement.appendChild(cardElement);
-        }
-
-        if (botDobbyHandElement) botDobbyHandElement.classList.remove("hidden");
-        if (botCrookshanksHandElement)
-            botCrookshanksHandElement.classList.remove("hidden");
-        if (botHedwigHandElement)
-            botHedwigHandElement.classList.remove("hidden");
-        if (botTrevorHandElement)
-            botTrevorHandElement.classList.remove("hidden");
+        [
+            botDobbyHandElement,
+            botCrookshanksHandElement,
+            botHedwigHandElement,
+            botTrevorHandElement,
+        ]
+            .filter((el) => el)
+            .forEach((el) => el.classList.remove("hidden"));
 
         console.log("Bot Dobby Hand:", botDobbyHand);
         console.log("Bot Crookshanks Hand:", botCrookshanksHand);

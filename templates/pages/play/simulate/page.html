@@ -1,5 +1,10 @@
 {% extends 'layouts/game_layout.html' %} {% block title %}House of Cards | PvE |
 1 Bot | Game{% endblock %} {% block content %}
+
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
 <div
     id="timer-indicator"
     class="fixed top-0 left-0 w-full h-3 bg-[var(--bg)] z-[999999999]"
@@ -13,7 +18,12 @@
     &nbsp;
 </div>
 
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
 <!----------------------------------------------------------------------- Dobby ----------------------------------------------------------------------->
+
 <div
     id="bot_dobby"
     class="w-96 flex flex-row absolute top-7 right-7 items-center gap-3"
@@ -62,6 +72,7 @@
 </div>
 
 <!----------------------------------------------------------------------- Crookshanks ----------------------------------------------------------------------->
+
 <div
     id="bot_crookshanks"
     class="w-96 flex flex-row-reverse absolute top-7 left-7 items-center gap-3"
@@ -110,6 +121,7 @@
 </div>
 
 <!----------------------------------------------------------------------- Hedwig ----------------------------------------------------------------------->
+
 <div
     id="bot_hedwig"
     class="w-96 flex flex-row absolute bottom-7 right-7 items-center gap-3"
@@ -141,7 +153,7 @@
         <img
             src="../../../../../../static/cards/z_base_card.png"
             alt="random_card"
-            class="rotate-180 w-[170.666px] h-[238.666px]"
+            class="w-[170.666px] h-[238.666px]"
         />
         {% for card in bots.hedwig.cards %}
         <div class="bot_hedwig_cards hidden">
@@ -160,6 +172,7 @@
 </div>
 
 <!----------------------------------------------------------------------- Trevor ----------------------------------------------------------------------->
+
 <div
     id="bot_trevor"
     class="w-96 flex flex-row-reverse absolute bottom-7 left-7 items-center gap-3"
@@ -191,7 +204,7 @@
         <img
             src="../../../../../../static/cards/z_base_card.png"
             alt="random_card"
-            class="rotate-180 w-[170.666px] h-[238.666px]"
+            class="w-[170.666px] h-[238.666px]"
         />
         {% for card in bots.trevor.cards %}
         <div class="bot_trevor_cards hidden">
@@ -208,6 +221,8 @@
         {% endfor %}
     </div>
 </div>
+
+<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
 
 <!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
 
@@ -231,16 +246,24 @@
     class="flex flex-row gap-8 items-center absolute bottom-7 left-[425px]"
 ></div>
 
+<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
+
+<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
+
+<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
+
 <!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
 
 <div class="game-container">
-    <div class="relative w-full h-64">
+    <div
+        class="relative w-full h-64 flex flex-row justify-between items-center px-16"
+    >
         {% for card in leftover_deck %}
         <div class="leftover_deck hidden">
             <img
                 src="{{ card.src }}"
                 alt="{{ card.house }} {{ card.name }}"
-                class="rotate-90 absolute left-16 top-1/2 transform -translate-y-1/2 w-[187.733px] h-[262.533px] invisible"
+                class="rotate-90 w-[187.733px] h-[262.533px] invisible"
                 data-card-id="{{ card.id }}"
                 data-card-name="{{ card.name }}"
                 data-card-house="{{ card.house }}"
@@ -251,23 +274,47 @@
         <img
             src="../../../../../../static/cards/z_base_card.png"
             alt="random_card"
-            class="rotate-90 absolute left-16 top-1/2 transform -translate-y-1/2 w-[187.733px] h-[262.533px]"
+            class="rotate-90 w-[187.733px] h-[262.533px]"
         />
 
         <h1
-            id="currentValue"
-            class="harry-potter text-8xl tracking-widest absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            id="current_value"
+            class="ml-64 harry-potter text-8xl tracking-widest"
         >
             0
         </h1>
 
-        <h1
-            id="targetValue"
-            class="harry-potter text-8xl tracking-widest absolute top-1/2 right-16 transform -translate-y-1/2"
-        >
-            -->27<--
-        </h1>
+        <div class="flex flex-col items-center gap-4">
+            <div class="flex items-center">
+                <span class="harry-potter text-8xl">--</span>
+                <span class="harry-potter text-6xl -rotate-90 inline-block ml-2"
+                    >V</span
+                >
+                <h1
+                    id="targetValue"
+                    class="harry-potter text-8xl tracking-widest ml-4"
+                >
+                    27
+                </h1>
+                <span class="harry-potter text-6xl rotate-90 inline-block mr-1"
+                    >V</span
+                >
+                <span class="harry-potter text-8xl">--</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <span class="lucida-bright uppercase text-2xl tracking-widest"
+                    >Round</span
+                >
+                <span id="current_round" class="harry-potter text-4xl">1</span>
+            </div>
+        </div>
     </div>
 </div>
+
+<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
+
+<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
+
 <script type="module" src="../../../../static/scripts/simulate.js"></script>
 {% endblock %}
