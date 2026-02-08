@@ -148,7 +148,7 @@ bots = [
     },
     {
         "name": "scabbers", 
-        "color_icon": "/static/icons/x_color_scabbers.png",
+        "color_icon": "/static/icons/x_color_trevor.png",
         "base_icon": "/static/icons/x_bot_scabbers.png"
     },
 ]
@@ -205,7 +205,7 @@ def play_pve_1_bot_game():
         botImageSrc = "/static/icons/x_color_dobby.png"
     if botInteger == 2:
         botName = "Scabbers"
-        botImageSrc = "/static/icons/x_color_scabbers.png"
+        botImageSrc = "/static/icons/x_color_trevor.png"
     if botInteger == 3:
         botName = "Hedwig"
         botImageSrc = "/static/icons/x_color_hedwig.png"
@@ -228,7 +228,7 @@ def play_pve_2_bot_game():
 
 @app.route('/play/pve/3-bot')
 def play_pve_3_bot():
-    return render_template('pages/play/pve/2-bot/game/page.html')
+    return render_template('pages/play/pve/3-bot/page.html')
 
 
 @app.route('/play/pve/3-bot/game')
