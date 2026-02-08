@@ -13,7 +13,7 @@
     &nbsp;
 </div>
 
-<!-- Dobby -->
+<!----------------------------------------------------------------------- Dobby ----------------------------------------------------------------------->
 <div
     id="bot_dobby"
     class="w-96 flex flex-row absolute top-7 right-7 items-center gap-3"
@@ -50,7 +50,8 @@
         </div>
         {% endfor %}
         <p class="harry-potter heading tracking-wide">
-            {{ bots.dobby.cards|length }} <span class="lucida-bright text-3xl">left</span>
+            {{ bots.dobby.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
         </p>
         <img
             src="../../../../../../static/cards/z_base_card.png"
@@ -60,7 +61,7 @@
     </div>
 </div>
 
-<!-- Crookshanks -->
+<!----------------------------------------------------------------------- Crookshanks ----------------------------------------------------------------------->
 <div
     id="bot_crookshanks"
     class="w-96 flex flex-row-reverse absolute top-7 left-7 items-center gap-3"
@@ -97,7 +98,8 @@
         </div>
         {% endfor %}
         <p class="harry-potter heading tracking-wide">
-            {{ bots.crookshanks.cards|length }} <span class="lucida-bright text-3xl">left</span>
+            {{ bots.crookshanks.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
         </p>
         <img
             src="../../../../../../static/cards/z_base_card.png"
@@ -107,7 +109,7 @@
     </div>
 </div>
 
-<!-- Hedwig -->
+<!----------------------------------------------------------------------- Hedwig ----------------------------------------------------------------------->
 <div
     id="bot_hedwig"
     class="w-96 flex flex-row absolute bottom-7 right-7 items-center gap-3"
@@ -133,7 +135,8 @@
         class="flex flex-col justify-center items-center gap-4 w-1/2"
     >
         <p class="harry-potter heading tracking-wide">
-            {{ bots.hedwig.cards|length }} <span class="lucida-bright text-3xl">left</span>
+            {{ bots.hedwig.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
         </p>
         <img
             src="../../../../../../static/cards/z_base_card.png"
@@ -156,7 +159,7 @@
     </div>
 </div>
 
-<!-- Trevor -->
+<!----------------------------------------------------------------------- Trevor ----------------------------------------------------------------------->
 <div
     id="bot_trevor"
     class="w-96 flex flex-row-reverse absolute bottom-7 left-7 items-center gap-3"
@@ -182,7 +185,8 @@
         class="flex flex-col justify-center items-center gap-4 w-1/2"
     >
         <p class="harry-potter heading tracking-wide">
-            {{ bots.trevor.cards|length }} <span class="lucida-bright text-3xl">left</span>
+            {{ bots.trevor.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
         </p>
         <img
             src="../../../../../../static/cards/z_base_card.png"
@@ -205,7 +209,7 @@
     </div>
 </div>
 
-<!-- --------------------------------------------- Hand -------------------------------------------------------------->
+<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
 
 <div
     id="bot_dobby_hand_cards"
@@ -227,10 +231,23 @@
     class="flex flex-row gap-8 items-center absolute bottom-7 left-[425px]"
 ></div>
 
-<!-- ------------------------------------------------------------------------------------------- -->
+<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
 
 <div class="game-container">
     <div class="relative w-full h-64">
+        {% for card in leftover_deck %}
+        <div class="leftover_deck hidden">
+            <img
+                src="{{ card.src }}"
+                alt="{{ card.house }} {{ card.name }}"
+                class="rotate-90 absolute left-16 top-1/2 transform -translate-y-1/2 w-[187.733px] h-[262.533px] invisible"
+                data-card-id="{{ card.id }}"
+                data-card-name="{{ card.name }}"
+                data-card-house="{{ card.house }}"
+                data-card-value="{{ card.value }}"
+            />
+        </div>
+        {% endfor %}
         <img
             src="../../../../../../static/cards/z_base_card.png"
             alt="random_card"

@@ -153,12 +153,29 @@ bots = [
     },
 ]
 
-def get_personal_deck(number_of_cards):
-    all_cards = gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
-    newDeck = []
-    for i in range(0, number_of_cards):
-        newDeck.append(all_cards.pop(random.randint(0, len(all_cards) -1)))
-    return newDeck
+def get_fresh_deck():
+    fresh_deck = gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
+    random.shuffle(fresh_deck)
+    return fresh_deck
+
+
+def deal_cards(num_players, cards_per_player):
+    all_cards = get_fresh_deck()
+    
+    total_cards_needed = num_players * cards_per_player
+    
+    if total_cards_needed > len(all_cards):
+        raise ValueError(f"Not enough cards. Need {total_cards_needed}, have {len(all_cards)}")
+    
+    player_decks = []
+    for i in range(num_players):
+        start_idx = i * cards_per_player
+        end_idx = start_idx + cards_per_player
+        player_decks.append(all_cards[start_idx:end_idx])
+    
+    leftover_deck = all_cards[total_cards_needed:]
+    
+    return player_decks, leftover_deck
 
 
 @app.route('/')
@@ -185,35 +202,44 @@ def play_pve_1_bot():
 @app.route('/play/pve/1-bot/game')
 def play_pve_1_bot_game():
     session.clear()
-
-    session.update({
-            'player': {
-                'name': "Hitler",
-                'cards': get_personal_deck(10)
-            },
-            'bot_dobby': {
-                'name': "Dobby",
-                'cards': get_personal_deck(10)
-            }
-        })
     
-    botInteger = random.randint(1,4)
-    botName = ""
-    botImageSrc = ""
+    player_decks, leftover_deck = deal_cards(num_players=2, cards_per_player=10)
+    
+    botInteger = random.randint(1, 4)
     if botInteger == 1:
         botName = "Dobby"
         botImageSrc = "/static/icons/x_color_dobby.png"
-    if botInteger == 2:
+    elif botInteger == 2:
         botName = "Scabbers"
         botImageSrc = "/static/icons/x_color_trevor.png"
-    if botInteger == 3:
+    elif botInteger == 3:
         botName = "Hedwig"
         botImageSrc = "/static/icons/x_color_hedwig.png"
-    if botInteger == 4:
+    else:  # botInteger == 4
         botName = "Crookshanks"
         botImageSrc = "/static/icons/x_color_crookshanks.png"
-
-    return render_template('pages/play/pve/1-bot/game/page.html', playerRecievedCards = session["player"]["cards"], bot1Name = botName , bot1ImageSrc = botImageSrc, botRecievedCards = session["bot_dobby"]["cards"])
+    
+    session.update({
+        'player': {
+            'name': "Hitler",
+            'cards': player_decks[0],
+            'personal_deck': player_decks[0][2:],  
+            'hand': player_decks[0][:2]
+        },
+        'bot': {
+            'name': botName,
+            'cards': player_decks[1],
+            'personal_deck': player_decks[1][2:],  
+            'hand': player_decks[1][:2]
+        },
+        'leftover_deck': leftover_deck
+    })
+    
+    return render_template('pages/play/pve/1-bot/game/page.html', 
+                         playerRecievedCards=session["player"]["cards"], 
+                         bot1Name=botName, 
+                         bot1ImageSrc=botImageSrc, 
+                         botRecievedCards=session["bot"]["cards"])
 
 
 @app.route('/play/pve/2-bot')
@@ -243,31 +269,54 @@ def play_pvp():
 
 @app.route('/play/simulate')
 def play_simulate():
+    player_decks, leftover_deck = deal_cards(num_players=4, cards_per_player=10)
+    
+    all_dealt_cards = []
+    for deck in player_decks:
+        all_dealt_cards.extend(deck)
+    
+    card_srcs = [card['src'] for card in all_dealt_cards]
+    if len(card_srcs) != len(set(card_srcs)):
+        print("WARNING: Duplicate cards found!")
+    
+    print(f"Total cards in game: {len(get_fresh_deck())}")
+    print(f"Cards dealt to bots: {len(all_dealt_cards)}")
+    print(f"Leftover deck size: {len(leftover_deck)}")
+    print(f"Sum: {len(all_dealt_cards) + len(leftover_deck)}")
     
     bots = {
         'dobby': {
             'name': "Dobby",
             'image_src': "/static/icons/x_color_dobby.png",
-            'cards': get_personal_deck(10)
+            'cards': player_decks[0],
+            'personal_deck': player_decks[0][2:], 
+            'hand': player_decks[0][:2]
         },
         'trevor': {
             'name': "Trevor",
             'image_src': "/static/icons/x_color_trevor.png",
-            'cards': get_personal_deck(10)
+            'cards': player_decks[1],
+            'personal_deck': player_decks[1][2:],
+            'hand': player_decks[1][:2]
         },
         'hedwig': {
             'name': "Hedwig",
             'image_src': "/static/icons/x_color_hedwig.png",
-            'cards': get_personal_deck(10)
+            'cards': player_decks[2],
+            'personal_deck': player_decks[2][2:],
+            'hand': player_decks[2][:2]
         },
         'crookshanks': {
             'name': "Crookshanks",
             'image_src': "/static/icons/x_color_crookshanks.png",
-            'cards': get_personal_deck(10)
-        }
+            'cards': player_decks[3],
+            'personal_deck': player_decks[3][2:],
+            'hand': player_decks[3][:2]
+        },
+        'leftover_deck': leftover_deck
     }
     
-    return render_template('pages/play/simulate/page.html', bots=bots)
+    return render_template('pages/play/simulate/page.html', bots=bots, leftover_deck=leftover_deck)
 
 
 if __name__ == '__main__':
