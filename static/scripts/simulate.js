@@ -1,14 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ============ Constants =====================================================================================================================================
-
-    // ============ Constants =====================================================================================================================================
-
     const timerIndicator = document.getElementById("timer-indicator");
     const timerIndicatorBG = document.getElementById("timer-indicator-bg");
     const totalTime = 5000;
 
     const currentValueElement = document.getElementById("current_value");
-    const targetValueElement = document.getElementById("target_value");
+    const targetValueElement = document.getElementById("targetValue");
     const currentRoundElement = document.getElementById("current_round");
 
     const leftoverDeckElement = document.querySelectorAll(".leftover_deck");
@@ -33,19 +29,31 @@ document.addEventListener("DOMContentLoaded", () => {
         "bot_trevor_hand_cards",
     );
 
-    // ============ Constants =====================================================================================================================================
+    const botDobbyElement = document.getElementById("bot_dobby");
+    const botCrookshanksElement = document.getElementById("bot_crookshanks");
+    const botHedwigElement = document.getElementById("bot_hedwig");
+    const botTrevorElement = document.getElementById("bot_trevor");
 
-    // ============ Constants =====================================================================================================================================
+    const botDobbyCardsLeftElement = document.getElementById(
+        "bot_dobby_cards_left",
+    );
+    const botCrookshanksCardsLeftElement = document.getElementById(
+        "bot_crookshanks_cards_left",
+    );
+    const botHedwigCardsLeftElement = document.getElementById(
+        "bot_hedwig_cards_left",
+    );
+    const botTrevorCardsLeftElement = document.getElementById(
+        "bot_trevor_cards_left",
+    );
 
-    // ============ Declarations =====================================================================================================================================
-
-    // ============ Declarations =====================================================================================================================================
+    const gameContainer = document.querySelector(".game-container");
 
     let timeSpace = 0;
     let timerInterval = null;
+    let gameInterval = null;
 
     let leftoverCards = [];
-
     let botDobbyCards = [],
         botCrookshanksCards = [],
         botHedwigCards = [],
@@ -56,642 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
         botHedwigHand = [],
         botTrevorHand = [];
 
-    let gryffindorCards = [
-        //  Numerical Cards
-        {
-            house: "gryffindor",
-            name: "0",
-            value: 0,
-            src: "/static/cards/gryffindor_0_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "0",
-            value: 0,
-            src: "/static/cards/gryffindor_0_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "1",
-            value: 1,
-            src: "/static/cards/gryffindor_1_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "1",
-            value: 1,
-            src: "/static/cards/gryffindor_1_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "2",
-            value: 2,
-            src: "/static/cards/gryffindor_2_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "2",
-            value: 2,
-            src: "/static/cards/gryffindor_2_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "3",
-            value: 3,
-            src: "/static/cards/gryffindor_3_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "3",
-            value: 3,
-            src: "/static/cards/gryffindor_3_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "4",
-            value: 4,
-            src: "/static/cards/gryffindor_4_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "4",
-            value: 4,
-            src: "/static/cards/gryffindor_4_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "5",
-            value: 5,
-            src: "/static/cards/gryffindor_5_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "5",
-            value: 5,
-            src: "/static/cards/gryffindor_5_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "6",
-            value: 6,
-            src: "/static/cards/gryffindor_6_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "6",
-            value: 6,
-            src: "/static/cards/gryffindor_6_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "7",
-            value: 7,
-            src: "/static/cards/gryffindor_7_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "7",
-            value: 7,
-            src: "/static/cards/gryffindor_7_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "8",
-            value: 8,
-            src: "/static/cards/gryffindor_8_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "8",
-            value: 8,
-            src: "/static/cards/gryffindor_8_2.png",
-        },
-        {
-            house: "gryffindor",
-            name: "9",
-            value: 9,
-            src: "/static/cards/gryffindor_9_1.png",
-        },
-        {
-            house: "gryffindor",
-            name: "9",
-            value: 9,
-            src: "/static/cards/gryffindor_9_2.png",
-        },
-        // Special Cards
-        {
-            house: "gryffindor",
-            name: "mirror",
-            value: 0,
-            src: "/static/cards/gryffindor_mirror.png",
-        },
-        {
-            house: "gryffindor",
-            name: "hallows",
-            value: 0,
-            src: "/static/cards/gryffindor_hallows.png",
-        },
-        {
-            house: "gryffindor",
-            name: "echo",
-            value: 0,
-            src: "/static/cards/gryffindor_echo.png",
-        },
-        {
-            house: "gryffindor",
-            name: "shield",
-            value: 0,
-            src: "/static/cards/gryffindor_shield.png",
-        },
-        {
-            house: "gryffindor",
-            name: "swap",
-            value: 0,
-            src: "/static/cards/gryffindor_swap.png",
-        },
-    ];
+    let currentSum = 0;
+    let limit = 27;
+    let currentRound = 1;
+    let currentPlayerIndex = 0;
+    let players = ["dobby", "crookshanks", "hedwig", "trevor"];
 
-    let hufflepuffCards = [
-        //  Numerical Cards
-        {
-            house: "hufflepuff",
-            name: "0",
-            value: 0,
-            src: "/static/cards/hufflepuff_0_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "0",
-            value: 0,
-            src: "/static/cards/hufflepuff_0_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "1",
-            value: 1,
-            src: "/static/cards/hufflepuff_1_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "1",
-            value: 1,
-            src: "/static/cards/hufflepuff_1_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "2",
-            value: 2,
-            src: "/static/cards/hufflepuff_2_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "2",
-            value: 2,
-            src: "/static/cards/hufflepuff_2_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "3",
-            value: 3,
-            src: "/static/cards/hufflepuff_3_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "3",
-            value: 3,
-            src: "/static/cards/hufflepuff_3_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "4",
-            value: 4,
-            src: "/static/cards/hufflepuff_4_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "4",
-            value: 4,
-            src: "/static/cards/hufflepuff_4_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "5",
-            value: 5,
-            src: "/static/cards/hufflepuff_5_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "5",
-            value: 5,
-            src: "/static/cards/hufflepuff_5_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "6",
-            value: 6,
-            src: "/static/cards/hufflepuff_6_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "6",
-            value: 6,
-            src: "/static/cards/hufflepuff_6_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "7",
-            value: 7,
-            src: "/static/cards/hufflepuff_7_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "7",
-            value: 7,
-            src: "/static/cards/hufflepuff_7_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "8",
-            value: 8,
-            src: "/static/cards/hufflepuff_8_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "8",
-            value: 8,
-            src: "/static/cards/hufflepuff_8_2.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "9",
-            value: 9,
-            src: "/static/cards/hufflepuff_9_1.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "9",
-            value: 9,
-            src: "/static/cards/hufflepuff_9_2.png",
-        },
-        // Special Cards
-        {
-            house: "hufflepuff",
-            name: "mirror",
-            value: 0,
-            src: "/static/cards/hufflepuff_mirror.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "hallows",
-            value: 0,
-            src: "/static/cards/hufflepuff_hallows.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "echo",
-            value: 0,
-            src: "/static/cards/hufflepuff_echo.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "shield",
-            value: 0,
-            src: "/static/cards/hufflepuff_shield.png",
-        },
-        {
-            house: "hufflepuff",
-            name: "swap",
-            value: 0,
-            src: "/static/cards/hufflepuff_swap.png",
-        },
-    ];
-
-    let ravenclawCards = [
-        //  Numerical Cards
-        {
-            house: "ravenclaw",
-            name: "0",
-            value: 0,
-            src: "/static/cards/ravenclaw_0_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "0",
-            value: 0,
-            src: "/static/cards/ravenclaw_0_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "1",
-            value: 1,
-            src: "/static/cards/ravenclaw_1_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "1",
-            value: 1,
-            src: "/static/cards/ravenclaw_1_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "2",
-            value: 2,
-            src: "/static/cards/ravenclaw_2_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "2",
-            value: 2,
-            src: "/static/cards/ravenclaw_2_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "3",
-            value: 3,
-            src: "/static/cards/ravenclaw_3_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "3",
-            value: 3,
-            src: "/static/cards/ravenclaw_3_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "4",
-            value: 4,
-            src: "/static/cards/ravenclaw_4_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "4",
-            value: 4,
-            src: "/static/cards/ravenclaw_4_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "5",
-            value: 5,
-            src: "/static/cards/ravenclaw_5_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "5",
-            value: 5,
-            src: "/static/cards/ravenclaw_5_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "6",
-            value: 6,
-            src: "/static/cards/ravenclaw_6_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "6",
-            value: 6,
-            src: "/static/cards/ravenclaw_6_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "7",
-            value: 7,
-            src: "/static/cards/ravenclaw_7_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "7",
-            value: 7,
-            src: "/static/cards/ravenclaw_7_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "8",
-            value: 8,
-            src: "/static/cards/ravenclaw_8_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "8",
-            value: 8,
-            src: "/static/cards/ravenclaw_8_2.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "9",
-            value: 9,
-            src: "/static/cards/ravenclaw_9_1.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "9",
-            value: 9,
-            src: "/static/cards/ravenclaw_9_2.png",
-        },
-        // Special Cards
-        {
-            house: "ravenclaw",
-            name: "mirror",
-            value: 0,
-            src: "/static/cards/ravenclaw_mirror.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "hallows",
-            value: 0,
-            src: "/static/cards/ravenclaw_hallows.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "echo",
-            value: 0,
-            src: "/static/cards/ravenclaw_echo.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "shield",
-            value: 0,
-            src: "/static/cards/ravenclaw_shield.png",
-        },
-        {
-            house: "ravenclaw",
-            name: "swap",
-            value: 0,
-            src: "/static/cards/ravenclaw_swap.png",
-        },
-    ];
-
-    let slytherinCards = [
-        //  Numerical Cards
-        {
-            house: "slytherin",
-            name: "0",
-            value: 0,
-            src: "/static/cards/slytherin_0_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "0",
-            value: 0,
-            src: "/static/cards/slytherin_0_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "1",
-            value: 1,
-            src: "/static/cards/slytherin_1_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "1",
-            value: 1,
-            src: "/static/cards/slytherin_1_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "2",
-            value: 2,
-            src: "/static/cards/slytherin_2_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "2",
-            value: 2,
-            src: "/static/cards/slytherin_2_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "3",
-            value: 3,
-            src: "/static/cards/slytherin_3_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "3",
-            value: 3,
-            src: "/static/cards/slytherin_3_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "4",
-            value: 4,
-            src: "/static/cards/slytherin_4_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "4",
-            value: 4,
-            src: "/static/cards/slytherin_4_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "5",
-            value: 5,
-            src: "/static/cards/slytherin_5_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "5",
-            value: 5,
-            src: "/static/cards/slytherin_5_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "6",
-            value: 6,
-            src: "/static/cards/slytherin_6_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "6",
-            value: 6,
-            src: "/static/cards/slytherin_6_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "7",
-            value: 7,
-            src: "/static/cards/slytherin_7_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "7",
-            value: 7,
-            src: "/static/cards/slytherin_7_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "8",
-            value: 8,
-            src: "/static/cards/slytherin_8_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "8",
-            value: 8,
-            src: "/static/cards/slytherin_8_2.png",
-        },
-        {
-            house: "slytherin",
-            name: "9",
-            value: 9,
-            src: "/static/cards/slytherin_9_1.png",
-        },
-        {
-            house: "slytherin",
-            name: "9",
-            value: 9,
-            src: "/static/cards/slytherin_9_2.png",
-        },
-        // Special Cards
-        {
-            house: "slytherin",
-            name: "mirror",
-            value: 0,
-            src: "/static/cards/slytherin_mirror.png",
-        },
-        {
-            house: "slytherin",
-            name: "hallows",
-            value: 0,
-            src: "/static/cards/slytherin_hallows.png",
-        },
-        {
-            house: "slytherin",
-            name: "echo",
-            value: 0,
-            src: "/static/cards/slytherin_echo.png",
-        },
-        {
-            house: "slytherin",
-            name: "shield",
-            value: 0,
-            src: "/static/cards/slytherin_shield.png",
-        },
-        {
-            house: "slytherin",
-            name: "swap",
-            value: 0,
-            src: "/static/cards/slytherin_swap.png",
-        },
-    ];
-
-    let allCards = [
-        ...gryffindorCards,
-        ...hufflepuffCards,
-        ...ravenclawCards,
-        ...slytherinCards,
-    ];
-
-    let leftoverDeck = [];
-
-    // ============ Declarations =====================================================================================================================================
-
-    // ============ Declarations =====================================================================================================================================
-
-    // ============ Helper Funtions =====================================================================================================================================
-
-    // ============ Helper Funtions =====================================================================================================================================
+    let roundDiscardPile = [];
 
     function startTimer() {
         const maxWidth = timerIndicatorBG.offsetWidth;
@@ -717,9 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function generateRandomString() {
         const charset =
             "#r&/q{g%,*$O}()@*HS^\\=sRP!ftXTQGu0?|]e\"<MD>CZ.NELb/v;JaIUc[K':2hAon-zi9j1VdmW+5Fplxw3B48k6Yy7";
-
         const cleanCharset = charset.replace(/\\/g, "");
-
         let result = "";
         const charsetLength = cleanCharset.length;
 
@@ -734,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cardsArray.length <= 2) {
             return cardsArray.slice();
         }
-
         const shuffled = [...cardsArray].sort(() => Math.random() - 0.5);
         return shuffled.slice(0, 2);
     }
@@ -762,7 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function displayBotHand(hand, containerElement, prefix, rotate) {
         if (!containerElement) return;
-
         containerElement.innerHTML = "";
 
         hand.forEach((card) => {
@@ -781,13 +156,372 @@ document.addEventListener("DOMContentLoaded", () => {
             containerElement.appendChild(cardElement);
         });
     }
-    // ============ Helper Funtions =====================================================================================================================================
 
-    // ============ Helper Funtions =====================================================================================================================================
+    function updateGameUI() {
+        if (currentValueElement) {
+            currentValueElement.textContent = currentSum;
+        }
+        if (targetValueElement) {
+            targetValueElement.textContent = limit;
+        }
+        if (currentRoundElement) {
+            currentRoundElement.textContent = currentRound;
+        }
+    }
 
-    // ============ Game Logic =====================================================================================================================================
+    function updateCardsLeftCounter(playerName) {
+        let cardsLeftElement;
+        let deck;
+        let hand;
 
-    // ============ Game Logic =====================================================================================================================================
+        switch (playerName) {
+            case "dobby":
+                cardsLeftElement = botDobbyCardsLeftElement;
+                deck = botDobbyCards;
+                hand = botDobbyHand;
+                break;
+            case "crookshanks":
+                cardsLeftElement = botCrookshanksCardsLeftElement;
+                deck = botCrookshanksCards;
+                hand = botCrookshanksHand;
+                break;
+            case "hedwig":
+                cardsLeftElement = botHedwigCardsLeftElement;
+                deck = botHedwigCards;
+                hand = botHedwigHand;
+                break;
+            case "trevor":
+                cardsLeftElement = botTrevorCardsLeftElement;
+                deck = botTrevorCards;
+                hand = botTrevorHand;
+                break;
+        }
+
+        if (!cardsLeftElement) return;
+
+        const unusedDeckCards = deck.filter((card) => !card.used).length;
+        const totalCardsLeft = unusedDeckCards + hand.length;
+
+        const textContent = cardsLeftElement.textContent;
+        const spanMatch = textContent.match(/<span.*?<\/span>/);
+        const spanText = spanMatch
+            ? spanMatch[0]
+            : '<span class="lucida-bright text-3xl">left</span>';
+
+        cardsLeftElement.innerHTML = `${totalCardsLeft} ${spanText}`;
+
+        console.log(
+            `${playerName} has ${totalCardsLeft} cards left (${unusedDeckCards} in deck + ${hand.length} in hand)`,
+        );
+    }
+
+    function getRandomCardFromHand(hand) {
+        if (hand.length === 0) return null;
+        const randomIndex = Math.floor(Math.random() * hand.length);
+        return hand[randomIndex];
+    }
+
+    function removeCardFromHand(hand, card) {
+        const index = hand.findIndex((c) => c.data.id === card.data.id);
+        if (index !== -1) {
+            return hand.splice(index, 1)[0];
+        }
+        return null;
+    }
+
+    function drawCardFromPersonalDeck(playerDeck, playerHand) {
+        if (playerDeck.length === 0) return null;
+
+        const availableCard = playerDeck.find((card) => !card.used);
+        if (availableCard) {
+            availableCard.used = true;
+            playerHand.push(availableCard);
+            return availableCard;
+        }
+        return null;
+    }
+
+    function startNewRound() {
+        leftoverCards = [...leftoverCards, ...roundDiscardPile];
+        roundDiscardPile = [];
+
+        currentSum = 0;
+
+        if (leftoverCards.length > 0) {
+            const randomIndex = Math.floor(
+                Math.random() * leftoverCards.length,
+            );
+            const startingCard = leftoverCards.splice(randomIndex, 1)[0];
+            roundDiscardPile.push(startingCard);
+            currentSum += startingCard.data.value || 0;
+        }
+
+        currentRound++;
+        updateGameUI();
+
+        console.log(`Starting Round ${currentRound} with sum: ${currentSum}`);
+    }
+
+    function checkRoundEnd() {
+        if (currentSum === limit) {
+            console.log("Exactly hit the limit! Starting new round...");
+            console.log("Dobby's Cards:", botDobbyCards);
+            console.log("Crookshanks's Cards:", botCrookshanksCards);
+            console.log("Hedwig's Cards:", botHedwigCards);
+            console.log("Trevor's Cards:", botTrevorCards);
+            console.log("Round Discard Pile:", roundDiscardPile);
+            console.log("Leftover Cards:", leftoverCards);
+            startNewRound();
+            return true;
+        } else if (currentSum > limit) {
+            console.log("Exceeded the limit! Starting new round...");
+            console.log("Dobby's Cards:", botDobbyCards);
+            console.log("Crookshanks's Cards:", botCrookshanksCards);
+            console.log("Hedwig's Cards:", botHedwigCards);
+            console.log("Trevor's Cards:", botTrevorCards);
+            console.log("Round Discard Pile:", roundDiscardPile);
+            console.log("Leftover Cards:", leftoverCards);
+            startNewRound();
+            return true;
+        }
+        return false;
+    }
+
+    function createFlyingCardAnimation(cardData, startX, startY, playerName) {
+        const flyingCard = document.createElement("img");
+        flyingCard.src = cardData.src;
+        flyingCard.alt = `${cardData.house} ${cardData.name}`;
+        flyingCard.classList.add(
+            "w-[170.666px]",
+            "h-[238.666px]",
+            "absolute",
+            "z-[999999]",
+            "transition-all",
+            "duration-500",
+            "ease-out",
+        );
+
+        flyingCard.style.left = `${startX}px`;
+        flyingCard.style.top = `${startY}px`;
+
+        document.body.appendChild(flyingCard);
+
+        const containerRect = gameContainer.getBoundingClientRect();
+        const centerX = containerRect.left + containerRect.width / 2 - 85.333;
+        const centerY = containerRect.top + containerRect.height / 2 - 119.333;
+
+        flyingCard.offsetHeight;
+
+        flyingCard.style.left = `${centerX}px`;
+        flyingCard.style.top = `${centerY}px`;
+        flyingCard.style.transform = "scale(1.2)";
+        flyingCard.style.opacity = "0.9";
+
+        setTimeout(() => {
+            flyingCard.remove();
+        }, 800);
+
+        console.log(`${playerName}'s card flying to center...`);
+    }
+
+    function getBotHandPosition(playerName) {
+        let handElement;
+        let botElement;
+
+        switch (playerName) {
+            case "dobby":
+                handElement = botDobbyHandElement;
+                botElement = botDobbyElement;
+                break;
+            case "crookshanks":
+                handElement = botCrookshanksHandElement;
+                botElement = botCrookshanksElement;
+                break;
+            case "hedwig":
+                handElement = botHedwigHandElement;
+                botElement = botHedwigElement;
+                break;
+            case "trevor":
+                handElement = botTrevorHandElement;
+                botElement = botTrevorElement;
+                break;
+        }
+
+        if (!handElement || !botElement) return { x: 0, y: 0 };
+
+        const handRect = handElement.getBoundingClientRect();
+        const botRect = botElement.getBoundingClientRect();
+
+        const x = handRect.left + handRect.width / 2 - 85.333;
+        const y = botRect.bottom - 50;
+
+        return { x, y };
+    }
+
+    function botPlayTurn(
+        playerName,
+        playerHand,
+        playerDeck,
+        playerHandElement,
+    ) {
+        if (playerHand.length === 0) {
+            console.log(`${playerName} has no cards to play`);
+            return false;
+        }
+
+        const cardToPlay = getRandomCardFromHand(playerHand);
+        if (!cardToPlay) {
+            console.log(`${playerName} could not select a card`);
+            return false;
+        }
+
+        const startPos = getBotHandPosition(playerName);
+
+        createFlyingCardAnimation(
+            cardToPlay.data,
+            startPos.x,
+            startPos.y,
+            playerName,
+        );
+
+        removeCardFromHand(playerHand, cardToPlay);
+
+        roundDiscardPile.push(cardToPlay);
+
+        currentSum += cardToPlay.data.value || 0;
+
+        // Draw new card before updating the counter
+        drawCardFromPersonalDeck(playerDeck, playerHand);
+
+        setTimeout(() => {
+            const isRotated =
+                playerName === "dobby" || playerName === "crookshanks";
+            displayBotHand(
+                playerHand,
+                playerHandElement,
+                `bot_${playerName}_card`,
+                isRotated,
+            );
+
+            // Update cards left counter after hand is displayed
+            updateCardsLeftCounter(playerName);
+        }, 300);
+
+        updateGameUI();
+
+        console.log(
+            `${playerName} played ${cardToPlay.data.name} (${cardToPlay.data.value}). New sum: ${currentSum}`,
+        );
+
+        setTimeout(() => {
+            checkRoundEnd();
+        }, 500);
+
+        return true;
+    }
+
+    function playNextBotTurn() {
+        if (currentPlayerIndex >= players.length) {
+            currentPlayerIndex = 0;
+        }
+
+        const playerName = players[currentPlayerIndex];
+        let playerHand, playerDeck, playerHandElement;
+
+        switch (playerName) {
+            case "dobby":
+                playerHand = botDobbyHand;
+                playerDeck = botDobbyCards;
+                playerHandElement = botDobbyHandElement;
+                break;
+            case "crookshanks":
+                playerHand = botCrookshanksHand;
+                playerDeck = botCrookshanksCards;
+                playerHandElement = botCrookshanksHandElement;
+                break;
+            case "hedwig":
+                playerHand = botHedwigHand;
+                playerDeck = botHedwigCards;
+                playerHandElement = botHedwigHandElement;
+                break;
+            case "trevor":
+                playerHand = botTrevorHand;
+                playerDeck = botTrevorCards;
+                playerHandElement = botTrevorHandElement;
+                break;
+        }
+
+        console.log(`${playerName}'s turn...`);
+        botPlayTurn(playerName, playerHand, playerDeck, playerHandElement);
+
+        currentPlayerIndex++;
+    }
+
+    function startGameLoop() {
+        if (leftoverCards.length > 0) {
+            const randomIndex = Math.floor(
+                Math.random() * leftoverCards.length,
+            );
+            const startingCard = leftoverCards.splice(randomIndex, 1)[0];
+            roundDiscardPile.push(startingCard);
+            currentSum += startingCard.data.value || 0;
+            updateGameUI();
+            console.log(
+                `Starting card: ${startingCard.data.name} (${startingCard.data.value}). Initial sum: ${currentSum}`,
+            );
+        }
+
+        players.forEach((playerName) => {
+            updateCardsLeftCounter(playerName);
+        });
+
+        gameInterval = setInterval(() => {
+            playNextBotTurn();
+
+            const allBots = [
+                { name: "dobby", deck: botDobbyCards, hand: botDobbyHand },
+                {
+                    name: "crookshanks",
+                    deck: botCrookshanksCards,
+                    hand: botCrookshanksHand,
+                },
+                { name: "hedwig", deck: botHedwigCards, hand: botHedwigHand },
+                { name: "trevor", deck: botTrevorCards, hand: botTrevorHand },
+            ];
+
+            for (const bot of allBots) {
+                const totalCards =
+                    bot.deck.filter((c) => !c.used).length + bot.hand.length;
+                if (totalCards === 0) {
+                    console.log(`${bot.name} has won the game!`);
+                    clearInterval(gameInterval);
+
+                    const winMessage = document.createElement("div");
+                    winMessage.textContent = `${bot.name.toUpperCase()} WINS!`;
+                    winMessage.classList.add(
+                        "fixed",
+                        "top-1/2",
+                        "left-1/2",
+                        "transform",
+                        "-translate-x-1/2",
+                        "-translate-y-1/2",
+                        "text-6xl",
+                        "font-bold",
+                        "text-white",
+                        "bg-black",
+                        "bg-opacity-75",
+                        "p-8",
+                        "rounded-lg",
+                        "z-[9999999]",
+                        "harry-potter",
+                        "tracking-widest",
+                    );
+                    document.body.appendChild(winMessage);
+                    return;
+                }
+            }
+        }, 2000);
+    }
 
     function startGame() {
         leftoverCards = createPersonalDeck(leftoverDeckElement);
@@ -839,8 +573,11 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Bot Crookshanks Hand:", botCrookshanksHand);
         console.log("Bot Hedwig Hand:", botHedwigHand);
         console.log("Bot Trevor Hand:", botTrevorHand);
-
         console.log("Leftover Deck:", leftoverCards);
+
+        updateGameUI();
+
+        startGameLoop();
     }
 
     startGame();
