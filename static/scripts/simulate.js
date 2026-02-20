@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const timerIndicator = document.getElementById("timer-indicator");
+    const timerIndicator = document.getElementById("-indicator");
     const timerIndicatorBG = document.getElementById("timer-indicator-bg");
     const totalTime = 5000;
 
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             flyingCard.remove();
-        }, 800);
+        }, 1000);
 
         console.log(`${playerName}'s card flying to center...`);
     }
@@ -388,10 +388,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         roundDiscardPile.push(cardToPlay);
 
+        const previousSum = currentSum;
         currentSum += cardToPlay.data.value || 0;
 
-        // Draw new card before updating the counter
-        drawCardFromPersonalDeck(playerDeck, playerHand);
+        const sumCheckResult = checkSumConditions(
+            playerName,
+            cardToPlay.data.value,
+            previousSum,
+        );
+
+        if (!sumCheckResult) {
+            drawCardFromPersonalDeck(playerDeck, playerHand);
+        }
 
         setTimeout(() => {
             const isRotated =
@@ -403,9 +411,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 isRotated,
             );
 
-            // Update cards left counter after hand is displayed
             updateCardsLeftCounter(playerName);
-        }, 300);
+        }, 1000);
 
         updateGameUI();
 
@@ -413,11 +420,100 @@ document.addEventListener("DOMContentLoaded", () => {
             `${playerName} played ${cardToPlay.data.name} (${cardToPlay.data.value}). New sum: ${currentSum}`,
         );
 
-        setTimeout(() => {
-            checkRoundEnd();
-        }, 500);
-
         return true;
+    }
+
+    function checkSumConditions(playerName, playedValue, previousSum) {
+        let specialConditionTriggered = false;
+
+        if (currentSum === limit) {
+            console.log(`${playerName} exactly hit the limit!`);
+
+            const otherPlayers = players.filter((p) => p !== playerName);
+            otherPlayers.forEach((otherPlayerName) => {
+                for (let i = 0; i < 2; i++) {
+                    if (leftoverCards.length > 0) {
+                        const randomIndex = Math.floor(
+                            Math.random() * leftoverCards.length,
+                        );
+                        const drawnCard = leftoverCards.splice(
+                            randomIndex,
+                            1,
+                        )[0];
+
+                        switch (otherPlayerName) {
+                            case "dobby":
+                                botDobbyCards.push(drawnCard);
+                                break;
+                            case "crookshanks":
+                                botCrookshanksCards.push(drawnCard);
+                                break;
+                            case "hedwig":
+                                botHedwigCards.push(drawnCard);
+                                break;
+                            case "trevor":
+                                botTrevorCards.push(drawnCard);
+                                break;
+                        }
+                        console.log(
+                            `${otherPlayerName} drew 1 card from leftover deck`,
+                        );
+                    }
+                }
+            });
+
+            const shouldReshuffle = Math.random() > 0.5;
+            if (shouldReshuffle) {
+                console.log(`${playerName} chooses to reshuffle their deck`);
+                reshufflePlayerDeck(playerName);
+            }
+
+            drawTwoCardsFromOwnDeck(playerName);
+
+            startNewRound();
+            specialConditionTriggered = true;
+        } else if (currentSum > limit) {
+            console.log(`${playerName} exceeded the limit!`);
+
+            const cardsToDraw = Math.min(playedValue, leftoverCards.length);
+            for (let i = 0; i < cardsToDraw; i++) {
+                if (leftoverCards.length > 0) {
+                    const randomIndex = Math.floor(
+                        Math.random() * leftoverCards.length,
+                    );
+                    const drawnCard = leftoverCards.splice(randomIndex, 1)[0];
+
+                    switch (playerName) {
+                        case "dobby":
+                            botDobbyCards.push(drawnCard);
+                            break;
+                        case "crookshanks":
+                            botCrookshanksCards.push(drawnCard);
+                            break;
+                        case "hedwig":
+                            botHedwigCards.push(drawnCard);
+                            break;
+                        case "trevor":
+                            botTrevorCards.push(drawnCard);
+                            break;
+                    }
+                    console.log(`${playerName} drew 1 card from leftover deck`);
+                }
+            }
+
+            const shouldReshuffle = Math.random() > 0.5;
+            if (shouldReshuffle) {
+                console.log(`${playerName} chooses to reshuffle their deck`);
+                reshufflePlayerDeck(playerName);
+            }
+
+            drawTwoCardsFromOwnDeck(playerName);
+
+            startNewRound();
+            specialConditionTriggered = true;
+        }
+
+        return specialConditionTriggered;
     }
 
     function playNextBotTurn() {
@@ -455,6 +551,102 @@ document.addEventListener("DOMContentLoaded", () => {
         botPlayTurn(playerName, playerHand, playerDeck, playerHandElement);
 
         currentPlayerIndex++;
+    }
+
+    function reshufflePlayerDeck(playerName) {
+        let playerDeck;
+
+        switch (playerName) {
+            case "dobby":
+                playerDeck = botDobbyCards;
+                break;
+            case "crookshanks":
+                playerDeck = botCrookshanksCards;
+                break;
+            case "hedwig":
+                playerDeck = botHedwigCards;
+                break;
+            case "trevor":
+                playerDeck = botTrevorCards;
+                break;
+        }
+
+        playerDeck.forEach((card) => {
+            card.used = false;
+        });
+
+        for (let i = playerDeck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
+        }
+
+        switch (playerName) {
+            case "dobby":
+                botDobbyHand = [];
+                break;
+            case "crookshanks":
+                botCrookshanksHand = [];
+                break;
+            case "hedwig":
+                botHedwigHand = [];
+                break;
+            case "trevor":
+                botTrevorHand = [];
+                break;
+        }
+    }
+
+    function drawTwoCardsFromOwnDeck(playerName) {
+        let playerDeck, playerHand, playerHandElement;
+        let isRotated = false;
+
+        switch (playerName) {
+            case "dobby":
+                playerDeck = botDobbyCards;
+                playerHand = botDobbyHand;
+                playerHandElement = botDobbyHandElement;
+                isRotated = true;
+                break;
+            case "crookshanks":
+                playerDeck = botCrookshanksCards;
+                playerHand = botCrookshanksHand;
+                playerHandElement = botCrookshanksHandElement;
+                isRotated = true;
+                break;
+            case "hedwig":
+                playerDeck = botHedwigCards;
+                playerHand = botHedwigHand;
+                playerHandElement = botHedwigHandElement;
+                isRotated = false;
+                break;
+            case "trevor":
+                playerDeck = botTrevorCards;
+                playerHand = botTrevorHand;
+                playerHandElement = botTrevorHandElement;
+                isRotated = false;
+                break;
+        }
+
+        for (let i = 0; i < 2; i++) {
+            const availableCard = playerDeck.find((card) => !card.used);
+            if (availableCard) {
+                availableCard.used = true;
+                playerHand.push(availableCard);
+            }
+        }
+
+        displayBotHand(
+            playerHand,
+            playerHandElement,
+            `bot_${playerName}_card`,
+            isRotated,
+        );
+
+        updateCardsLeftCounter(playerName);
+    }
+
+    function checkRoundEnd() {
+        console.log("Round ended, starting new round...");
     }
 
     function startGameLoop() {
@@ -520,7 +712,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
             }
-        }, 2000);
+        }, 1000);
     }
 
     function startGame() {
