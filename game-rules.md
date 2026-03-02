@@ -55,7 +55,7 @@
 - Sum > limit:  
   → The player who exceeded draws cards equal to the value they just played from leftover deck, adds them to personal deck.  
   → This player can may choose reshuffle their personal deck, and after shuffling will pick two from their set (rest remain face down).
-  → New round begins.
+  → This player will begin the new round.
 
 <br>
 

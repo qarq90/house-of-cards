@@ -215,7 +215,7 @@ def play_pve_1_bot_game():
     elif botInteger == 3:
         botName = "Hedwig"
         botImageSrc = "/static/icons/x_color_hedwig.png"
-    else:  # botInteger == 4
+    else:  
         botName = "Crookshanks"
         botImageSrc = "/static/icons/x_color_crookshanks.png"
     

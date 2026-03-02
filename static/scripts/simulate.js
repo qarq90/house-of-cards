@@ -49,6 +49,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const gameContainer = document.querySelector(".game-container");
 
+    function addHandStyles() {
+        const style = document.createElement("style");
+        style.textContent = `
+            .bot-hand {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 10px !important;
+                justify-content: center !important;
+                align-items: center !important;
+                min-height: 250px !important;
+                flex-wrap: wrap !important;
+            }
+            .bot-hand img {
+                width: 170.666px !important;
+                height: 238.666px !important;
+                object-fit: cover !important;
+                flex-shrink: 0 !important;
+            }
+            .rotate-180 {
+                transform: rotate(180deg) !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
     let timeSpace = 0;
     let timerInterval = null;
     let gameInterval = null;
@@ -71,6 +96,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let players = ["dobby", "crookshanks", "hedwig", "trevor"];
 
     let roundDiscardPile = [];
+
+    let lastNumberCard = null;
+    let echoActive = false;
+    let mirrorBlocked = false;
+    let lastPlayedCard = null;
+
+    function markCardAsUsed(card) {
+        if (card) {
+            card.used = true;
+        }
+    }
 
     function startTimer() {
         const maxWidth = timerIndicatorBG.offsetWidth;
@@ -108,11 +144,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function getTwoRandomCards(cardsArray) {
-        if (cardsArray.length <= 2) {
-            return cardsArray.slice();
+        if (cardsArray.length === 0) return [];
+
+        const availableCards = cardsArray.filter((card) => !card.used);
+
+        if (availableCards.length === 0) return [];
+
+        if (availableCards.length <= 2) {
+            availableCards.forEach((card) => markCardAsUsed(card));
+            return availableCards.slice();
         }
-        const shuffled = [...cardsArray].sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, 2);
+
+        const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, 2);
+
+        selected.forEach((card) => markCardAsUsed(card));
+        return selected;
     }
 
     function createPersonalDeck(cardElements) {
@@ -138,9 +185,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function displayBotHand(hand, containerElement, prefix, rotate) {
         if (!containerElement) return;
+
         containerElement.innerHTML = "";
 
-        hand.forEach((card) => {
+        if (!containerElement.classList.contains("bot-hand")) {
+            containerElement.classList.add("bot-hand");
+        }
+
+        const displayHand = hand.slice(0, 2);
+
+        displayHand.forEach((card) => {
             if (!card || !card.data) return;
 
             const cardElement = document.createElement("img");
@@ -234,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const availableCard = playerDeck.find((card) => !card.used);
         if (availableCard) {
-            availableCard.used = true;
+            markCardAsUsed(availableCard);
             playerHand.push(availableCard);
             return availableCard;
         }
@@ -257,6 +311,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         currentRound++;
+        echoActive = false;
+        mirrorBlocked = false;
+        lastNumberCard = null;
+        lastPlayedCard = null;
         updateGameUI();
 
         console.log(`Starting Round ${currentRound} with sum: ${currentSum}`);
@@ -265,22 +323,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function checkRoundEnd() {
         if (currentSum === limit) {
             console.log("Exactly hit the limit! Starting new round...");
-            console.log("Dobby's Cards:", botDobbyCards);
-            console.log("Crookshanks's Cards:", botCrookshanksCards);
-            console.log("Hedwig's Cards:", botHedwigCards);
-            console.log("Trevor's Cards:", botTrevorCards);
-            console.log("Round Discard Pile:", roundDiscardPile);
-            console.log("Leftover Cards:", leftoverCards);
             startNewRound();
             return true;
         } else if (currentSum > limit) {
             console.log("Exceeded the limit! Starting new round...");
-            console.log("Dobby's Cards:", botDobbyCards);
-            console.log("Crookshanks's Cards:", botCrookshanksCards);
-            console.log("Hedwig's Cards:", botHedwigCards);
-            console.log("Trevor's Cards:", botTrevorCards);
-            console.log("Round Discard Pile:", roundDiscardPile);
-            console.log("Leftover Cards:", leftoverCards);
             startNewRound();
             return true;
         }
@@ -358,6 +404,111 @@ document.addEventListener("DOMContentLoaded", () => {
         return { x, y };
     }
 
+    function handleSpecialCard(playerName, card) {
+        const name = card.data.name;
+
+        switch (name) {
+            case "Hallows":
+                currentSum = limit;
+
+                players
+                    .filter((p) => p !== playerName)
+                    .forEach((otherPlayerName) => {
+                        for (let i = 0; i < 2; i++) {
+                            if (leftoverCards.length > 0) {
+                                const randomIndex = Math.floor(
+                                    Math.random() * leftoverCards.length,
+                                );
+                                const drawnCard = leftoverCards.splice(
+                                    randomIndex,
+                                    1,
+                                )[0];
+                                drawnCard.used = false;
+
+                                switch (otherPlayerName) {
+                                    case "dobby":
+                                        botDobbyCards.push(drawnCard);
+                                        break;
+                                    case "crookshanks":
+                                        botCrookshanksCards.push(drawnCard);
+                                        break;
+                                    case "hedwig":
+                                        botHedwigCards.push(drawnCard);
+                                        break;
+                                    case "trevor":
+                                        botTrevorCards.push(drawnCard);
+                                        break;
+                                }
+                            }
+                        }
+                    });
+
+                reshufflePlayerDeck(playerName);
+                drawCardsUpToLimit(playerName);
+                startNewRound();
+                break;
+
+            case "Shield":
+                mirrorBlocked = true;
+                echoActive = false;
+                break;
+
+            case "Echo":
+                echoActive = true;
+                break;
+
+            case "Mirror":
+                if (!mirrorBlocked && lastNumberCard) {
+                    currentSum += lastNumberCard.data.value;
+                }
+                mirrorBlocked = false;
+                break;
+
+            case "Swap":
+                swapTopCardWithHand(playerName);
+                break;
+        }
+
+        updateGameUI();
+    }
+
+    function swapTopCardWithHand(playerName) {
+        let deck, hand;
+
+        switch (playerName) {
+            case "dobby":
+                deck = botDobbyCards;
+                hand = botDobbyHand;
+                break;
+            case "crookshanks":
+                deck = botCrookshanksCards;
+                hand = botCrookshanksHand;
+                break;
+            case "hedwig":
+                deck = botHedwigCards;
+                hand = botHedwigHand;
+                break;
+            case "trevor":
+                deck = botTrevorCards;
+                hand = botTrevorHand;
+                break;
+        }
+
+        if (!deck || !hand || deck.length === 0 || hand.length === 0) return;
+
+        const topDeckCard = deck.find((c) => !c.used);
+        if (!topDeckCard) return;
+
+        const randomHandIndex = Math.floor(Math.random() * hand.length);
+        const handCard = hand[randomHandIndex];
+
+        hand[randomHandIndex] = topDeckCard;
+        topDeckCard.used = true;
+
+        deck.push(handCard);
+        handCard.used = false;
+    }
+
     function botPlayTurn(
         playerName,
         playerHand,
@@ -389,50 +540,99 @@ document.addEventListener("DOMContentLoaded", () => {
         roundDiscardPile.push(cardToPlay);
 
         const previousSum = currentSum;
-        currentSum += cardToPlay.data.value || 0;
+        const playedValue = cardToPlay.data.value || 0;
 
-        const sumCheckResult = checkSumConditions(
+        if (isSpecialCard(cardToPlay)) {
+            handleSpecialCard(playerName, cardToPlay);
+        } else {
+            let finalValue = playedValue;
+
+            if (echoActive) {
+                finalValue *= 2;
+                echoActive = false;
+            }
+
+            if (
+                cardToPlay.data.name !== "Mirror" &&
+                lastPlayedCard &&
+                lastPlayedCard.data.name === "Mirror" &&
+                !mirrorBlocked
+            ) {
+                finalValue += lastNumberCard ? lastNumberCard.data.value : 0;
+            }
+
+            currentSum += finalValue;
+            lastNumberCard = cardToPlay;
+        }
+
+        lastPlayedCard = cardToPlay;
+
+        const roundEnded = checkForPenalties(
             playerName,
             cardToPlay.data.value,
             previousSum,
         );
+        if (roundEnded) return true;
 
-        if (!sumCheckResult) {
+        if (playerHand.length < 2) {
             drawCardFromPersonalDeck(playerDeck, playerHand);
         }
 
-        setTimeout(() => {
-            const isRotated =
-                playerName === "dobby" || playerName === "crookshanks";
-            displayBotHand(
-                playerHand,
-                playerHandElement,
-                `bot_${playerName}_card`,
-                isRotated,
-            );
+        const isRotated =
+            playerName === "dobby" || playerName === "crookshanks";
+        displayBotHand(
+            playerHand,
+            playerHandElement,
+            `bot_${playerName}_card`,
+            isRotated,
+        );
 
-            updateCardsLeftCounter(playerName);
-        }, 1000);
-
+        updateCardsLeftCounter(playerName);
         updateGameUI();
 
-        console.log(
-            `${playerName} played ${cardToPlay.data.name} (${cardToPlay.data.value}). New sum: ${currentSum}`,
-        );
+        const cardName = cardToPlay.data.name;
+        const cardValue = cardToPlay.data.value || 0;
+        const newSum = currentSum;
+
+        console.log(`Turn ${playerName}`);
+        console.log(`Card Played ${cardName}`);
+        console.log(`Current Value ${cardValue}`);
+        console.log(`Current Sum ${previousSum}`);
+        console.log(`Value after adding ${newSum}`);
+
+        if (newSum > limit) {
+            console.log(
+                `${playerName} played ${cardName} and got penalty of ${cardValue} cards`,
+            );
+        } else if (newSum === limit) {
+            const otherPlayers = players
+                .filter((p) => p !== playerName)
+                .join(",");
+            console.log(
+                `${playerName} played ${cardName} and ${otherPlayers} got 2 cards`,
+            );
+        } else {
+            console.log(`${playerName} played ${cardName}`);
+        }
+
+        console.log("--------------------------------------------------");
 
         return true;
     }
 
-    function checkSumConditions(playerName, playedValue, previousSum) {
-        let specialConditionTriggered = false;
-
+    function checkForPenalties(playerName, playedValue, previousSum) {
         if (currentSum === limit) {
             console.log(`${playerName} exactly hit the limit!`);
 
-            const otherPlayers = players.filter((p) => p !== playerName);
-            otherPlayers.forEach((otherPlayerName) => {
-                for (let i = 0; i < 2; i++) {
-                    if (leftoverCards.length > 0) {
+            leftoverCards = [...leftoverCards, ...roundDiscardPile];
+            roundDiscardPile = [];
+
+            players
+                .filter((p) => p !== playerName)
+                .forEach((otherPlayerName) => {
+                    for (let i = 0; i < 2; i++) {
+                        if (leftoverCards.length === 0) break;
+
                         const randomIndex = Math.floor(
                             Math.random() * leftoverCards.length,
                         );
@@ -440,6 +640,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             randomIndex,
                             1,
                         )[0];
+                        drawnCard.used = false;
 
                         switch (otherPlayerName) {
                             case "dobby":
@@ -455,65 +656,118 @@ document.addEventListener("DOMContentLoaded", () => {
                                 botTrevorCards.push(drawnCard);
                                 break;
                         }
-                        console.log(
-                            `${otherPlayerName} drew 1 card from leftover deck`,
-                        );
                     }
-                }
-            });
+                });
 
-            const shouldReshuffle = Math.random() > 0.5;
-            if (shouldReshuffle) {
-                console.log(`${playerName} chooses to reshuffle their deck`);
-                reshufflePlayerDeck(playerName);
-            }
-
-            drawTwoCardsFromOwnDeck(playerName);
-
+            drawCardsUpToLimit(playerName);
             startNewRound();
-            specialConditionTriggered = true;
-        } else if (currentSum > limit) {
-            console.log(`${playerName} exceeded the limit!`);
 
-            const cardsToDraw = Math.min(playedValue, leftoverCards.length);
-            for (let i = 0; i < cardsToDraw; i++) {
-                if (leftoverCards.length > 0) {
-                    const randomIndex = Math.floor(
-                        Math.random() * leftoverCards.length,
-                    );
-                    const drawnCard = leftoverCards.splice(randomIndex, 1)[0];
-
-                    switch (playerName) {
-                        case "dobby":
-                            botDobbyCards.push(drawnCard);
-                            break;
-                        case "crookshanks":
-                            botCrookshanksCards.push(drawnCard);
-                            break;
-                        case "hedwig":
-                            botHedwigCards.push(drawnCard);
-                            break;
-                        case "trevor":
-                            botTrevorCards.push(drawnCard);
-                            break;
-                    }
-                    console.log(`${playerName} drew 1 card from leftover deck`);
-                }
-            }
-
-            const shouldReshuffle = Math.random() > 0.5;
-            if (shouldReshuffle) {
-                console.log(`${playerName} chooses to reshuffle their deck`);
-                reshufflePlayerDeck(playerName);
-            }
-
-            drawTwoCardsFromOwnDeck(playerName);
-
-            startNewRound();
-            specialConditionTriggered = true;
+            return true;
         }
 
-        return specialConditionTriggered;
+        if (currentSum > limit) {
+            console.log(`${playerName} exceeded the limit!`);
+
+            const penaltyCards = playedValue;
+
+            leftoverCards = [...leftoverCards, ...roundDiscardPile];
+            roundDiscardPile = [];
+
+            let playerDeck;
+
+            switch (playerName) {
+                case "dobby":
+                    playerDeck = botDobbyCards;
+                    break;
+                case "crookshanks":
+                    playerDeck = botCrookshanksCards;
+                    break;
+                case "hedwig":
+                    playerDeck = botHedwigCards;
+                    break;
+                case "trevor":
+                    playerDeck = botTrevorCards;
+                    break;
+            }
+
+            for (let i = 0; i < penaltyCards; i++) {
+                if (leftoverCards.length === 0) break;
+
+                const randomIndex = Math.floor(
+                    Math.random() * leftoverCards.length,
+                );
+                const drawnCard = leftoverCards.splice(randomIndex, 1)[0];
+                drawnCard.used = false;
+
+                playerDeck.push(drawnCard);
+            }
+
+            if (Math.random() > 0.5) {
+                reshufflePlayerDeck(playerName);
+            }
+
+            drawCardsUpToLimit(playerName);
+            startNewRound();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    function drawCardsUpToLimit(playerName) {
+        let playerDeck, playerHand, playerHandElement;
+        let isRotated = false;
+
+        switch (playerName) {
+            case "dobby":
+                playerDeck = botDobbyCards;
+                playerHand = botDobbyHand;
+                playerHandElement = botDobbyHandElement;
+                isRotated = true;
+                break;
+            case "crookshanks":
+                playerDeck = botCrookshanksCards;
+                playerHand = botCrookshanksHand;
+                playerHandElement = botCrookshanksHandElement;
+                isRotated = true;
+                break;
+            case "hedwig":
+                playerDeck = botHedwigCards;
+                playerHand = botHedwigHand;
+                playerHandElement = botHedwigHandElement;
+                isRotated = false;
+                break;
+            case "trevor":
+                playerDeck = botTrevorCards;
+                playerHand = botTrevorHand;
+                playerHandElement = botTrevorHandElement;
+                isRotated = false;
+                break;
+        }
+
+        const cardsNeeded = Math.max(0, 2 - playerHand.length);
+
+        for (let i = 0; i < cardsNeeded; i++) {
+            const availableCard = playerDeck.find((card) => !card.used);
+            if (availableCard) {
+                markCardAsUsed(availableCard);
+                playerHand.push(availableCard);
+            }
+        }
+
+        displayBotHand(
+            playerHand,
+            playerHandElement,
+            `bot_${playerName}_card`,
+            isRotated,
+        );
+
+        updateCardsLeftCounter(playerName);
+    }
+
+    function drawTwoCardsFromOwnDeck(playerName) {
+        drawCardsUpToLimit(playerName);
     }
 
     function playNextBotTurn() {
@@ -555,21 +809,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function reshufflePlayerDeck(playerName) {
         let playerDeck;
+        let playerHand;
 
         switch (playerName) {
             case "dobby":
                 playerDeck = botDobbyCards;
+                playerHand = botDobbyHand;
                 break;
             case "crookshanks":
                 playerDeck = botCrookshanksCards;
+                playerHand = botCrookshanksHand;
                 break;
             case "hedwig":
                 playerDeck = botHedwigCards;
+                playerHand = botHedwigHand;
                 break;
             case "trevor":
                 playerDeck = botTrevorCards;
+                playerHand = botTrevorHand;
                 break;
         }
+
+        playerHand.forEach((card) => {
+            card.used = false;
+            playerDeck.push(card);
+        });
+        playerHand.length = 0;
 
         playerDeck.forEach((card) => {
             card.used = false;
@@ -579,74 +844,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const j = Math.floor(Math.random() * (i + 1));
             [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
         }
-
-        switch (playerName) {
-            case "dobby":
-                botDobbyHand = [];
-                break;
-            case "crookshanks":
-                botCrookshanksHand = [];
-                break;
-            case "hedwig":
-                botHedwigHand = [];
-                break;
-            case "trevor":
-                botTrevorHand = [];
-                break;
-        }
     }
 
-    function drawTwoCardsFromOwnDeck(playerName) {
-        let playerDeck, playerHand, playerHandElement;
-        let isRotated = false;
-
-        switch (playerName) {
-            case "dobby":
-                playerDeck = botDobbyCards;
-                playerHand = botDobbyHand;
-                playerHandElement = botDobbyHandElement;
-                isRotated = true;
-                break;
-            case "crookshanks":
-                playerDeck = botCrookshanksCards;
-                playerHand = botCrookshanksHand;
-                playerHandElement = botCrookshanksHandElement;
-                isRotated = true;
-                break;
-            case "hedwig":
-                playerDeck = botHedwigCards;
-                playerHand = botHedwigHand;
-                playerHandElement = botHedwigHandElement;
-                isRotated = false;
-                break;
-            case "trevor":
-                playerDeck = botTrevorCards;
-                playerHand = botTrevorHand;
-                playerHandElement = botTrevorHandElement;
-                isRotated = false;
-                break;
-        }
-
-        for (let i = 0; i < 2; i++) {
-            const availableCard = playerDeck.find((card) => !card.used);
-            if (availableCard) {
-                availableCard.used = true;
-                playerHand.push(availableCard);
-            }
-        }
-
-        displayBotHand(
-            playerHand,
-            playerHandElement,
-            `bot_${playerName}_card`,
-            isRotated,
-        );
-
-        updateCardsLeftCounter(playerName);
-    }
-
-    function checkRoundEnd() {
-        console.log("Round ended, starting new round...");
+    function isSpecialCard(card) {
+        const specials = ["Hallows", "Shield", "Echo", "Mirror", "Swap"];
+        return specials.includes(card.data.name);
     }
 
     function startGameLoop() {
@@ -684,11 +886,13 @@ document.addEventListener("DOMContentLoaded", () => {
             for (const bot of allBots) {
                 const totalCards =
                     bot.deck.filter((c) => !c.used).length + bot.hand.length;
+
                 if (totalCards === 0) {
                     console.log(`${bot.name} has won the game!`);
                     clearInterval(gameInterval);
 
                     const winMessage = document.createElement("div");
+                    winMessage.classList.add("harry-potter");
                     winMessage.textContent = `${bot.name.toUpperCase()} WINS!`;
                     winMessage.classList.add(
                         "fixed",
@@ -705,17 +909,18 @@ document.addEventListener("DOMContentLoaded", () => {
                         "p-8",
                         "rounded-lg",
                         "z-[9999999]",
-                        "harry-potter",
-                        "tracking-widest",
                     );
+
                     document.body.appendChild(winMessage);
                     return;
                 }
             }
-        }, 1000);
+        }, 200);
     }
 
     function startGame() {
+        addHandStyles();
+
         leftoverCards = createPersonalDeck(leftoverDeckElement);
         botDobbyCards = createPersonalDeck(botDobbyCardsElements);
         botCrookshanksCards = createPersonalDeck(botCrookshanksCardsElements);
@@ -759,7 +964,10 @@ document.addEventListener("DOMContentLoaded", () => {
             botTrevorHandElement,
         ]
             .filter((el) => el)
-            .forEach((el) => el.classList.remove("hidden"));
+            .forEach((el) => {
+                el.classList.remove("hidden");
+                el.classList.add("bot-hand");
+            });
 
         console.log("Bot Dobby Hand:", botDobbyHand);
         console.log("Bot Crookshanks Hand:", botCrookshanksHand);
