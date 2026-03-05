@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect
 import json
 import random
 import uuid
@@ -10,122 +10,122 @@ app.secret_key = '170105245166'
 
 gryffindor_cards = [
     # Numerical Cards
-    {"house": "gryffindor", "name": "0", "value": 0, "src": "/static/cards/gryffindor_0_1.png"},
-    {"house": "gryffindor", "name": "0", "value": 0, "src": "/static/cards/gryffindor_0_2.png"},
-    {"house": "gryffindor", "name": "1", "value": 1, "src": "/static/cards/gryffindor_1_1.png"},
-    {"house": "gryffindor", "name": "1", "value": 1, "src": "/static/cards/gryffindor_1_2.png"},
-    {"house": "gryffindor", "name": "2", "value": 2, "src": "/static/cards/gryffindor_2_1.png"},
-    {"house": "gryffindor", "name": "2", "value": 2, "src": "/static/cards/gryffindor_2_2.png"},
-    {"house": "gryffindor", "name": "3", "value": 3, "src": "/static/cards/gryffindor_3_1.png"},
-    {"house": "gryffindor", "name": "3", "value": 3, "src": "/static/cards/gryffindor_3_2.png"},
-    {"house": "gryffindor", "name": "4", "value": 4, "src": "/static/cards/gryffindor_4_1.png"},
-    {"house": "gryffindor", "name": "4", "value": 4, "src": "/static/cards/gryffindor_4_2.png"},
-    {"house": "gryffindor", "name": "5", "value": 5, "src": "/static/cards/gryffindor_5_1.png"},
-    {"house": "gryffindor", "name": "5", "value": 5, "src": "/static/cards/gryffindor_5_2.png"},
-    {"house": "gryffindor", "name": "6", "value": 6, "src": "/static/cards/gryffindor_6_1.png"},
-    {"house": "gryffindor", "name": "6", "value": 6, "src": "/static/cards/gryffindor_6_2.png"},
-    {"house": "gryffindor", "name": "7", "value": 7, "src": "/static/cards/gryffindor_7_1.png"},
-    {"house": "gryffindor", "name": "7", "value": 7, "src": "/static/cards/gryffindor_7_2.png"},
-    {"house": "gryffindor", "name": "8", "value": 8, "src": "/static/cards/gryffindor_8_1.png"},
-    {"house": "gryffindor", "name": "8", "value": 8, "src": "/static/cards/gryffindor_8_2.png"},
-    {"house": "gryffindor", "name": "9", "value": 9, "src": "/static/cards/gryffindor_9_1.png"},
-    {"house": "gryffindor", "name": "9", "value": 9, "src": "/static/cards/gryffindor_9_2.png"},
+    {"house": "gryffindor", "name": "0", "value": 0, "src": "/static/cards/gryffindor_0_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "0", "value": 0, "src": "/static/cards/gryffindor_0_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "1", "value": 1, "src": "/static/cards/gryffindor_1_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "1", "value": 1, "src": "/static/cards/gryffindor_1_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "2", "value": 2, "src": "/static/cards/gryffindor_2_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "2", "value": 2, "src": "/static/cards/gryffindor_2_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "3", "value": 3, "src": "/static/cards/gryffindor_3_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "3", "value": 3, "src": "/static/cards/gryffindor_3_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "4", "value": 4, "src": "/static/cards/gryffindor_4_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "4", "value": 4, "src": "/static/cards/gryffindor_4_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "5", "value": 5, "src": "/static/cards/gryffindor_5_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "5", "value": 5, "src": "/static/cards/gryffindor_5_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "6", "value": 6, "src": "/static/cards/gryffindor_6_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "6", "value": 6, "src": "/static/cards/gryffindor_6_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "7", "value": 7, "src": "/static/cards/gryffindor_7_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "7", "value": 7, "src": "/static/cards/gryffindor_7_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "8", "value": 8, "src": "/static/cards/gryffindor_8_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "8", "value": 8, "src": "/static/cards/gryffindor_8_2.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "9", "value": 9, "src": "/static/cards/gryffindor_9_1.png", "type": "numerical"},
+    {"house": "gryffindor", "name": "9", "value": 9, "src": "/static/cards/gryffindor_9_2.png", "type": "numerical"},
     # Special Cards
-    {"house": "gryffindor", "name": "mirror", "value": 0, "src": "/static/cards/gryffindor_mirror.png"},
-    {"house": "gryffindor", "name": "hallows", "value": 0, "src": "/static/cards/gryffindor_hallows.png"},
-    {"house": "gryffindor", "name": "echo", "value": 0, "src": "/static/cards/gryffindor_echo.png"},
-    {"house": "gryffindor", "name": "shield", "value": 0, "src": "/static/cards/gryffindor_shield.png"},
-    {"house": "gryffindor", "name": "swap", "value": 0, "src": "/static/cards/gryffindor_swap.png"},
+    {"house": "gryffindor", "name": "mirror", "value": 0, "src": "/static/cards/gryffindor_mirror.png", "type": "special"},
+    {"house": "gryffindor", "name": "hallows", "value": 0, "src": "/static/cards/gryffindor_hallows.png", "type": "special"},
+    {"house": "gryffindor", "name": "echo", "value": 0, "src": "/static/cards/gryffindor_echo.png", "type": "special"},
+    {"house": "gryffindor", "name": "shield", "value": 0, "src": "/static/cards/gryffindor_shield.png", "type": "special"},
+    {"house": "gryffindor", "name": "swap", "value": 0, "src": "/static/cards/gryffindor_swap.png", "type": "special"},
 ]
 
 hufflepuff_cards = [
     # Numerical Cards
-    {"house": "hufflepuff", "name": "0", "value": 0, "src": "/static/cards/hufflepuff_0_1.png"},
-    {"house": "hufflepuff", "name": "0", "value": 0, "src": "/static/cards/hufflepuff_0_2.png"},
-    {"house": "hufflepuff", "name": "1", "value": 1, "src": "/static/cards/hufflepuff_1_1.png"},
-    {"house": "hufflepuff", "name": "1", "value": 1, "src": "/static/cards/hufflepuff_1_2.png"},
-    {"house": "hufflepuff", "name": "2", "value": 2, "src": "/static/cards/hufflepuff_2_1.png"},
-    {"house": "hufflepuff", "name": "2", "value": 2, "src": "/static/cards/hufflepuff_2_2.png"},
-    {"house": "hufflepuff", "name": "3", "value": 3, "src": "/static/cards/hufflepuff_3_1.png"},
-    {"house": "hufflepuff", "name": "3", "value": 3, "src": "/static/cards/hufflepuff_3_2.png"},
-    {"house": "hufflepuff", "name": "4", "value": 4, "src": "/static/cards/hufflepuff_4_1.png"},
-    {"house": "hufflepuff", "name": "4", "value": 4, "src": "/static/cards/hufflepuff_4_2.png"},
-    {"house": "hufflepuff", "name": "5", "value": 5, "src": "/static/cards/hufflepuff_5_1.png"},
-    {"house": "hufflepuff", "name": "5", "value": 5, "src": "/static/cards/hufflepuff_5_2.png"},
-    {"house": "hufflepuff", "name": "6", "value": 6, "src": "/static/cards/hufflepuff_6_1.png"},
-    {"house": "hufflepuff", "name": "6", "value": 6, "src": "/static/cards/hufflepuff_6_2.png"},
-    {"house": "hufflepuff", "name": "7", "value": 7, "src": "/static/cards/hufflepuff_7_1.png"},
-    {"house": "hufflepuff", "name": "7", "value": 7, "src": "/static/cards/hufflepuff_7_2.png"},
-    {"house": "hufflepuff", "name": "8", "value": 8, "src": "/static/cards/hufflepuff_8_1.png"},
-    {"house": "hufflepuff", "name": "8", "value": 8, "src": "/static/cards/hufflepuff_8_2.png"},
-    {"house": "hufflepuff", "name": "9", "value": 9, "src": "/static/cards/hufflepuff_9_1.png"},
-    {"house": "hufflepuff", "name": "9", "value": 9, "src": "/static/cards/hufflepuff_9_2.png"},
+    {"house": "hufflepuff", "name": "0", "value": 0, "src": "/static/cards/hufflepuff_0_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "0", "value": 0, "src": "/static/cards/hufflepuff_0_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "1", "value": 1, "src": "/static/cards/hufflepuff_1_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "1", "value": 1, "src": "/static/cards/hufflepuff_1_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "2", "value": 2, "src": "/static/cards/hufflepuff_2_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "2", "value": 2, "src": "/static/cards/hufflepuff_2_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "3", "value": 3, "src": "/static/cards/hufflepuff_3_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "3", "value": 3, "src": "/static/cards/hufflepuff_3_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "4", "value": 4, "src": "/static/cards/hufflepuff_4_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "4", "value": 4, "src": "/static/cards/hufflepuff_4_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "5", "value": 5, "src": "/static/cards/hufflepuff_5_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "5", "value": 5, "src": "/static/cards/hufflepuff_5_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "6", "value": 6, "src": "/static/cards/hufflepuff_6_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "6", "value": 6, "src": "/static/cards/hufflepuff_6_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "7", "value": 7, "src": "/static/cards/hufflepuff_7_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "7", "value": 7, "src": "/static/cards/hufflepuff_7_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "8", "value": 8, "src": "/static/cards/hufflepuff_8_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "8", "value": 8, "src": "/static/cards/hufflepuff_8_2.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "9", "value": 9, "src": "/static/cards/hufflepuff_9_1.png", "type": "numerical"},
+    {"house": "hufflepuff", "name": "9", "value": 9, "src": "/static/cards/hufflepuff_9_2.png", "type": "numerical"},
     # Special Cards
-    {"house": "hufflepuff", "name": "mirror", "value": 0, "src": "/static/cards/hufflepuff_mirror.png"},
-    {"house": "hufflepuff", "name": "hallows", "value": 0, "src": "/static/cards/hufflepuff_hallows.png"},
-    {"house": "hufflepuff", "name": "echo", "value": 0, "src": "/static/cards/hufflepuff_echo.png"},
-    {"house": "hufflepuff", "name": "shield", "value": 0, "src": "/static/cards/hufflepuff_shield.png"},
-    {"house": "hufflepuff", "name": "swap", "value": 0, "src": "/static/cards/hufflepuff_swap.png"},
+    {"house": "hufflepuff", "name": "mirror", "value": 0, "src": "/static/cards/hufflepuff_mirror.png", "type": "special"},
+    {"house": "hufflepuff", "name": "hallows", "value": 0, "src": "/static/cards/hufflepuff_hallows.png", "type": "special"},
+    {"house": "hufflepuff", "name": "echo", "value": 0, "src": "/static/cards/hufflepuff_echo.png", "type": "special"},
+    {"house": "hufflepuff", "name": "shield", "value": 0, "src": "/static/cards/hufflepuff_shield.png", "type": "special"},
+    {"house": "hufflepuff", "name": "swap", "value": 0, "src": "/static/cards/hufflepuff_swap.png", "type": "special"},
 ]
 
 ravenclaw_cards = [
     # Numerical Cards  
-    {"house": "ravenclaw", "name": "0", "value": 0, "src": "/static/cards/ravenclaw_0_1.png"},
-    {"house": "ravenclaw", "name": "0", "value": 0, "src": "/static/cards/ravenclaw_0_2.png"},
-    {"house": "ravenclaw", "name": "1", "value": 1, "src": "/static/cards/ravenclaw_1_1.png"},
-    {"house": "ravenclaw", "name": "1", "value": 1, "src": "/static/cards/ravenclaw_1_2.png"},
-    {"house": "ravenclaw", "name": "2", "value": 2, "src": "/static/cards/ravenclaw_2_1.png"},
-    {"house": "ravenclaw", "name": "2", "value": 2, "src": "/static/cards/ravenclaw_2_2.png"},
-    {"house": "ravenclaw", "name": "3", "value": 3, "src": "/static/cards/ravenclaw_3_1.png"},
-    {"house": "ravenclaw", "name": "3", "value": 3, "src": "/static/cards/ravenclaw_3_2.png"},
-    {"house": "ravenclaw", "name": "4", "value": 4, "src": "/static/cards/ravenclaw_4_1.png"},
-    {"house": "ravenclaw", "name": "4", "value": 4, "src": "/static/cards/ravenclaw_4_2.png"},
-    {"house": "ravenclaw", "name": "5", "value": 5, "src": "/static/cards/ravenclaw_5_1.png"},
-    {"house": "ravenclaw", "name": "5", "value": 5, "src": "/static/cards/ravenclaw_5_2.png"},
-    {"house": "ravenclaw", "name": "6", "value": 6, "src": "/static/cards/ravenclaw_6_1.png"},
-    {"house": "ravenclaw", "name": "6", "value": 6, "src": "/static/cards/ravenclaw_6_2.png"},
-    {"house": "ravenclaw", "name": "7", "value": 7, "src": "/static/cards/ravenclaw_7_1.png"},
-    {"house": "ravenclaw", "name": "7", "value": 7, "src": "/static/cards/ravenclaw_7_2.png"},
-    {"house": "ravenclaw", "name": "8", "value": 8, "src": "/static/cards/ravenclaw_8_1.png"},
-    {"house": "ravenclaw", "name": "8", "value": 8, "src": "/static/cards/ravenclaw_8_2.png"},
-    {"house": "ravenclaw", "name": "9", "value": 9, "src": "/static/cards/ravenclaw_9_1.png"},
-    {"house": "ravenclaw", "name": "9", "value": 9, "src": "/static/cards/ravenclaw_9_2.png"},
+    {"house": "ravenclaw", "name": "0", "value": 0, "src": "/static/cards/ravenclaw_0_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "0", "value": 0, "src": "/static/cards/ravenclaw_0_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "1", "value": 1, "src": "/static/cards/ravenclaw_1_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "1", "value": 1, "src": "/static/cards/ravenclaw_1_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "2", "value": 2, "src": "/static/cards/ravenclaw_2_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "2", "value": 2, "src": "/static/cards/ravenclaw_2_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "3", "value": 3, "src": "/static/cards/ravenclaw_3_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "3", "value": 3, "src": "/static/cards/ravenclaw_3_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "4", "value": 4, "src": "/static/cards/ravenclaw_4_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "4", "value": 4, "src": "/static/cards/ravenclaw_4_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "5", "value": 5, "src": "/static/cards/ravenclaw_5_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "5", "value": 5, "src": "/static/cards/ravenclaw_5_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "6", "value": 6, "src": "/static/cards/ravenclaw_6_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "6", "value": 6, "src": "/static/cards/ravenclaw_6_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "7", "value": 7, "src": "/static/cards/ravenclaw_7_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "7", "value": 7, "src": "/static/cards/ravenclaw_7_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "8", "value": 8, "src": "/static/cards/ravenclaw_8_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "8", "value": 8, "src": "/static/cards/ravenclaw_8_2.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "9", "value": 9, "src": "/static/cards/ravenclaw_9_1.png", "type": "numerical"},
+    {"house": "ravenclaw", "name": "9", "value": 9, "src": "/static/cards/ravenclaw_9_2.png", "type": "numerical"},
     # Special Cards
-    {"house": "ravenclaw", "name": "mirror", "value": 0, "src": "/static/cards/ravenclaw_mirror.png"},
-    {"house": "ravenclaw", "name": "hallows", "value": 0, "src": "/static/cards/ravenclaw_hallows.png"},
-    {"house": "ravenclaw", "name": "echo", "value": 0, "src": "/static/cards/ravenclaw_echo.png"},
-    {"house": "ravenclaw", "name": "shield", "value": 0, "src": "/static/cards/ravenclaw_shield.png"},
-    {"house": "ravenclaw", "name": "swap", "value": 0, "src": "/static/cards/ravenclaw_swap.png"},
+    {"house": "ravenclaw", "name": "mirror", "value": 0, "src": "/static/cards/ravenclaw_mirror.png", "type": "special"},
+    {"house": "ravenclaw", "name": "hallows", "value": 0, "src": "/static/cards/ravenclaw_hallows.png", "type": "special"},
+    {"house": "ravenclaw", "name": "echo", "value": 0, "src": "/static/cards/ravenclaw_echo.png", "type": "special"},
+    {"house": "ravenclaw", "name": "shield", "value": 0, "src": "/static/cards/ravenclaw_shield.png", "type": "special"},
+    {"house": "ravenclaw", "name": "swap", "value": 0, "src": "/static/cards/ravenclaw_swap.png", "type": "special"},
 ]
 
 slytherin_cards = [
     # Numerical Cards 
-    {"house": "slytherin", "name": "0", "value": 0, "src": "/static/cards/slytherin_0_1.png"},
-    {"house": "slytherin", "name": "0", "value": 0, "src": "/static/cards/slytherin_0_2.png"},
-    {"house": "slytherin", "name": "1", "value": 1, "src": "/static/cards/slytherin_1_1.png"},
-    {"house": "slytherin", "name": "1", "value": 1, "src": "/static/cards/slytherin_1_2.png"},
-    {"house": "slytherin", "name": "2", "value": 2, "src": "/static/cards/slytherin_2_1.png"},
-    {"house": "slytherin", "name": "2", "value": 2, "src": "/static/cards/slytherin_2_2.png"},
-    {"house": "slytherin", "name": "3", "value": 3, "src": "/static/cards/slytherin_3_1.png"},
-    {"house": "slytherin", "name": "3", "value": 3, "src": "/static/cards/slytherin_3_2.png"},
-    {"house": "slytherin", "name": "4", "value": 4, "src": "/static/cards/slytherin_4_1.png"},
-    {"house": "slytherin", "name": "4", "value": 4, "src": "/static/cards/slytherin_4_2.png"},
-    {"house": "slytherin", "name": "5", "value": 5, "src": "/static/cards/slytherin_5_1.png"},
-    {"house": "slytherin", "name": "5", "value": 5, "src": "/static/cards/slytherin_5_2.png"},
-    {"house": "slytherin", "name": "6", "value": 6, "src": "/static/cards/slytherin_6_1.png"},
-    {"house": "slytherin", "name": "6", "value": 6, "src": "/static/cards/slytherin_6_2.png"},
-    {"house": "slytherin", "name": "7", "value": 7, "src": "/static/cards/slytherin_7_1.png"},
-    {"house": "slytherin", "name": "7", "value": 7, "src": "/static/cards/slytherin_7_2.png"},
-    {"house": "slytherin", "name": "8", "value": 8, "src": "/static/cards/slytherin_8_1.png"},
-    {"house": "slytherin", "name": "8", "value": 8, "src": "/static/cards/slytherin_8_2.png"},
-    {"house": "slytherin", "name": "9", "value": 9, "src": "/static/cards/slytherin_9_1.png"},
-    {"house": "slytherin", "name": "9", "value": 9, "src": "/static/cards/slytherin_9_2.png"},
+    {"house": "slytherin", "name": "0", "value": 0, "src": "/static/cards/slytherin_0_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "0", "value": 0, "src": "/static/cards/slytherin_0_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "1", "value": 1, "src": "/static/cards/slytherin_1_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "1", "value": 1, "src": "/static/cards/slytherin_1_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "2", "value": 2, "src": "/static/cards/slytherin_2_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "2", "value": 2, "src": "/static/cards/slytherin_2_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "3", "value": 3, "src": "/static/cards/slytherin_3_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "3", "value": 3, "src": "/static/cards/slytherin_3_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "4", "value": 4, "src": "/static/cards/slytherin_4_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "4", "value": 4, "src": "/static/cards/slytherin_4_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "5", "value": 5, "src": "/static/cards/slytherin_5_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "5", "value": 5, "src": "/static/cards/slytherin_5_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "6", "value": 6, "src": "/static/cards/slytherin_6_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "6", "value": 6, "src": "/static/cards/slytherin_6_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "7", "value": 7, "src": "/static/cards/slytherin_7_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "7", "value": 7, "src": "/static/cards/slytherin_7_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "8", "value": 8, "src": "/static/cards/slytherin_8_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "8", "value": 8, "src": "/static/cards/slytherin_8_2.png", "type": "numerical"},
+    {"house": "slytherin", "name": "9", "value": 9, "src": "/static/cards/slytherin_9_1.png", "type": "numerical"},
+    {"house": "slytherin", "name": "9", "value": 9, "src": "/static/cards/slytherin_9_2.png", "type": "numerical"},
     # Special Cards
-    {"house": "slytherin", "name": "mirror", "value": 0, "src": "/static/cards/slytherin_mirror.png"},
-    {"house": "slytherin", "name": "hallows", "value": 0, "src": "/static/cards/slytherin_hallows.png"},
-    {"house": "slytherin", "name": "echo", "value": 0, "src": "/static/cards/slytherin_echo.png"},
-    {"house": "slytherin", "name": "shield", "value": 0, "src": "/static/cards/slytherin_shield.png"},
-    {"house": "slytherin", "name": "swap", "value": 0, "src": "/static/cards/slytherin_swap.png"},
+    {"house": "slytherin", "name": "mirror", "value": 0, "src": "/static/cards/slytherin_mirror.png", "type": "special"},
+    {"house": "slytherin", "name": "hallows", "value": 0, "src": "/static/cards/slytherin_hallows.png", "type": "special"},
+    {"house": "slytherin", "name": "echo", "value": 0, "src": "/static/cards/slytherin_echo.png", "type": "special"},
+    {"house": "slytherin", "name": "shield", "value": 0, "src": "/static/cards/slytherin_shield.png", "type": "special"},
+    {"house": "slytherin", "name": "swap", "value": 0, "src": "/static/cards/slytherin_swap.png", "type": "special"},
 ]
 
 all_cards = gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
@@ -154,7 +154,13 @@ bots = [
 ]
 
 def get_fresh_deck():
-    fresh_deck = gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards
+    fresh_deck = []
+
+    for card in gryffindor_cards + hufflepuff_cards + ravenclaw_cards + slytherin_cards:
+        new_card = card.copy()
+        new_card["id"] = str(uuid.uuid4())
+        fresh_deck.append(new_card)
+
     random.shuffle(fresh_deck)
     return fresh_deck
 
@@ -267,8 +273,47 @@ def play_pvp():
     return render_template('pages/play/pvp/page.html')
 
 
-@app.route('/play/simulate')
-def play_simulate():
+@app.route('/simulate/configure')
+def play_simulate_configure():
+    return render_template('pages/simulate/configure/page.html')
+
+@app.route("/simulate/simulation", methods=["POST"])
+def simulate_game():
+    selected_bot_count = int(request.form.get("botCount"))
+    selected_bots = request.form.get("selectedBots", "").split(",")
+
+    if len(selected_bots) != selected_bot_count:
+        return redirect("/simulate")
+
+    cards_per_player = 10
+    player_decks, leftover_deck = deal_cards(
+        num_players=selected_bot_count,
+        cards_per_player=cards_per_player
+    )
+
+    bots_data = {}
+
+    for i, bot_name in enumerate(selected_bots):
+        bot_info = next((b for b in bots if b["name"] == bot_name), None)
+
+        if not bot_info:
+            continue
+
+        bots_data[bot_name] = {
+            "name": bot_name.capitalize(),
+            "image_src": bot_info["color_icon"],
+            "cards": player_decks[i]
+        }
+
+    return render_template(
+        "pages/simulate/simulation/page.html",
+        bots=bots_data,
+        leftover_deck=leftover_deck
+    )
+
+
+@app.route('/testing')
+def testing():
     player_decks, leftover_deck = deal_cards(num_players=4, cards_per_player=10)
     
     all_dealt_cards = []
@@ -316,7 +361,7 @@ def play_simulate():
         'leftover_deck': leftover_deck
     }
     
-    return render_template('pages/play/simulate/page.html', bots=bots, leftover_deck=leftover_deck)
+    return render_template('pages/testing/page.html', bots=bots, leftover_deck=leftover_deck)
 
 
 if __name__ == '__main__':

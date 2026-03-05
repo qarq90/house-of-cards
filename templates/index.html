@@ -17,32 +17,44 @@ endblock %} {% block content %}
             >Play against Bots</a
         >
         <a
+            href="/simulate/configure"
+            class="button-link uppercase hover:opacity-75 lucida-bright text-3xl tracking-widest"
+            >Run Simulation</a
+        >
+        <a
             href="/how-to-play"
             class="button-link uppercase hover:opacity-75 lucida-bright text-3xl tracking-widest"
-            >Game Rules</a
+            >How to Play</a
+        >
+        <a
+            href="/testing"
+            class="button-link uppercase hover:opacity-75 lucida-bright text-3xl tracking-widest"
+            >{TESTING_SIMULATION}</a
         >
     </div>
 </div>
 
 <img
+    id="gryffindor"
     src="/static/icons/color_gryffindor.png"
-    alt="color_gryffindor"
-    class="absolute bottom-4 left-4 w-48 h-48"
+    class="house-icon w-48 h-48 absolute"
 />
 <img
+    id="hufflepuff"
     src="/static/icons/color_hufflepuff.png"
-    alt="color_hufflepuff"
-    class="absolute top-4 left-4 w-48 h-48"
+    class="house-icon w-48 h-48 absolute"
 />
 <img
+    id="ravenclaw"
     src="/static/icons/color_ravenclaw.png"
-    alt="color_ravenclaw"
-    class="absolute top-4 right-4 w-48 h-48"
+    class="house-icon w-48 h-48 absolute"
 />
 <img
+    id="slytherin"
     src="/static/icons/color_slytherin.png"
-    alt="color_slytherin"
-    class="absolute bottom-4 right-4 w-48 h-48"
+    class="house-icon w-48 h-48 absolute"
 />
+
+<script type="module" src="../../../../static/scripts/house-icons.js"></script>
 
 {% endblock %}

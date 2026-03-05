@@ -90,10 +90,13 @@ document.addEventListener("DOMContentLoaded", () => {
         botTrevorHand = [];
 
     let currentSum = 0;
-    let limit = 37;
+    let limit = 27;
     let currentRound = 1;
-    let players = ["dobby", "crookshanks", "hedwig", "trevor"];
-    let currentPlayerIndex = Math.floor(Math.random() * players.length);
+    let currentPlayerIndex = 0;
+    let players =
+        typeof ACTIVE_BOTS !== "undefined"
+            ? ACTIVE_BOTS
+            : ["dobby", "crookshanks", "hedwig", "trevor"];
 
     let roundDiscardPile = [];
 
@@ -143,47 +146,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return result;
     }
 
-    function addCardToPlayerDeck(playerName, card) {
-        let deck, hand;
-
-        switch (playerName) {
-            case "dobby":
-                deck = botDobbyCards;
-                hand = botDobbyHand;
-                break;
-            case "crookshanks":
-                deck = botCrookshanksCards;
-                hand = botCrookshanksHand;
-                break;
-            case "hedwig":
-                deck = botHedwigCards;
-                hand = botHedwigHand;
-                break;
-            case "trevor":
-                deck = botTrevorCards;
-                hand = botTrevorHand;
-                break;
-        }
-
-        if (!deck || !hand) return;
-
-        const totalCards = deck.filter((c) => !c.used).length + hand.length;
-
-        if (totalCards >= 20) {
-            leftoverCards.push(card);
-            return;
-        }
-
-        const deckCards = deck.filter((c) => !c.used).length;
-
-        if (deckCards >= 18) {
-            leftoverCards.push(card);
-            return;
-        }
-
-        deck.push(card);
-    }
-
     function getTwoRandomCards(cardsArray) {
         if (cardsArray.length === 0) return [];
 
@@ -219,10 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         img && img.dataset.cardValue
                             ? parseInt(img.dataset.cardValue)
                             : 0,
-                    type:
-                        img && img.dataset.type
-                            ? img.dataset.type
-                            : "numerical",
                 },
             };
         });
@@ -314,108 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-    function chooseCardToPlay(hand) {
+    function getRandomCardFromHand(hand) {
         if (hand.length === 0) return null;
-        if (hand.length === 1) return hand[0];
-
-        let a = hand[0];
-        let b = hand[1];
-
-        let flag = undefined;
-
-        if (
-            a.data.value + currentSum > limit &&
-            b.data.type === "special" &&
-            b.data.name === "hallows"
-        ) {
-            return b;
-        }
-
-        if (
-            b.data.value + currentSum > limit &&
-            a.data.type === "special" &&
-            a.data.name === "hallows"
-        ) {
-            return a;
-        }
-
-        if (!echoActive) {
-            if (
-                a.data.type === "numerical" &&
-                a.data.value + currentSum === limit
-            )
-                flag = true;
-            else if (
-                b.data.type === "numerical" &&
-                b.data.value + currentSum === limit
-            )
-                flag = false;
-        } else {
-            if (
-                a.data.type === "numerical" &&
-                a.data.value * 2 + currentSum === limit
-            )
-                flag = true;
-            else if (
-                b.data.type === "numerical" &&
-                b.data.value * 2 + currentSum === limit
-            )
-                flag = false;
-        }
-
-        if (!echoActive) {
-            if (
-                a.data.type === "numerical" &&
-                a.data.value + currentSum === limit &&
-                b.data.type === "special" &&
-                b.data.name !== "hallows"
-            )
-                flag = true;
-            else if (
-                b.data.type === "numerical" &&
-                b.data.value + currentSum === limit &&
-                a.data.type === "special" &&
-                b.data.name !== "hallows"
-            )
-                flag = false;
-        } else {
-            if (
-                a.data.type === "numerical" &&
-                a.data.value + currentSum === limit &&
-                b.data.type === "special" &&
-                b.data.name !== "hallows"
-            )
-                flag = true;
-            else if (
-                b.data.type === "numerical" &&
-                b.data.value + currentSum === limit &&
-                a.data.type === "special" &&
-                b.data.name !== "hallows"
-            )
-                flag = false;
-        }
-
-        if (flag === true) return a;
-        if (flag === false) return b;
-
-        if (a.data.type === "numerical" && b.data.type === "numerical") {
-            const aEffective = echoActive ? a.data.value * 2 : a.data.value;
-            const bEffective = echoActive ? b.data.value * 2 : b.data.value;
-
-            const aSafe = aEffective + currentSum < limit;
-            const bSafe = bEffective + currentSum < limit;
-
-            if (aSafe && !bSafe) return a;
-            if (!aSafe && bSafe) return b;
-
-            if (aSafe && bSafe) {
-                return aEffective >= bEffective ? a : b;
-            }
-
-            return aEffective <= bEffective ? a : b;
-        }
-
-        return Math.random() < 0.5 ? a : b;
+        const randomIndex = Math.floor(Math.random() * hand.length);
+        return hand[randomIndex];
     }
 
     function removeCardFromHand(hand, card) {
@@ -568,16 +428,27 @@ document.addEventListener("DOMContentLoaded", () => {
                                 )[0];
                                 drawnCard.used = false;
 
-                                addCardToPlayerDeck(otherPlayerName, drawnCard);
+                                switch (otherPlayerName) {
+                                    case "dobby":
+                                        botDobbyCards.push(drawnCard);
+                                        break;
+                                    case "crookshanks":
+                                        botCrookshanksCards.push(drawnCard);
+                                        break;
+                                    case "hedwig":
+                                        botHedwigCards.push(drawnCard);
+                                        break;
+                                    case "trevor":
+                                        botTrevorCards.push(drawnCard);
+                                        break;
+                                }
                             }
                         }
                     });
 
                 reshufflePlayerDeck(playerName);
-
                 drawCardsUpToLimit(playerName);
-
-                return true;
+                startNewRound();
                 break;
 
             case "Shield":
@@ -602,7 +473,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         updateGameUI();
-        return false;
     }
 
     function swapTopCardWithHand(playerName) {
@@ -653,7 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return false;
         }
 
-        const cardToPlay = chooseCardToPlay(playerHand);
+        const cardToPlay = getRandomCardFromHand(playerHand);
         if (!cardToPlay) {
             console.log(`${playerName} could not select a card`);
             return false;
@@ -676,16 +546,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const playedValue = cardToPlay.data.value || 0;
 
         if (isSpecialCard(cardToPlay)) {
-            const roundShouldEnd = handleSpecialCard(playerName, cardToPlay);
-            if (roundShouldEnd) {
-                return true;
-            }
+            handleSpecialCard(playerName, cardToPlay);
         } else {
             let finalValue = playedValue;
 
             if (echoActive) {
                 finalValue *= 2;
                 echoActive = false;
+            }
+
+            if (
+                cardToPlay.data.name !== "Mirror" &&
+                lastPlayedCard &&
+                lastPlayedCard.data.name === "Mirror" &&
+                !mirrorBlocked
+            ) {
+                finalValue += lastNumberCard ? lastNumberCard.data.value : 0;
             }
 
             currentSum += finalValue;
@@ -1020,9 +896,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const winMessage = document.createElement("div");
                     winMessage.classList.add("harry-potter");
-                    winMessage.style.letterSpacing = "10px";
-                    winMessage.classList.add("text-7xl");
-                    winMessage.classList.add("w-xl");
                     winMessage.textContent = `${bot.name.toUpperCase()} WINS!`;
                     winMessage.classList.add(
                         "fixed",
@@ -1045,7 +918,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
             }
-        }, 1);
+        }, 200);
     }
 
     function startGame() {
