@@ -108,27 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function startTimer() {
-        const maxWidth = timerIndicatorBG.offsetWidth;
-        const increment = 50;
-
-        timerInterval = setInterval(() => {
-            timeSpace += increment;
-            const percentage = Math.min(timeSpace / totalTime, 1);
-            timerIndicator.style.width = percentage * maxWidth + "px";
-        }, increment);
-    }
-
-    function resetTimer() {
-        timeSpace = 0;
-        timerIndicator.style.width = "0px";
-
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
-    }
-
     function generateRandomString() {
         const charset =
             "#r&/q{g%,*$O}()@*HS^\\=sRP!ftXTQGu0?|]e\"<MD>CZ.NELb/v;JaIUc[K':2hAon-zi9j1VdmW+5Fplxw3B48k6Yy7";
@@ -1045,7 +1024,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
             }
-        }, 1);
+        }, 100);
     }
 
     function startGame() {
