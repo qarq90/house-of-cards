@@ -1,4 +1,6 @@
-## House of Cards
+![alt text](/static/imgs/image.png)
+
+### A strategic multiplayer card game where players compete to be the first to empty their personal deck by playing numerical and special cards, while managing their hand and avoiding exceeding the limit.
 
 #### Components :
 
