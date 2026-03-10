@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const timerIndicator = document.getElementById("-indicator");
-    const timerIndicatorBG = document.getElementById("timer-indicator-bg");
-    const totalTime = 5000;
+    const LOOP_INTERVAL = 100;
 
     const currentValueElement = document.getElementById("current_value");
     const targetValueElement = document.getElementById("targetValue");
@@ -49,6 +47,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const gameContainer = document.querySelector(".game-container");
 
+    let gameInterval = null;
+
+    let leftoverCards = [];
+    let botDobbyCards = [],
+        botCrookshanksCards = [],
+        botHedwigCards = [],
+        botTrevorCards = [];
+
+    let botDobbyHand = [],
+        botCrookshanksHand = [],
+        botHedwigHand = [],
+        botTrevorHand = [];
+
+    let lastTwoHouses = {
+        dobby: [],
+        crookshanks: [],
+        hedwig: [],
+        trevor: [],
+    };
+
+    let currentSum = 0;
+    let limit = 37
+    let currentRound = 1;
+    let players = ["dobby", "crookshanks", "hedwig", "trevor"];
+    let currentPlayerIndex = Math.floor(Math.random() * players.length);
+
+    let roundDiscardPile = [];
+
+    let lastNumberCard = null;
+    let echoActive = false;
+    let mirrorBlocked = false;
+    let lastPlayedCard = null;
+
     function addHandStyles() {
         const style = document.createElement("style");
         style.textContent = `
@@ -74,33 +105,53 @@ document.addEventListener("DOMContentLoaded", () => {
         document.head.appendChild(style);
     }
 
-    let timeSpace = 0;
-    let timerInterval = null;
-    let gameInterval = null;
+    function highlightPenaltyPlayer(playerName) {
+        let elements = [];
 
-    let leftoverCards = [];
-    let botDobbyCards = [],
-        botCrookshanksCards = [],
-        botHedwigCards = [],
-        botTrevorCards = [];
+        switch (playerName) {
+            case "dobby":
+                elements = [
+                    botDobbyElement,
+                    botDobbyHandElement,
+                    ...botDobbyCardsElements,
+                ];
+                break;
 
-    let botDobbyHand = [],
-        botCrookshanksHand = [],
-        botHedwigHand = [],
-        botTrevorHand = [];
+            case "crookshanks":
+                elements = [
+                    botCrookshanksElement,
+                    botCrookshanksHandElement,
+                    ...botCrookshanksCardsElements,
+                ];
+                break;
 
-    let currentSum = 0;
-    let limit = 37;
-    let currentRound = 1;
-    let players = ["dobby", "crookshanks", "hedwig", "trevor"];
-    let currentPlayerIndex = Math.floor(Math.random() * players.length);
+            case "hedwig":
+                elements = [
+                    botHedwigElement,
+                    botHedwigHandElement,
+                    ...botHedwigCardsElements,
+                ];
+                break;
 
-    let roundDiscardPile = [];
+            case "trevor":
+                elements = [
+                    botTrevorElement,
+                    botTrevorHandElement,
+                    ...botTrevorCardsElements,
+                ];
+                break;
+        }
 
-    let lastNumberCard = null;
-    let echoActive = false;
-    let mirrorBlocked = false;
-    let lastPlayedCard = null;
+        elements.forEach((el) => {
+            if (!el) return;
+
+            el.style.backgroundColor = "rgba(255,0,0,0.5)";
+
+            setTimeout(() => {
+                el.style.backgroundColor = "";
+            }, 500);
+        });
+    }
 
     function markCardAsUsed(card) {
         if (card) {
@@ -318,6 +369,142 @@ document.addEventListener("DOMContentLoaded", () => {
             return a;
         }
 
+        const distanceToLimit = limit - currentSum;
+        const farThreshold = Math.floor(limit * 0.4);
+
+        const nextPlayerName =
+            players[(currentPlayerIndex + 1) % players.length];
+        const nextPlayerHandSize = getPlayerHandSize(nextPlayerName);
+        const nextPlayerHasSmallHand = nextPlayerHandSize <= 3;
+
+        if (distanceToLimit > farThreshold || nextPlayerHasSmallHand) {
+            if (a.data.type === "special" && a.data.name === "echo") {
+                return a;
+            }
+            if (b.data.type === "special" && b.data.name === "echo") {
+                return b;
+            }
+        }
+
+        const nextPlayerHasEcho = checkIfPlayerHasEcho(nextPlayerName);
+        if (
+            nextPlayerHasEcho &&
+            (a.data.name === "shield" || b.data.name === "shield")
+        ) {
+            return a.data.name === "shield" ? b : a;
+        }
+
+        if (lastNumberCard) {
+            if (a.data.name === "mirror") {
+                const mirrorValue = lastNumberCard.data.value;
+                const effectiveValue = echoActive
+                    ? mirrorValue * 2
+                    : mirrorValue;
+
+                if (effectiveValue + currentSum > limit) {
+                    return b;
+                }
+                if (effectiveValue + currentSum === limit) {
+                    return a;
+                }
+            }
+            if (b.data.name === "mirror") {
+                const mirrorValue = lastNumberCard.data.value;
+                const effectiveValue = echoActive
+                    ? mirrorValue * 2
+                    : mirrorValue;
+
+                if (effectiveValue + currentSum > limit) {
+                    return a;
+                }
+                if (effectiveValue + currentSum === limit) {
+                    return b;
+                }
+            }
+        }
+
+        if (a.data.name === "swap" || b.data.name === "swap") {
+            const swapCard = a.data.name === "swap" ? a : b;
+            const otherCard = a.data.name === "swap" ? b : a;
+
+            if (otherCard.data.type === "numerical") {
+                const otherEffective = echoActive
+                    ? otherCard.data.value * 2
+                    : otherCard.data.value;
+
+                if (otherEffective + currentSum > limit) {
+                    return swapCard;
+                }
+            }
+        }
+
+        const currentPlayerName = players[currentPlayerIndex];
+        const playerDeckSize = getPlayerDeckSize(currentPlayerName);
+
+        if (playerDeckSize <= 2) {
+            if (a.data.type === "numerical") {
+                const aEffective = echoActive ? a.data.value * 2 : a.data.value;
+                if (aEffective + currentSum === limit) return a;
+            }
+            if (b.data.type === "numerical") {
+                const bEffective = echoActive ? b.data.value * 2 : b.data.value;
+                if (bEffective + currentSum === limit) return b;
+            }
+        }
+
+        if (limit - currentSum <= 3) {
+            if (a.data.type === "numerical" && a.data.value <= 2) return a;
+            if (b.data.type === "numerical" && b.data.value <= 2) return b;
+
+            if (
+                a.data.type === "special" &&
+                b.data.type === "numerical" &&
+                b.data.value > 2
+            )
+                return a;
+            if (
+                b.data.type === "special" &&
+                a.data.type === "numerical" &&
+                a.data.value > 2
+            )
+                return b;
+        }
+
+        const opponentsHaveManyCards =
+            checkIfOpponentsHaveManyCards(currentPlayerName);
+        if (currentSum < limit - 10 && opponentsHaveManyCards) {
+            if (a.data.name === "hallows") return b;
+            if (b.data.name === "hallows") return a;
+        }
+
+        if (a.data.name === "echo" && b.data.name === "mirror") {
+            if (currentSum < limit - 8 && lastNumberCard) {
+                return b;
+            }
+        }
+        if (b.data.name === "echo" && a.data.name === "mirror") {
+            if (currentSum < limit - 8 && lastNumberCard) {
+                return a;
+            }
+        }
+
+        const playerLastTwoHouses = lastTwoHouses[currentPlayerName] || [];
+        if (playerLastTwoHouses.length === 2) {
+            const [house1, house2] = playerLastTwoHouses;
+            if (house1 === house2) {
+                if (a.data.house === house1 && b.data.house !== house1) {
+                    if (currentSum < limit - 5) {
+                        return b;
+                    }
+                }
+                if (b.data.house === house1 && a.data.house !== house1) {
+                    if (currentSum < limit - 5) {
+                        return a;
+                    }
+                }
+            }
+        }
+
         if (!echoActive) {
             if (
                 a.data.type === "numerical" &&
@@ -397,6 +584,71 @@ document.addEventListener("DOMContentLoaded", () => {
         return Math.random() < 0.5 ? a : b;
     }
 
+    function getPlayerHandSize(playerName) {
+        switch (playerName) {
+            case "dobby":
+                return botDobbyHand.length;
+            case "crookshanks":
+                return botCrookshanksHand.length;
+            case "hedwig":
+                return botHedwigHand.length;
+            case "trevor":
+                return botTrevorHand.length;
+            default:
+                return 0;
+        }
+    }
+
+    function getPlayerDeckSize(playerName) {
+        switch (playerName) {
+            case "dobby":
+                return botDobbyCards.filter((c) => !c.used).length;
+            case "crookshanks":
+                return botCrookshanksCards.filter((c) => !c.used).length;
+            case "hedwig":
+                return botHedwigCards.filter((c) => !c.used).length;
+            case "trevor":
+                return botTrevorCards.filter((c) => !c.used).length;
+            default:
+                return 0;
+        }
+    }
+
+    function checkIfPlayerHasEcho(playerName) {
+        let hand;
+        switch (playerName) {
+            case "dobby":
+                hand = botDobbyHand;
+                break;
+            case "crookshanks":
+                hand = botCrookshanksHand;
+                break;
+            case "hedwig":
+                hand = botHedwigHand;
+                break;
+            case "trevor":
+                hand = botTrevorHand;
+                break;
+            default:
+                return false;
+        }
+
+        return hand.some(
+            (card) => card.data.type === "special" && card.data.name === "echo",
+        );
+    }
+
+    function checkIfOpponentsHaveManyCards(currentPlayer) {
+        const otherPlayers = players.filter((p) => p !== currentPlayer);
+        let totalCards = 0;
+
+        otherPlayers.forEach((player) => {
+            totalCards += getPlayerHandSize(player) + getPlayerDeckSize(player);
+        });
+
+        return totalCards > 15;
+    }
+
     function removeCardFromHand(hand, card) {
         const index = hand.findIndex((c) => c.data.id === card.data.id);
         if (index !== -1) {
@@ -442,19 +694,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(`Starting Round ${currentRound} with sum: ${currentSum}`);
     }
 
-    function checkRoundEnd() {
-        if (currentSum === limit) {
-            console.log("Exactly hit the limit! Starting new round...");
-            startNewRound();
-            return true;
-        } else if (currentSum > limit) {
-            console.log("Exceeded the limit! Starting new round...");
-            startNewRound();
-            return true;
-        }
-        return false;
-    }
-
     function createFlyingCardAnimation(cardData, startX, startY, playerName) {
         const flyingCard = document.createElement("img");
         flyingCard.src = cardData.src;
@@ -483,7 +722,7 @@ document.addEventListener("DOMContentLoaded", () => {
         flyingCard.style.left = `${centerX}px`;
         flyingCard.style.top = `${centerY}px`;
         flyingCard.style.transform = "scale(1.2)";
-        flyingCard.style.opacity = "0.9";
+        flyingCard.style.opacity = "0.75";
 
         setTimeout(() => {
             flyingCard.remove();
@@ -673,6 +912,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         lastPlayedCard = cardToPlay;
 
+        if (!isSpecialCard(cardToPlay) && cardToPlay.data.house) {
+            const playerHouses = lastTwoHouses[playerName] || [];
+            playerHouses.push(cardToPlay.data.house);
+            if (playerHouses.length > 3) {
+                playerHouses.shift();
+            }
+            lastTwoHouses[playerName] = playerHouses;
+        }
+
         const roundEnded = checkForPenalties(
             playerName,
             cardToPlay.data.value,
@@ -773,6 +1021,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (currentSum > limit) {
             console.log(`${playerName} exceeded the limit!`);
+            highlightPenaltyPlayer(playerName);
 
             const penaltyCards = playedValue;
 
@@ -870,10 +1119,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         updateCardsLeftCounter(playerName);
-    }
-
-    function drawTwoCardsFromOwnDeck(playerName) {
-        drawCardsUpToLimit(playerName);
     }
 
     function playNextBotTurn() {
@@ -1024,7 +1269,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
             }
-        }, 100);
+        }, LOOP_INTERVAL);
     }
 
     function startGame() {
