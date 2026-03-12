@@ -15,68 +15,162 @@ endblock %} {% block content %}
             >n
         </h1>
     </div>
-    <div class="flex flex-col gap-6 items-center justify-center">
-        <h1 class="lucida-bright uppercase text-5xl tracking-wider mb-6">
-            Choose number of Bots
-        </h1>
-        <select
-            id="botCount"
-            class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest"
-        >
-            <option value="">Number of bots &nbsp;</option>
-            <option value="2">2 Bots</option>
-            <option value="3">3 Bots</option>
-            <option value="4">4 Bots</option>
-        </select>
-        <h1 class="lucida-bright uppercase text-5xl tracking-wider mt-12 mb-6">
-            Choose bots to simulate
-        </h1>
-        <div class="flex gap-10 flex-wrap justify-center mb-6">
-            <label class="bot-option">
-                <input type="checkbox" value="crookshanks" hidden />
-                <img
-                    src="/static/icons/x_color_crookshanks.png"
-                    class="bot-img p-2 w-36 h-36"
-                />
-            </label>
 
-            <label class="bot-option">
-                <input type="checkbox" value="dobby" hidden />
-                <img
-                    src="/static/icons/x_color_dobby.png"
-                    class="bot-img p-2 w-36 h-36"
-                />
-            </label>
+    <div class="grid grid-cols-2 gap-16 items-stretch max-w-7xl mx-auto mt-8">
+        <div class="flex flex-col gap-8 h-96">
+            <div class="flex flex-col gap-4 flex-1">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    1. Choose number of Bots
+                </h1>
+                <select
+                    id="botCount"
+                    class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest w-full py-4 text-center"
+                >
+                    <option value="">Number of bots &nbsp;</option>
+                    <option value="2">2 Bots</option>
+                    <option value="3">3 Bots</option>
+                    <option value="4">4 Bots</option>
+                </select>
+            </div>
 
-            <label class="bot-option">
-                <input type="checkbox" value="hedwig" hidden />
-                <img
-                    src="/static/icons/x_color_hedwig.png"
-                    class="bot-img p-2 w-36 h-36"
-                />
-            </label>
-
-            <label class="bot-option">
-                <input type="checkbox" value="trevor" hidden />
-                <img
-                    src="/static/icons/x_color_trevor.png"
-                    class="bot-img p-2 w-36 h-36"
-                />
-            </label>
+            <div class="flex flex-col gap-4 flex-1">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    2. Choose Target Limit
+                </h1>
+                <select
+                    id="limitSelect"
+                    class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest w-full py-4 text-center"
+                >
+                    <option value="">Target limit &nbsp;</option>
+                    <option value="19">19</option>
+                    <option value="21">21</option>
+                    <option value="23">23</option>
+                    <option value="27">27</option>
+                    <option value="29">29</option>
+                    <option value="33">33</option>
+                    <option value="37" selected>37 (Default)</option>
+                    <option value="39">39</option>
+                </select>
+            </div>
         </div>
-        <form method="POST" action="/simulate/simulation" id="simulationForm">
-            <input type="hidden" name="botCount" id="selectedBotCount" />
 
-            <input type="hidden" name="selectedBots" id="selectedBotsInput" />
+        <div class="flex flex-col gap-8 h-96">
+            <div class="flex flex-col gap-4 flex-1">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    3. Choose bots to simulate
+                </h1>
+                <div class="grid grid-cols-4 gap-4 justify-items-center">
+                    <label class="bot-option">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="crookshanks"
+                            hidden
+                        />
+                        <img
+                            src="/static/icons/x_color_crookshanks.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                    </label>
 
-            <button
-                type="submit"
-                class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest"
-            >
-                Start Simulation
-            </button>
-        </form>
+                    <label class="bot-option">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="dobby"
+                            hidden
+                        />
+                        <img
+                            src="/static/icons/x_color_dobby.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                    </label>
+
+                    <label class="bot-option">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="hedwig"
+                            hidden
+                        />
+                        <img
+                            src="/static/icons/x_color_hedwig.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                    </label>
+
+                    <label class="bot-option">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="trevor"
+                            hidden
+                        />
+                        <img
+                            src="/static/icons/x_color_trevor.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4 flex-1">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    4. Simulation Speed
+                </h1>
+                <div class="w-full px-4">
+                    <input
+                        type="range"
+                        id="speedSlider"
+                        class="w-full h-3 bg-white rounded-lg appearance-none cursor-pointer"
+                        min="1"
+                        max="10"
+                        value="4"
+                        step="1"
+                    />
+                    <div
+                        class="flex justify-between text-2xl lucida-bright mt-4 text-gray-300"
+                    >
+                        <span>Slow</span>
+                        <span id="speedValue">Medium</span>
+                        <span>Fast</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <form
+        method="POST"
+        action="/simulate/simulation"
+        id="simulationForm"
+        class="flex justify-center mt-8"
+    >
+        <input type="hidden" name="botCount" id="selectedBotCount" />
+        <input type="hidden" name="selectedBots" id="selectedBotsInput" />
+        <input type="hidden" name="targetLimit" id="selectedLimit" value="37" />
+        <input
+            type="hidden"
+            name="simulationSpeed"
+            id="selectedSpeed"
+            value="100"
+        />
+
+        <button
+            type="submit"
+            class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest px-12 py-4"
+        >
+            Start Simulation
+        </button>
+    </form>
 </div>
 
 <img
@@ -105,4 +199,25 @@ endblock %} {% block content %}
     type="module"
     src="../../../../static/scripts/configure-simulation.js"
 ></script>
+
+<script>
+    const speedSlider = document.getElementById("speedSlider");
+    const speedValue = document.getElementById("speedValue");
+    const selectedSpeed = document.getElementById("selectedSpeed");
+
+    speedSlider.addEventListener("input", function () {
+        const val = parseInt(this.value);
+
+        if (val <= 3) {
+            speedValue.textContent = "Slow";
+        } else if (val <= 6) {
+            speedValue.textContent = "Medium";
+        } else {
+            speedValue.textContent = "Fast";
+        }
+
+        const speedMs = Math.max(50, Math.min(400, 400 - (val - 1) * 38.9));
+        selectedSpeed.value = Math.round(speedMs);
+    });
+</script>
 {% endblock %}

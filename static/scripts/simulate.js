@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const LOOP_INTERVAL = 100;
+    const LOOP_INTERVAL = 10;
 
     const currentValueElement = document.getElementById("current_value");
     const targetValueElement = document.getElementById("targetValue");
@@ -68,10 +68,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     let currentSum = 0;
-    let limit = 37
+    let limit = 37;
     let currentRound = 1;
     let players = ["dobby", "crookshanks", "hedwig", "trevor"];
-    let currentPlayerIndex = Math.floor(Math.random() * players.length);
+    let activePlayers = [...players];
+    let currentPlayerIndex = Math.floor(Math.random() * activePlayers.length);
+    let eliminatedPlayers = [];
 
     let roundDiscardPile = [];
 
@@ -101,8 +103,152 @@ document.addEventListener("DOMContentLoaded", () => {
             .rotate-180 {
                 transform: rotate(180deg) !important;
             }
+            .eliminated-player {
+                opacity: 0.3 !important;
+                filter: grayscale(100%) !important;
+                pointer-events: none !important;
+            }
+            .eliminated-player .bot-hand {
+                display: none !important;
+            }
         `;
         document.head.appendChild(style);
+    }
+
+    function displayRankings() {
+        const rankings = [];
+
+        for (let i = eliminatedPlayers.length - 1; i >= 0; i--) {
+            rankings.push(eliminatedPlayers[i]);
+        }
+
+        rankings.reverse()
+
+        if (activePlayers.length === 1) {
+            rankings.push(activePlayers[0]);
+        }
+
+        const rankingsContainer = document.createElement("div");
+        rankingsContainer.classList.add(
+            "fixed",
+            "top-1/2",
+            "left-1/2",
+            "transform",
+            "-translate-x-1/2",
+            "-translate-y-1/2",
+            "bg-black",
+            "bg-opacity-75",
+            "p-12",
+            "rounded-2xl",
+            "capitalize",
+            "tracking-widest",
+            "z-[9999999]",
+            "text-center",
+            "shadow-2xl",
+            "min-w-[500px]",
+        );
+
+        const title = document.createElement("h2");
+        title.classList.add("harry-potter", "text-7xl", "tracking-widest");
+        title.textContent = "QUIDDITCH RANKINGS";
+        rankingsContainer.appendChild(title);
+
+        const border = document.createElement("h2");
+        border.classList.add(
+            "harry-potter",
+            "text-7xl",
+            "mb-4",
+            "tracking-widest",
+        );
+        border.textContent = "-----------------";
+        rankingsContainer.appendChild(border);
+
+        const rankEmojis = ["1st", "2nd", "3rd"];
+
+        rankings.forEach((player, index) => {
+            const rankNumber = index + 1;
+            const rankItem = document.createElement("div");
+            rankItem.classList.add(
+                "text-6xl",
+                "capitalize",
+                "mb-4",
+                "font-bold",
+                "harry-potter",
+                "flex",
+                "items-center",
+                "justify-center",
+                "gap-4",
+            );
+
+            const capitalizedPlayer = player.toUpperCase();
+
+            if (rankNumber <= 3) {
+                rankItem.innerHTML = `
+                <span class="text-6xl tracking-widest">${rankEmojis[rankNumber - 1]} -=></span>
+                <span class="tracking-widest">${capitalizedPlayer}</span>
+            `;
+            } else {
+                rankItem.innerHTML = `
+                <span class="text-6xl tracking-widest">${rankNumber}th -=></span>
+                <span class="tracking-widest">${capitalizedPlayer}</span>
+            `;
+            }
+
+            rankingsContainer.appendChild(rankItem);
+        });
+
+        document.body.appendChild(rankingsContainer);
+    }
+
+    function eliminatePlayer(playerName) {
+        if (!activePlayers.includes(playerName)) return;
+
+        activePlayers = activePlayers.filter((p) => p !== playerName);
+        eliminatedPlayers.push(playerName);
+
+        if (
+            currentPlayerIndex >= activePlayers.length &&
+            activePlayers.length > 0
+        ) {
+            currentPlayerIndex = 0;
+        }
+
+        let playerElement;
+        switch (playerName) {
+            case "dobby":
+                playerElement = botDobbyElement;
+                break;
+            case "crookshanks":
+                playerElement = botCrookshanksElement;
+                break;
+            case "hedwig":
+                playerElement = botHedwigElement;
+                break;
+            case "trevor":
+                playerElement = botTrevorElement;
+                break;
+        }
+
+        if (playerElement) {
+            playerElement.classList.add("eliminated-player");
+        }
+
+        console.log(`${playerName} has been eliminated!`);
+
+        checkForWinner();
+    }
+
+    function checkForWinner() {
+        if (activePlayers.length === 1) {
+            const winner = activePlayers[0];
+            console.log(`${winner} has won the game!`);
+            clearInterval(gameInterval);
+
+            displayRankings();
+
+            return true;
+        }
+        return false;
     }
 
     function highlightPenaltyPlayer(playerName) {
@@ -342,6 +488,17 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(
             `${playerName} has ${totalCardsLeft} cards left (${unusedDeckCards} in deck + ${hand.length} in hand)`,
         );
+
+        if (totalCardsLeft === 0 && activePlayers.includes(playerName)) {
+            eliminatePlayer(playerName);
+        }
+    }
+
+    function getNextActivePlayer() {
+        if (activePlayers.length === 0) return null;
+
+        let nextIndex = (currentPlayerIndex + 1) % activePlayers.length;
+        return activePlayers[nextIndex];
     }
 
     function chooseCardToPlay(hand) {
@@ -372,9 +529,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const distanceToLimit = limit - currentSum;
         const farThreshold = Math.floor(limit * 0.4);
 
-        const nextPlayerName =
-            players[(currentPlayerIndex + 1) % players.length];
-        const nextPlayerHandSize = getPlayerHandSize(nextPlayerName);
+        const nextPlayerName = getNextActivePlayer();
+        const nextPlayerHandSize = nextPlayerName
+            ? getPlayerHandSize(nextPlayerName)
+            : 0;
         const nextPlayerHasSmallHand = nextPlayerHandSize <= 3;
 
         if (distanceToLimit > farThreshold || nextPlayerHasSmallHand) {
@@ -386,7 +544,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        const nextPlayerHasEcho = checkIfPlayerHasEcho(nextPlayerName);
+        const nextPlayerHasEcho = nextPlayerName
+            ? checkIfPlayerHasEcho(nextPlayerName)
+            : false;
         if (
             nextPlayerHasEcho &&
             (a.data.name === "shield" || b.data.name === "shield")
@@ -438,8 +598,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        const currentPlayerName = players[currentPlayerIndex];
-        const playerDeckSize = getPlayerDeckSize(currentPlayerName);
+        const currentPlayerName = activePlayers[currentPlayerIndex];
+        const playerDeckSize = currentPlayerName
+            ? getPlayerDeckSize(currentPlayerName)
+            : 0;
 
         if (playerDeckSize <= 2) {
             if (a.data.type === "numerical") {
@@ -470,8 +632,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 return b;
         }
 
-        const opponentsHaveManyCards =
-            checkIfOpponentsHaveManyCards(currentPlayerName);
+        const opponentsHaveManyCards = currentPlayerName
+            ? checkIfOpponentsHaveManyCards(currentPlayerName)
+            : false;
         if (currentSum < limit - 10 && opponentsHaveManyCards) {
             if (a.data.name === "hallows") return b;
             if (b.data.name === "hallows") return a;
@@ -488,7 +651,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        const playerLastTwoHouses = lastTwoHouses[currentPlayerName] || [];
+        const playerLastTwoHouses = currentPlayerName
+            ? lastTwoHouses[currentPlayerName] || []
+            : [];
         if (playerLastTwoHouses.length === 2) {
             const [house1, house2] = playerLastTwoHouses;
             if (house1 === house2) {
@@ -639,7 +804,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function checkIfOpponentsHaveManyCards(currentPlayer) {
-        const otherPlayers = players.filter((p) => p !== currentPlayer);
+        const otherPlayers = activePlayers.filter((p) => p !== currentPlayer);
         let totalCards = 0;
 
         otherPlayers.forEach((player) => {
@@ -675,7 +840,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         currentSum = 0;
 
-        if (leftoverCards.length > 0) {
+        if (leftoverCards.length > 0 && activePlayers.length > 0) {
             const randomIndex = Math.floor(
                 Math.random() * leftoverCards.length,
             );
@@ -692,6 +857,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateGameUI();
 
         console.log(`Starting Round ${currentRound} with sum: ${currentSum}`);
+        console.log(`Active players: ${activePlayers.join(", ")}`);
     }
 
     function createFlyingCardAnimation(cardData, startX, startY, playerName) {
@@ -772,7 +938,7 @@ document.addEventListener("DOMContentLoaded", () => {
             case "Hallows":
                 currentSum = limit;
 
-                players
+                activePlayers
                     .filter((p) => p !== playerName)
                     .forEach((otherPlayerName) => {
                         for (let i = 0; i < 2; i++) {
@@ -959,7 +1125,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `${playerName} played ${cardName} and got penalty of ${cardValue} cards`,
             );
         } else if (newSum === limit) {
-            const otherPlayers = players
+            const otherPlayers = activePlayers
                 .filter((p) => p !== playerName)
                 .join(",");
             console.log(
@@ -981,7 +1147,7 @@ document.addEventListener("DOMContentLoaded", () => {
             leftoverCards = [...leftoverCards, ...roundDiscardPile];
             roundDiscardPile = [];
 
-            players
+            activePlayers
                 .filter((p) => p !== playerName)
                 .forEach((otherPlayerName) => {
                     for (let i = 0; i < 2; i++) {
@@ -1122,11 +1288,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function playNextBotTurn() {
-        if (currentPlayerIndex >= players.length) {
+        if (activePlayers.length === 0) return;
+
+        if (currentPlayerIndex >= activePlayers.length) {
             currentPlayerIndex = 0;
         }
 
-        const playerName = players[currentPlayerIndex];
+        const playerName = activePlayers[currentPlayerIndex];
         let playerHand, playerDeck, playerHandElement;
 
         switch (playerName) {
@@ -1150,12 +1318,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 playerDeck = botTrevorCards;
                 playerHandElement = botTrevorHandElement;
                 break;
+            default:
+                return;
         }
 
         console.log(`${playerName}'s turn...`);
         botPlayTurn(playerName, playerHand, playerDeck, playerHandElement);
 
         currentPlayerIndex++;
+
+        if (currentPlayerIndex >= activePlayers.length) {
+            currentPlayerIndex = 0;
+        }
     }
 
     function reshufflePlayerDeck(playerName) {
@@ -1179,6 +1353,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 playerDeck = botTrevorCards;
                 playerHand = botTrevorHand;
                 break;
+            default:
+                return;
         }
 
         playerHand.forEach((card) => {
@@ -1203,7 +1379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function startGameLoop() {
-        if (leftoverCards.length > 0) {
+        if (leftoverCards.length > 0 && activePlayers.length > 0) {
             const randomIndex = Math.floor(
                 Math.random() * leftoverCards.length,
             );
@@ -1221,53 +1397,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         gameInterval = setInterval(() => {
-            playNextBotTurn();
-
-            const allBots = [
-                { name: "dobby", deck: botDobbyCards, hand: botDobbyHand },
-                {
-                    name: "crookshanks",
-                    deck: botCrookshanksCards,
-                    hand: botCrookshanksHand,
-                },
-                { name: "hedwig", deck: botHedwigCards, hand: botHedwigHand },
-                { name: "trevor", deck: botTrevorCards, hand: botTrevorHand },
-            ];
-
-            for (const bot of allBots) {
-                const totalCards =
-                    bot.deck.filter((c) => !c.used).length + bot.hand.length;
-
-                if (totalCards === 0) {
-                    console.log(`${bot.name} has won the game!`);
-                    clearInterval(gameInterval);
-
-                    const winMessage = document.createElement("div");
-                    winMessage.classList.add("harry-potter");
-                    winMessage.style.letterSpacing = "10px";
-                    winMessage.classList.add("text-7xl");
-                    winMessage.classList.add("w-xl");
-                    winMessage.textContent = `${bot.name.toUpperCase()} WINS!`;
-                    winMessage.classList.add(
-                        "fixed",
-                        "top-1/2",
-                        "left-1/2",
-                        "transform",
-                        "-translate-x-1/2",
-                        "-translate-y-1/2",
-                        "text-6xl",
-                        "font-bold",
-                        "text-white",
-                        "bg-black",
-                        "bg-opacity-75",
-                        "p-8",
-                        "rounded-lg",
-                        "z-[9999999]",
-                    );
-
-                    document.body.appendChild(winMessage);
-                    return;
-                }
+            if (activePlayers.length > 1) {
+                playNextBotTurn();
+            } else if (activePlayers.length === 1) {
+                checkForWinner();
             }
         }, LOOP_INTERVAL);
     }
@@ -1328,6 +1461,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Bot Hedwig Hand:", botHedwigHand);
         console.log("Bot Trevor Hand:", botTrevorHand);
         console.log("Leftover Deck:", leftoverCards);
+        console.log("Active Players:", activePlayers);
 
         updateGameUI();
 
