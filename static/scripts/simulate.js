@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const LOOP_INTERVAL = 10;
+    const LOOP_INTERVAL = 250;
 
     const currentValueElement = document.getElementById("current_value");
     const targetValueElement = document.getElementById("targetValue");
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
             rankings.push(eliminatedPlayers[i]);
         }
 
-        rankings.reverse()
+        rankings.reverse();
 
         if (activePlayers.length === 1) {
             rankings.push(activePlayers[0]);
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const title = document.createElement("h2");
         title.classList.add("harry-potter", "text-7xl", "tracking-widest");
-        title.textContent = "QUIDDITCH RANKINGS";
+        title.textContent = "QUIDDITCH RANKING";
         rankingsContainer.appendChild(title);
 
         const border = document.createElement("h2");
@@ -1061,6 +1061,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isSpecialCard(cardToPlay)) {
             const roundShouldEnd = handleSpecialCard(playerName, cardToPlay);
+
+            if (currentSum >= limit) {
+                const roundEnded = checkForPenalties(
+                    playerName,
+                    cardToPlay.data.value,
+                    previousSum,
+                );
+                if (roundEnded) return true;
+            }
+
             if (roundShouldEnd) {
                 return true;
             }
@@ -1191,11 +1201,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const penaltyCards = playedValue;
 
-            leftoverCards = [...leftoverCards, ...roundDiscardPile];
+            const tempDiscardPile = [...roundDiscardPile];
             roundDiscardPile = [];
 
             let playerDeck;
-
             switch (playerName) {
                 case "dobby":
                     playerDeck = botDobbyCards;
@@ -1213,15 +1222,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             for (let i = 0; i < penaltyCards; i++) {
                 if (leftoverCards.length === 0) break;
-
                 const randomIndex = Math.floor(
                     Math.random() * leftoverCards.length,
                 );
                 const drawnCard = leftoverCards.splice(randomIndex, 1)[0];
                 drawnCard.used = false;
-
                 playerDeck.push(drawnCard);
             }
+
+            leftoverCards = [...leftoverCards, ...tempDiscardPile];
 
             if (Math.random() > 0.5) {
                 reshufflePlayerDeck(playerName);
@@ -1229,7 +1238,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             drawCardsUpToLimit(playerName);
             startNewRound();
-
             return true;
         }
 
