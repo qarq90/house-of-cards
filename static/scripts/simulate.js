@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const LOOP_INTERVAL = 250;
+    const LOOP_INTERVAL = 25;
 
     const currentValueElement = document.getElementById("current_value");
     const targetValueElement = document.getElementById("targetValue");
@@ -45,6 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "bot_trevor_cards_left",
     );
 
+    const echoEffect = document.getElementById("active_echo_effect");
+    const hallowsEffect = document.getElementById("active_hallows_effect");
+    const mirrorEffect = document.getElementById("active_mirror_effect");
+    const shieldEffect = document.getElementById("active_shield_effect");
+    const swapEffect = document.getElementById("active_swap_effect");
+
     const gameContainer = document.querySelector(".game-container");
 
     let gameInterval = null;
@@ -68,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     let currentSum = 0;
-    let limit = 37;
+    let limit = 29;
     let currentRound = 1;
     let players = ["dobby", "crookshanks", "hedwig", "trevor"];
     let activePlayers = [...players];
@@ -81,6 +87,24 @@ document.addEventListener("DOMContentLoaded", () => {
     let echoActive = false;
     let mirrorBlocked = false;
     let lastPlayedCard = null;
+
+    function hideAllEffects() {
+        echoEffect.classList.add("hidden");
+        hallowsEffect.classList.add("hidden");
+        mirrorEffect.classList.add("hidden");
+        shieldEffect.classList.add("hidden");
+        swapEffect.classList.add("hidden");
+    }
+
+    function showEffect(effectElement, duration = 800) {
+        hideAllEffects();
+
+        effectElement.classList.remove("hidden");
+
+        setTimeout(() => {
+            effectElement.classList.add("hidden");
+        }, duration);
+    }
 
     function addHandStyles() {
         const style = document.createElement("style");
@@ -935,7 +959,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const name = card.data.name;
 
         switch (name) {
-            case "Hallows":
+            case "hallows":
+                showEffect(hallowsEffect);
                 currentSum = limit;
 
                 activePlayers
@@ -964,23 +989,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 return true;
                 break;
 
-            case "Shield":
+            case "shield":
+                showEffect(shieldEffect);
                 mirrorBlocked = true;
                 echoActive = false;
                 break;
 
-            case "Echo":
+            case "echo":
+                showEffect(echoEffect);
                 echoActive = true;
                 break;
 
-            case "Mirror":
+            case "mirror":
+                showEffect(mirrorEffect);
                 if (!mirrorBlocked && lastNumberCard) {
                     currentSum += lastNumberCard.data.value;
                 }
                 mirrorBlocked = false;
                 break;
 
-            case "Swap":
+            case "swap":
+                showEffect(swapEffect);
                 swapTopCardWithHand(playerName);
                 break;
         }
@@ -1382,7 +1411,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function isSpecialCard(card) {
-        const specials = ["Hallows", "Shield", "Echo", "Mirror", "Swap"];
+        const specials = ["hallows", "shield", "echo", "mirror", "swap"];
         return specials.includes(card.data.name);
     }
 

@@ -287,16 +287,9 @@
             class="rotate-90 w-[187.733px] h-[262.533px]"
         />
 
-        <h1
-            id="current_value"
-            class="ml-64 harry-potter text-8xl tracking-widest"
-        >
-            0
-        </h1>
-
         <div class="flex flex-col items-center gap-4">
             <div class="flex items-center">
-                <span class="harry-potter text-8xl">--</span>
+                <span class="harry-potter text-8xl mr-2">-=</span>
                 <span class="harry-potter text-6xl -rotate-90 inline-block ml-2"
                     >V</span
                 >
@@ -304,12 +297,12 @@
                     id="target_value"
                     class="harry-potter text-8xl tracking-widest ml-4"
                 >
-                    37
+                    29
                 </h1>
                 <span class="harry-potter text-6xl rotate-90 inline-block mr-1"
                     >V</span
                 >
-                <span class="harry-potter text-8xl">--</span>
+                <span class="harry-potter text-8xl ml-2">=-</span>
             </div>
 
             <div class="flex items-center gap-4">
@@ -321,6 +314,41 @@
         </div>
     </div>
 </div>
+
+<div class="absolute bottom-24 left-1/2 -translate-x-1/2 flex items-center flex-col gap-4">
+    <h1 id="current_value" class="harry-potter text-8xl tracking-widest">0</h1>
+    <h1 class="lucida-bright uppercase text-2xl tracking-widest">Current Sum</h1>
+</div>
+
+<img
+    id="active_echo_effect"
+    src="../../../static/icons/y_active_echo.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
+
+<img
+    id="active_hallows_effect"
+    src="../../../static/icons/y_active_hallows.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
+
+<img
+    id="active_mirror_effect"
+    src="../../../static/icons/y_active_mirror.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
+
+<img
+    id="active_shield_effect"
+    src="../../../static/icons/y_active_shield.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
+
+<img
+    id="active_swap_effect"
+    src="../../../static/icons/y_active_swap.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden rotate-90"
+/>
 
 <!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
 

@@ -12,7 +12,6 @@
         - Echo : Next number card played counts double toward the sum.
         - Mirror : Add the same number as the last played number card.
         - Swap : Swap one hand card with the top card of your deck.
-        - Reverse : Reverse the order of turns.
 
     - House Effect: The game will track which house card a player has played. If the same house card is played 3 consecutive times
       in the same round by the same player, the player can remove/discard one of the two cards in thier hands back in to the leftover deck (not personal deck).
