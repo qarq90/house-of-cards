@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     let currentSum = 0;
-    let limit = 29;
+    let limit = 37;
     let currentRound = 1;
     let players = ["dobby", "crookshanks", "hedwig", "trevor"];
     let activePlayers = [...players];
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         swapEffect.classList.add("hidden");
     }
 
-    function showEffect(effectElement, duration = 800) {
+    function showEffect(effectElement, duration = LOOP_INTERVAL) {
         hideAllEffects();
 
         effectElement.classList.remove("hidden");
