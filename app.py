@@ -279,10 +279,44 @@ def play_simulate_configure():
 
 @app.route("/simulate/simulation", methods=["POST"])
 def simulate_game():
-    selected_bot_count = int(request.form.get("botCount"))
-    selected_bots = request.form.get("selectedBots", "").split(",")
+    selected_bot_count = request.form.get("botCount")
+    selected_bots_json = request.form.get("selectedBots", "[]")
+    limit = request.form.get("targetLimit")
+    speed = request.form.get("simulationSpeed")
+    
+    print(f"RAW FORM VALUES - limit: {limit}, speed: {speed}")
+    
+    try:
+        selected_bot_count = int(selected_bot_count) if selected_bot_count else 0
+    except ValueError:
+        selected_bot_count = 0
+    
+    try:
+        import json
+        selected_bots = json.loads(selected_bots_json)
+    except json.JSONDecodeError:
+        selected_bots = []
+    
+    try:
+        limit = int(limit) if limit else 27
+        print(f"Converted limit to: {limit}")
+    except ValueError:
+        limit = 27
+        print(f"Error converting limit, using default: {limit}")
+    
+    try:
+        speed = int(speed) if speed else 100
+        print(f"Converted speed to: {speed}")
+    except ValueError:
+        speed = 100
+        print(f"Error converting speed, using default: {speed}")
+
+    print(f"Selected bots: {selected_bots}")
+    print(f"Selected bot count: {selected_bot_count}")
+    print(f"Final values - Limit: {limit}, Speed: {speed}")
 
     if len(selected_bots) != selected_bot_count:
+        print(f"Error: Selected {len(selected_bots)} bots but expected {selected_bot_count}")
         return redirect("/simulate")
 
     cards_per_player = 10
@@ -292,11 +326,11 @@ def simulate_game():
     )
 
     bots_data = {}
-
     for i, bot_name in enumerate(selected_bots):
         bot_info = next((b for b in bots if b["name"] == bot_name), None)
 
         if not bot_info:
+            print(f"Warning: Bot info not found for {bot_name}")
             continue
 
         bots_data[bot_name] = {
@@ -305,12 +339,16 @@ def simulate_game():
             "cards": player_decks[i]
         }
 
+    print(f"Bots data keys: {bots_data.keys()}")
+    print(f"Rendering with limit: {limit}, speed: {speed}")
+
     return render_template(
         "pages/simulate/simulation/page.html",
         bots=bots_data,
-        leftover_deck=leftover_deck
+        leftover_deck=leftover_deck,
+        target_limit=limit, 
+        simulation_speed=speed
     )
-
 
 @app.route('/testing')
 def testing():

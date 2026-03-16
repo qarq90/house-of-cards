@@ -1,9 +1,6 @@
 {% extends 'layouts/game_layout.html' %} {% block title %}House of Cards | PvE |
-1 Bot | Game{% endblock %} {% block content %}
-
-<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
-
-<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+{{ bots|length }} Bot{% if bots|length > 1 %}s{% endif %} | Game{% endblock %}
+{% block content %}
 
 <div
     id="timer-indicator"
@@ -18,45 +15,263 @@
     &nbsp;
 </div>
 
-<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+<!-- 
+<div
+    style="
+        position: fixed;
+        top: 50px;
+        left: 0;
+        background: red;
+        color: white;
+        z-index: 10000;
+        padding: 10px;
+    "
+>
+    target_limit from template: {{ target_limit }}<br />
+    simulation_speed from template: {{ simulation_speed }}
+</div> -->
 
-<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
-
-<!----------------------------------------------------------------------- Dobby ----------------------------------------------------------------------->
-
-{% for bot_key, bot in bots.items() %}
-<div class="bot-container">
-    <p class="lucida-bright text-2xl uppercase tracking-wider">
-        {{ bot.name }}
-    </p>
-
-    <img src="{{ bot.image_src }}" class="h-[70%] w-[70%]" />
-
-    <p class="harry-potter heading tracking-wide">
-        {{ bot.cards|length }}
-        <span class="lucida-bright text-3xl">left</span>
-    </p>
+{% for bot_key, bot in bots.items() %} {% if bot_key == 'dobby' %}
+<div
+    id="bot_{{ bot_key }}"
+    class="w-96 flex flex-row absolute top-7 right-7 items-center gap-3"
+>
+    <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
+        <p class="lucida-bright text-2xl uppercase tracking-wider">
+            {{ bot.name }}
+        </p>
+        <img
+            src="{{ bot.image_src }}"
+            alt="bot_{{ bot_key }}_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_{{ bot_key }}_deck"
+        class="flex flex-col-reverse justify-center items-center gap-4 w-1/2"
+    >
+        {% for card in bot.cards %}
+        <div class="bot_{{ bot_key }}_cards hidden">
+            <img
+                src="{{ card.src }}"
+                alt="{{ card.house }} {{ card.name }}"
+                class="rotate-180 w-[170.666px] h-[238.666px]"
+                data-card-id="{{ card.id }}"
+                data-card-name="{{ card.name }}"
+                data-card-house="{{ card.house }}"
+                data-card-value="{{ card.value }}"
+                {%
+                if
+                card.type
+                %}data-type="{{ card.type }}"
+                {%
+                endif
+                %}
+            />
+        </div>
+        {% endfor %}
+        <p
+            id="bot_{{ bot_key }}_cards_left"
+            class="harry-potter heading tracking-wide"
+        >
+            {{ bot.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="rotate-180 w-[170.666px] h-[238.666px]"
+        />
+    </div>
 </div>
-{% endfor %}
 
-<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
+{% elif bot_key == 'crookshanks' %}
+<div
+    id="bot_{{ bot_key }}"
+    class="w-96 flex flex-row-reverse absolute top-7 left-7 items-center gap-3"
+>
+    <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
+        <p class="lucida-bright text-2xl uppercase tracking-wider">
+            {{ bot.name }}
+        </p>
+        <img
+            src="{{ bot.image_src }}"
+            alt="bot_{{ bot_key }}_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_{{ bot_key }}_deck"
+        class="flex flex-col-reverse justify-center items-center gap-4 w-1/2"
+    >
+        {% for card in bot.cards %}
+        <div class="bot_{{ bot_key }}_cards hidden">
+            <img
+                src="{{ card.src }}"
+                alt="{{ card.house }} {{ card.name }}"
+                class="rotate-180 w-[170.666px] h-[238.666px]"
+                data-card-id="{{ card.id }}"
+                data-card-name="{{ card.name }}"
+                data-card-house="{{ card.house }}"
+                data-card-value="{{ card.value }}"
+                {%
+                if
+                card.type
+                %}data-type="{{ card.type }}"
+                {%
+                endif
+                %}
+            />
+        </div>
+        {% endfor %}
+        <p
+            id="bot_{{ bot_key }}_cards_left"
+            class="harry-potter heading tracking-wide"
+        >
+            {{ bot.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="rotate-180 w-[170.666px] h-[238.666px]"
+        />
+    </div>
+</div>
 
-<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
+{% elif bot_key == 'hedwig' %}
+<div
+    id="bot_{{ bot_key }}"
+    class="w-96 flex flex-row absolute bottom-7 right-7 items-center gap-3"
+>
+    <div
+        class="relative flex flex-col-reverse gap-4 items-center justify-center w-1/2"
+    >
+        <p class="lucida-bright text-2xl uppercase tracking-wider">
+            {{ bot.name }}
+        </p>
+        <img
+            src="{{ bot.image_src }}"
+            alt="bot_{{ bot_key }}_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_{{ bot_key }}_deck"
+        class="flex flex-col justify-center items-center gap-4 w-1/2"
+    >
+        <p
+            id="bot_{{ bot_key }}_cards_left"
+            class="harry-potter heading tracking-wide"
+        >
+            {{ bot.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="w-[170.666px] h-[238.666px]"
+        />
+        {% for card in bot.cards %}
+        <div class="bot_{{ bot_key }}_cards hidden">
+            <img
+                src="{{ card.src }}"
+                alt="{{ card.house }} {{ card.name }}"
+                class="w-[170.666px] h-[238.666px]"
+                data-card-id="{{ card.id }}"
+                data-card-name="{{ card.name }}"
+                data-card-house="{{ card.house }}"
+                data-card-value="{{ card.value }}"
+                {%
+                if
+                card.type
+                %}data-type="{{ card.type }}"
+                {%
+                endif
+                %}
+            />
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-{% for bot_key, bot in bots.items() %}
+{% elif bot_key == 'trevor' %}
+<div
+    id="bot_{{ bot_key }}"
+    class="w-96 flex flex-row-reverse absolute bottom-7 left-7 items-center gap-3"
+>
+    <div
+        class="relative flex flex-col-reverse gap-4 items-center justify-center w-1/2"
+    >
+        <p class="lucida-bright text-2xl uppercase tracking-wider">
+            {{ bot.name }}
+        </p>
+        <img
+            src="{{ bot.image_src }}"
+            alt="bot_{{ bot_key }}_icon"
+            class="h-[70%] w-[70%]"
+        />
+    </div>
+    <div
+        id="bot_{{ bot_key }}_deck"
+        class="flex flex-col justify-center items-center gap-4 w-1/2"
+    >
+        <p
+            id="bot_{{ bot_key }}_cards_left"
+            class="harry-potter heading tracking-wide"
+        >
+            {{ bot.cards|length }}
+            <span class="lucida-bright text-3xl">left</span>
+        </p>
+        <img
+            src="../../../../../../static/cards/z_base_card.png"
+            alt="random_card"
+            class="w-[170.666px] h-[238.666px]"
+        />
+        {% for card in bot.cards %}
+        <div class="bot_{{ bot_key }}_cards hidden">
+            <img
+                src="{{ card.src }}"
+                alt="{{ card.house }} {{ card.name }}"
+                class="w-[170.666px] h-[238.666px]"
+                data-card-id="{{ card.id }}"
+                data-card-name="{{ card.name }}"
+                data-card-house="{{ card.house }}"
+                data-card-value="{{ card.value }}"
+                {%
+                if
+                card.type
+                %}data-type="{{ card.type }}"
+                {%
+                endif
+                %}
+            />
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %} {% endfor %} {% for bot_key, bot in bots.items() %} {% if bot_key ==
+'dobby' %}
 <div
     id="bot_{{ bot_key }}_hand_cards"
-    class="flex flex-row gap-8 items-center absolute"
+    class="flex flex-row gap-8 items-center absolute top-7 right-[425px]"
 ></div>
-{% endfor %}
-
-<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
-
-<!------------------------------------------------------------------------- Hand ----------------------------------------------------------------------->
-
-<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
-
-<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
+{% elif bot_key == 'crookshanks' %}
+<div
+    id="bot_{{ bot_key }}_hand_cards"
+    class="flex flex-row gap-8 items-center absolute top-7 left-[425px]"
+></div>
+{% elif bot_key == 'hedwig' %}
+<div
+    id="bot_{{ bot_key }}_hand_cards"
+    class="flex flex-row gap-8 items-center absolute bottom-7 right-[425px]"
+></div>
+{% elif bot_key == 'trevor' %}
+<div
+    id="bot_{{ bot_key }}_hand_cards"
+    class="flex flex-row gap-8 items-center absolute bottom-7 left-[425px]"
+></div>
+{% endif %} {% endfor %}
 
 <div class="game-container">
     <div
@@ -72,25 +287,27 @@
                 data-card-name="{{ card.name }}"
                 data-card-house="{{ card.house }}"
                 data-card-value="{{ card.value }}"
+                {%
+                if
+                card.type
+                %}data-type="{{ card.type }}"
+                {%
+                endif
+                %}
             />
         </div>
         {% endfor %}
+
         <img
+            id="leftover_deck_visual"
             src="../../../../../../static/cards/z_base_card.png"
             alt="random_card"
             class="rotate-90 w-[187.733px] h-[262.533px]"
         />
 
-        <h1
-            id="current_value"
-            class="ml-64 harry-potter text-8xl tracking-widest"
-        >
-            0
-        </h1>
-
         <div class="flex flex-col items-center gap-4">
             <div class="flex items-center">
-                <span class="harry-potter text-8xl">--</span>
+                <span class="harry-potter text-8xl mr-2">-=</span>
                 <span class="harry-potter text-6xl -rotate-90 inline-block ml-2"
                     >V</span
                 >
@@ -98,12 +315,12 @@
                     id="target_value"
                     class="harry-potter text-8xl tracking-widest ml-4"
                 >
-                    27
+                    {{ target_limit }}
                 </h1>
                 <span class="harry-potter text-6xl rotate-90 inline-block mr-1"
                     >V</span
                 >
-                <span class="harry-potter text-8xl">--</span>
+                <span class="harry-potter text-8xl ml-2">=-</span>
             </div>
 
             <div class="flex items-center gap-4">
@@ -116,12 +333,51 @@
     </div>
 </div>
 
-<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
+<div
+    class="absolute bottom-24 left-1/2 -translate-x-1/2 flex items-center flex-col gap-4"
+>
+    <h1 id="current_value" class="harry-potter text-8xl tracking-widest">0</h1>
+    <h1 class="lucida-bright uppercase text-2xl tracking-widest">
+        Current Sum
+    </h1>
+</div>
 
-<!------------------------------------------------------------------ Game Container ---------------------------------------------------------------------------->
-<script>
-    const ACTIVE_BOTS = {{ bots.keys()|list|tojson|safe if bots is defined else '[]' }};
-</script>
+<img
+    id="active_echo_effect"
+    src="../../../static/icons/y_active_echo.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
 
-<script type="module" src="../../../../static/scripts/simulate.js"></script>
+<img
+    id="active_hallows_effect"
+    src="../../../static/icons/y_active_hallows.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
+
+<img
+    id="active_mirror_effect"
+    src="../../../static/icons/y_active_mirror.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
+
+<img
+    id="active_shield_effect"
+    src="../../../static/icons/y_active_shield.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden"
+/>
+
+<img
+    id="active_swap_effect"
+    src="../../../static/icons/y_active_swap.png"
+    class="absolute w-36 h-36 top-20 left-1/2 -translate-x-1/2 hidden rotate-90"
+/>
+
+<div
+    id="game-config"
+    class="hidden"
+    data-target-limit="{{ target_limit|default(27) }}"
+    data-simulation-speed="{{ simulation_speed|default(100) }}"
+></div>
+
+<script type="module" src="../../../../static/scripts/simulation.js"></script>
 {% endblock %}

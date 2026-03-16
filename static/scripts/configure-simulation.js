@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const speedSlider = document.getElementById("speedSlider");
     const selectedSpeed = document.getElementById("selectedSpeed");
 
+    selectedLimit.value = limitSelect.value || "37";
+    selectedSpeed.value = "100";
+
     function updateCheckboxesState() {
         const selectedCount = parseInt(botCountSelect.value);
         const checkedCount = document.querySelectorAll(
@@ -76,7 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     limitSelect.addEventListener("change", function () {
-        selectedLimit.value = this.value || "37";
+        selectedLimit.value = this.value;
+        console.log("Limit updated to:", selectedLimit.value);
     });
 
     speedSlider.addEventListener("input", function () {
@@ -84,6 +88,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const speedMs = Math.max(50, Math.min(400, 400 - (val - 1) * 38.9));
         selectedSpeed.value = Math.round(speedMs);
+        console.log(
+            "Speed updated to:",
+            selectedSpeed.value,
+            "ms (slider:",
+            val,
+            ")",
+        );
     });
 
     simulationForm.addEventListener("submit", function (e) {
@@ -106,6 +117,23 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        if (!limitSelect.value) {
+            e.preventDefault();
+            alert("Please select a target limit!");
+            return;
+        }
+
+        selectedLimit.value = limitSelect.value;
+
+        if (!selectedSpeed.value) {
+            const sliderVal = parseInt(speedSlider.value);
+            const speedMs = Math.max(
+                50,
+                Math.min(400, 400 - (sliderVal - 1) * 38.9),
+            );
+            selectedSpeed.value = Math.round(speedMs);
+        }
+
         const selectedBots = [];
         botCheckboxes.forEach((cb) => {
             if (cb.checked) {
@@ -115,19 +143,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         selectedBotsInput.value = JSON.stringify(selectedBots);
 
-        if (!limitSelect.value) {
-            e.preventDefault();
-            alert("Please select a target limit!");
-            return;
-        }
-
+        console.log("=== FORM SUBMISSION ===");
         console.log("Selected Bots:", selectedBots);
-        console.log("Target Limit:", selectedLimit.value);
-        console.log("Simulation Speed:", selectedSpeed.value);
+        console.log("Selected Bots (JSON):", selectedBotsInput.value);
+        console.log("Target Limit (select):", limitSelect.value);
+        console.log("Target Limit (hidden):", selectedLimit.value);
+        console.log("Speed slider value:", speedSlider.value);
+        console.log("Speed (hidden):", selectedSpeed.value);
+        console.log("=======================");
     });
 
     selectedSpeed.value = "100";
-
     botCheckboxes.forEach((cb) => {
         cb.disabled = true;
     });
