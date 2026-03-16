@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     let currentSum = 0;
-    let limit = 37;
+    let limit = 29;
     let currentRound = 1;
     let players = ["dobby", "crookshanks", "hedwig", "trevor"];
     let activePlayers = [...players];
@@ -859,8 +859,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function startNewRound() {
-        leftoverCards = [...leftoverCards, ...roundDiscardPile];
-        roundDiscardPile = [];
+        // leftoverCards = [...leftoverCards, ...roundDiscardPile];
+        // roundDiscardPile = [];
 
         currentSum = 0;
 
@@ -961,7 +961,7 @@ document.addEventListener("DOMContentLoaded", () => {
         switch (name) {
             case "hallows":
                 showEffect(hallowsEffect);
-                currentSum = limit;
+                // currentSum = limit;
 
                 activePlayers
                     .filter((p) => p !== playerName)
@@ -982,11 +982,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     });
 
-                reshufflePlayerDeck(playerName);
+                // reshufflePlayerDeck(playerName);
 
-                drawCardsUpToLimit(playerName);
-
-                return true;
+                // drawCardsUpToLimit(playerName);
+                startNewRound();
+                // return true;
                 break;
 
             case "shield":
@@ -1183,7 +1183,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentSum === limit) {
             console.log(`${playerName} exactly hit the limit!`);
 
-            leftoverCards = [...leftoverCards, ...roundDiscardPile];
+            leftoverCards = [...roundDiscardPile];
             roundDiscardPile = [];
 
             activePlayers
@@ -1259,11 +1259,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 playerDeck.push(drawnCard);
             }
 
-            leftoverCards = [...leftoverCards, ...tempDiscardPile];
-
-            if (Math.random() > 0.5) {
-                reshufflePlayerDeck(playerName);
-            }
+            leftoverCards = [...tempDiscardPile];
 
             drawCardsUpToLimit(playerName);
             startNewRound();

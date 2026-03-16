@@ -7,7 +7,7 @@
         - Each house has 2 copies of numbers 0–9.
 
     - 20 Special cards: 4 per house (Hallows, Shield, Echo, Mirror, Swap)
-        - Hallows : Instantly hit the limit; others draw two, you reshuffle.
+        - Hallows : Instantly hit the limit; others draw two, you reshuffle, new round starts.
         - Shield : Cancels the effect of Echo or Mirror just played.
         - Echo : Next number card played counts double toward the sum.
         - Mirror : Add the same number as the last played number card.
