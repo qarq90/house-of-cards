@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let pauseText = null;
 
     function setupPauseButton() {
-        pauseButton = document.querySelector("button.absolute.left-40");
+        pauseButton = document.querySelector("button.absolute.left-28");
         if (!pauseButton) return;
 
         pauseIcon = pauseButton.querySelector("img");

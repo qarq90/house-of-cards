@@ -46,7 +46,7 @@
 {% for bot_key, bot in bots.items() %} {% if bot_key == 'dobby' %}
 <div
     id="bot_{{ bot_key }}"
-    class="w-96 flex flex-row absolute top-7 right-7 items-center gap-3"
+    class="w-96 flex flex-row absolute top-0 right-0 items-center gap-4 scale-75"
 >
     <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
         <p class="lucida-bright text-2xl uppercase tracking-wider">
@@ -102,7 +102,7 @@
 {% elif bot_key == 'crookshanks' %}
 <div
     id="bot_{{ bot_key }}"
-    class="w-96 flex flex-row-reverse absolute top-7 left-7 items-center gap-3"
+    class="w-96 flex flex-row-reverse absolute top-0 left-0 items-center gap-4 scale-75"
 >
     <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
         <p class="lucida-bright text-2xl uppercase tracking-wider">
@@ -158,7 +158,7 @@
 {% elif bot_key == 'hedwig' %}
 <div
     id="bot_{{ bot_key }}"
-    class="w-96 flex flex-row absolute bottom-7 right-7 items-center gap-3"
+    class="w-96 flex flex-row absolute bottom-0 right-0 items-center gap-4 scale-75"
 >
     <div
         class="relative flex flex-col-reverse gap-4 items-center justify-center w-1/2"
@@ -216,7 +216,7 @@
 {% elif bot_key == 'trevor' %}
 <div
     id="bot_{{ bot_key }}"
-    class="w-96 flex flex-row-reverse absolute bottom-7 left-7 items-center gap-3"
+    class="w-96 flex flex-row-reverse absolute bottom-0 left-0 items-center gap-4 scale-75"
 >
     <div
         class="relative flex flex-col-reverse gap-4 items-center justify-center w-1/2"
@@ -277,22 +277,22 @@
 'dobby' %}
 <div
     id="bot_{{ bot_key }}_hand_cards"
-    class="flex flex-row gap-8 items-center absolute top-7 right-[425px]"
+    class="flex flex-row gap-8 items-center absolute top-0 right-80 scale-75"
 ></div>
 {% elif bot_key == 'crookshanks' %}
 <div
     id="bot_{{ bot_key }}_hand_cards"
-    class="flex flex-row gap-8 items-center absolute top-7 left-[425px]"
+    class="flex flex-row gap-8 items-center absolute top-0 left-80 scale-75"
 ></div>
 {% elif bot_key == 'hedwig' %}
 <div
     id="bot_{{ bot_key }}_hand_cards"
-    class="flex flex-row gap-8 items-center absolute bottom-7 right-[425px]"
+    class="flex flex-row gap-8 items-center absolute bottom-0 right-80 scale-75"
 ></div>
 {% elif bot_key == 'trevor' %}
 <div
     id="bot_{{ bot_key }}_hand_cards"
-    class="flex flex-row gap-8 items-center absolute bottom-7 left-[425px]"
+    class="flex flex-row gap-8 items-center absolute bottom-0 left-80 scale-75"
 ></div>
 {% endif %} {% endfor %}
 
@@ -333,11 +333,11 @@
             id="leftover_deck_visual"
             src="../../../../../../static/cards/z_base_card.png"
             alt="random_card"
-            class="rotate-90 w-[187.733px] h-[262.533px]"
+            class="rotate-90 w-[150.186px] h-[210.026px] ml-3"
         />
 
         <button
-            class="absolute left-40 top-1/2 flex flex-col gap-4 items-center justify-center -translate-y-1/2"
+            class="absolute left-28 top-1/2 flex flex-col gap-4 items-center justify-center -translate-y-1/2 z-[99999999999999] scale-75"
         >
             <img
                 src="../../../../static/icons/z_pause.png"

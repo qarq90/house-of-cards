@@ -23,3 +23,4 @@
 | 14/03/2026 | Code                      | Testing Simulation Logic Fixed              |
 | 15/03/2026 | Bots                      | Bot Choices Completed                       |
 | 17/03/2026 | Code                      | Simulation Logic Completed Final, Bug Fixes |
+| 18/03/2026 | Code                      | Pause and Play Simulation                   |

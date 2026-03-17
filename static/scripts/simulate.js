@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const LOOP_INTERVAL = 25;
+    const LOOP_INTERVAL = 1000;
 
     const currentValueElement = document.getElementById("current_value");
     const targetValueElement = document.getElementById("targetValue");
