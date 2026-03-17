@@ -8,9 +8,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedLimit = document.getElementById("selectedLimit");
     const speedSlider = document.getElementById("speedSlider");
     const selectedSpeed = document.getElementById("selectedSpeed");
+    const speedValue = document.getElementById("speedValue");
 
     selectedLimit.value = limitSelect.value || "37";
-    selectedSpeed.value = "100";
+
+    const initialSliderVal = parseInt(speedSlider.value) || 4;
+    const initialSpeedMs = Math.max(
+        250,
+        Math.min(1250, 1250 - (initialSliderVal - 1) * (1000 / 9)),
+    );
+    selectedSpeed.value = Math.round(initialSpeedMs);
+
+    if (speedValue) {
+        if (initialSliderVal <= 3) {
+            speedValue.textContent = "Slow";
+        } else if (initialSliderVal <= 6) {
+            speedValue.textContent = "Medium";
+        } else {
+            speedValue.textContent = "Fast";
+        }
+    }
 
     function updateCheckboxesState() {
         const selectedCount = parseInt(botCountSelect.value);
@@ -86,8 +103,22 @@ document.addEventListener("DOMContentLoaded", function () {
     speedSlider.addEventListener("input", function () {
         const val = parseInt(this.value);
 
-        const speedMs = Math.max(50, Math.min(400, 400 - (val - 1) * 38.9));
+        const speedMs = Math.max(
+            250,
+            Math.min(1250, 1250 - (val - 1) * (1000 / 9)),
+        );
         selectedSpeed.value = Math.round(speedMs);
+
+        if (speedValue) {
+            if (val <= 3) {
+                speedValue.textContent = "Slow";
+            } else if (val <= 6) {
+                speedValue.textContent = "Medium";
+            } else {
+                speedValue.textContent = "Fast";
+            }
+        }
+
         console.log(
             "Speed updated to:",
             selectedSpeed.value,
@@ -128,8 +159,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!selectedSpeed.value) {
             const sliderVal = parseInt(speedSlider.value);
             const speedMs = Math.max(
-                50,
-                Math.min(400, 400 - (sliderVal - 1) * 38.9),
+                250,
+                Math.min(1250, 1250 - (sliderVal - 1) * (1000 / 9)),
             );
             selectedSpeed.value = Math.round(speedMs);
         }
@@ -153,7 +184,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("=======================");
     });
 
-    selectedSpeed.value = "100";
     botCheckboxes.forEach((cb) => {
         cb.disabled = true;
     });

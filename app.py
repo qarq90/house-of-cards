@@ -147,10 +147,15 @@ bots = [
         "base_icon": "/static/icons/x_bot_hedwig.png"
     },
     {
-        "name": "scabbers", 
+        "name": "trevor", 
         "color_icon": "/static/icons/x_color_trevor.png",
-        "base_icon": "/static/icons/x_bot_scabbers.png"
+        "base_icon": "/static/icons/x_bot_trevor.png"
     },
+    # {
+    #     "name": "scabbers",
+    #     "color_icon": "/static/icons/x_color_scabbers.png",
+    #     "base_icon": "/static/icons/x_bot_scabbers.png"
+    # }
 ]
 
 def get_fresh_deck():
@@ -284,8 +289,6 @@ def simulate_game():
     limit = request.form.get("targetLimit")
     speed = request.form.get("simulationSpeed")
     
-    print(f"RAW FORM VALUES - limit: {limit}, speed: {speed}")
-    
     try:
         selected_bot_count = int(selected_bot_count) if selected_bot_count else 0
     except ValueError:
@@ -299,24 +302,15 @@ def simulate_game():
     
     try:
         limit = int(limit) if limit else 27
-        print(f"Converted limit to: {limit}")
     except ValueError:
         limit = 27
-        print(f"Error converting limit, using default: {limit}")
     
     try:
         speed = int(speed) if speed else 100
-        print(f"Converted speed to: {speed}")
     except ValueError:
         speed = 100
-        print(f"Error converting speed, using default: {speed}")
-
-    print(f"Selected bots: {selected_bots}")
-    print(f"Selected bot count: {selected_bot_count}")
-    print(f"Final values - Limit: {limit}, Speed: {speed}")
 
     if len(selected_bots) != selected_bot_count:
-        print(f"Error: Selected {len(selected_bots)} bots but expected {selected_bot_count}")
         return redirect("/simulate")
 
     cards_per_player = 10
@@ -328,19 +322,11 @@ def simulate_game():
     bots_data = {}
     for i, bot_name in enumerate(selected_bots):
         bot_info = next((b for b in bots if b["name"] == bot_name), None)
-
-        if not bot_info:
-            print(f"Warning: Bot info not found for {bot_name}")
-            continue
-
         bots_data[bot_name] = {
             "name": bot_name.capitalize(),
             "image_src": bot_info["color_icon"],
             "cards": player_decks[i]
         }
-
-    print(f"Bots data keys: {bots_data.keys()}")
-    print(f"Rendering with limit: {limit}, speed: {speed}")
 
     return render_template(
         "pages/simulate/simulation/page.html",
@@ -349,6 +335,7 @@ def simulate_game():
         target_limit=limit, 
         simulation_speed=speed
     )
+
 
 @app.route('/testing')
 def testing():

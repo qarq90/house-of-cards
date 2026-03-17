@@ -1,0 +1,27 @@
+[
+    {
+        "name": "dobby",
+        "color_icon": "/static/icons/x_color_dobby.png",
+        "base_icon": "/static/icons/x_bot_dobby.png"
+    },
+    {
+        "name": "crookshanks",
+        "color_icon": "/static/icons/x_color_crookshanks.png",
+        "base_icon": "/static/icons/x_bot_crookshanks.png"
+    },
+    {
+        "name": "hedwig",
+        "color_icon": "/static/icons/x_color_hedwig.png",
+        "base_icon": "/static/icons/x_bot_hedwig.png"
+    },
+    {
+        "name": "trevor",
+        "color_icon": "/static/icons/x_color_trevor.png",
+        "base_icon": "/static/icons/x_bot_trevor.png"
+    },
+    {
+        "name": "scabbers",
+        "color_icon": "/static/icons/x_color_scabbers.png",
+        "base_icon": "/static/icons/x_bot_scabbers.png"
+    }
+]
