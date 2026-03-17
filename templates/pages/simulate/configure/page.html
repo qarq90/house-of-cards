@@ -2,12 +2,6 @@
 endblock %} {% block content %}
 <div class="non-game-container">
     <div class="flex items-center justify-center flex-row gap-6">
-        <a
-            href="/"
-            class="button-link text-4xl tracking-widest flex items-center gap-3 pt-6 pb-5 pl-7 hover:opacity-75"
-        >
-            <i class="fas fa-arrow-left text-3xl"></i>
-        </a>
         <h1 class="harry-potter text-8xl title tracking-widest">
             C<span class="text-6xl">ɸ</span>nfigure $imulati<span
                 class="text-6xl"
@@ -148,29 +142,41 @@ endblock %} {% block content %}
         </div>
     </div>
 
-    <form
-        method="POST"
-        action="/simulate/simulation"
-        id="simulationForm"
-        class="flex justify-center mt-8"
-    >
-        <input type="hidden" name="botCount" id="selectedBotCount" />
-        <input type="hidden" name="selectedBots" id="selectedBotsInput" />
-        <input type="hidden" name="targetLimit" id="selectedLimit" value="37" />
-        <input
-            type="hidden"
-            name="simulationSpeed"
-            id="selectedSpeed"
-            value="100"
-        />
-
-        <button
-            type="submit"
-            class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest px-12 py-4"
+    <div class="flex flex-row-reverse gap-8 items-center justify-center w-fit">
+        <form
+            method="POST"
+            action="/simulate/simulation"
+            id="simulationForm"
+            class="flex justify-center"
         >
-            Start Simulation
-        </button>
-    </form>
+            <input type="hidden" name="botCount" id="selectedBotCount" />
+            <input type="hidden" name="selectedBots" id="selectedBotsInput" />
+            <input
+                type="hidden"
+                name="targetLimit"
+                id="selectedLimit"
+                value="37"
+            />
+            <input
+                type="hidden"
+                name="simulationSpeed"
+                id="selectedSpeed"
+                value="100"
+            />
+
+            <button
+                type="submit"
+                class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest px-12 py-4"
+            >
+                Start Simulation
+            </button>
+        </form>
+        <a
+            href="/"
+            class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest px-12 py-4"
+            >Go Back</a
+        >
+    </div>
 </div>
 
 <img
