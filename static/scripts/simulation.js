@@ -79,6 +79,78 @@ document.addEventListener("DOMContentLoaded", () => {
     let mirrorBlocked = false;
     let lastPlayedCard = null;
 
+    let isPaused = false;
+    let pauseButton = null;
+    let pauseIcon = null;
+    let pauseText = null;
+
+    function setupPauseButton() {
+        pauseButton = document.querySelector("button.absolute.left-40");
+        if (!pauseButton) return;
+
+        pauseIcon = pauseButton.querySelector("img");
+        pauseText = pauseButton.querySelector("h1");
+
+        pauseButton.addEventListener("click", togglePause);
+
+        const pauseIndicator = document.createElement("div");
+        pauseIndicator.id = "pause-indicator";
+        pauseIndicator.className =
+            "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-75 text-white px-12 py-6 rounded-2xl text-6xl harry-potter tracking-widest z-[9999999] hidden";
+        pauseIndicator.textContent = "PAUSED";
+        document.body.appendChild(pauseIndicator);
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+
+        if (isPaused) {
+            if (pauseIcon)
+                pauseIcon.src = "../../../../static/icons/z_play.png";
+            if (pauseText) pauseText.textContent = "Play";
+
+            const pauseIndicator = document.getElementById("pause-indicator");
+            if (pauseIndicator) pauseIndicator.classList.remove("hidden");
+
+            console.log("Game paused");
+        } else {
+            if (pauseIcon)
+                pauseIcon.src = "../../../../static/icons/z_pause.png";
+            if (pauseText) pauseText.textContent = "Pause";
+
+            const pauseIndicator = document.getElementById("pause-indicator");
+            if (pauseIndicator) pauseIndicator.classList.add("hidden");
+
+            console.log("Game resumed");
+        }
+    }
+
+    function playNextBotTurn() {
+        if (isPaused) {
+            console.log("Game is paused - skipping turn");
+            return;
+        }
+
+        if (activePlayers.length === 0) return;
+
+        if (currentPlayerIndex >= activePlayers.length) {
+            currentPlayerIndex = 0;
+        }
+
+        const playerName = activePlayers[currentPlayerIndex];
+        const playerHand = botHands[playerName];
+        const playerDeck = botDecks[playerName];
+        const playerHandElement = botHandElements[playerName];
+
+        console.log(`${playerName}'s turn...`);
+        botPlayTurn(playerName, playerHand, playerDeck, playerHandElement);
+
+        currentPlayerIndex++;
+        if (currentPlayerIndex >= activePlayers.length) {
+            currentPlayerIndex = 0;
+        }
+    }
+
     function hideAllEffects() {
         if (echoEffect) echoEffect.classList.add("hidden");
         if (hallowsEffect) hallowsEffect.classList.add("hidden");
@@ -303,7 +375,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const unusedDeckCards = deck.filter((card) => !card.used).length;
         const totalCardsLeft = unusedDeckCards + hand.length;
 
-        // Update the number but preserve the span
         const spanElement = cardsLeftElement.querySelector("span");
         if (spanElement) {
             cardsLeftElement.innerHTML = `${totalCardsLeft} `;
@@ -418,7 +489,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const centerX = containerRect.left + containerRect.width / 2 - 85.333;
         const centerY = containerRect.top + containerRect.height / 2 - 119.333;
 
-        // Force reflow
         flyingCard.offsetHeight;
 
         flyingCard.style.left = `${centerX}px`;
@@ -562,7 +632,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let a = hand[0];
         let b = hand[1];
 
-        // Hallows logic - if other card would bust, play Hallows
         if (
             a.data.value + currentSum > limit &&
             b.data.type === "special" &&
@@ -586,13 +655,11 @@ document.addEventListener("DOMContentLoaded", () => {
             : 0;
         const nextPlayerHasSmallHand = nextPlayerHandSize <= 3;
 
-        // Echo strategy - play early in round or when next player has small hand
         if (distanceToLimit > farThreshold || nextPlayerHasSmallHand) {
             if (a.data.type === "special" && a.data.name === "echo") return a;
             if (b.data.type === "special" && b.data.name === "echo") return b;
         }
 
-        // Shield strategy - block opponent's Echo
         const nextPlayerHasEcho = nextPlayerName
             ? checkIfPlayerHasEcho(nextPlayerName)
             : false;
@@ -601,7 +668,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (b.data.name === "shield") return b;
         }
 
-        // Mirror strategy
         if (lastNumberCard) {
             if (a.data.name === "mirror") {
                 const mirrorValue = lastNumberCard.data.value;
@@ -621,7 +687,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Numerical card logic
         if (a.data.type === "numerical" && b.data.type === "numerical") {
             const aEffective = echoActive ? a.data.value * 2 : a.data.value;
             const bEffective = echoActive ? b.data.value * 2 : b.data.value;
@@ -637,7 +702,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return aEffective <= bEffective ? a : b;
         }
 
-        // If one card is numerical and one is special
         if (a.data.type === "numerical" && b.data.type === "special") {
             const aEffective = echoActive ? a.data.value * 2 : a.data.value;
             if (aEffective + currentSum < limit) return a;
@@ -649,7 +713,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return a;
         }
 
-        // Default random choice
         return Math.random() < 0.5 ? a : b;
     }
 
@@ -788,27 +851,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return false;
     }
 
-    function playNextBotTurn() {
-        if (activePlayers.length === 0) return;
-
-        if (currentPlayerIndex >= activePlayers.length) {
-            currentPlayerIndex = 0;
-        }
-
-        const playerName = activePlayers[currentPlayerIndex];
-        const playerHand = botHands[playerName];
-        const playerDeck = botDecks[playerName];
-        const playerHandElement = botHandElements[playerName];
-
-        console.log(`${playerName}'s turn...`);
-        botPlayTurn(playerName, playerHand, playerDeck, playerHandElement);
-
-        currentPlayerIndex++;
-        if (currentPlayerIndex >= activePlayers.length) {
-            currentPlayerIndex = 0;
-        }
-    }
-
     function reshufflePlayerDeck(playerName) {
         const deck = botDecks[playerName];
         const hand = botHands[playerName];
@@ -823,7 +865,6 @@ document.addEventListener("DOMContentLoaded", () => {
             card.used = false;
         });
 
-        // Shuffle deck
         for (let i = deck.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -859,6 +900,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function startGame() {
         addHandStyles();
+        setupPauseButton();
 
         leftoverCards = createPersonalDeck(leftoverDeckElement);
 
@@ -896,7 +938,6 @@ document.addEventListener("DOMContentLoaded", () => {
     startGame();
 });
 
-// Utility functions
 function generateRandomString() {
     const charset =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
