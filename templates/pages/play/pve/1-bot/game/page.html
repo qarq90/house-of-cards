@@ -1,5 +1,10 @@
 {% extends 'layouts/game_layout.html' %} {% block title %}House of Cards | PvE |
 1 Bot | Game{% endblock %} {% block content %}
+
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
 <div
     id="timer-indicator"
     class="fixed top-0 left-0 w-full h-3 bg-[var(--bg)] z-[999999999]"
@@ -13,43 +18,76 @@
     &nbsp;
 </div>
 
-<div id="bot" class="hidden w-96 absolute top-7 right-7 items-center gap-3">
-    <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
-        <p class="harry-potter text-4xl heading tracking-widest">
-            {{ bot1Name }}
-        </p>
-        <img src="{{ bot1ImageSrc }}" alt="bot-icon" class="h-[70%] w-[70%]" />
-    </div>
-    <div id="bot-deck" class="flex flex-col-reverse justify-center items-center gap-4 w-1/2">
-        <p class="harry-potter heading tracking-widest">
-            {{ botRecievedCards|length }} left
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
+<!----------------------------------------------------------------------- Timer ----------------------------------------------------------------------->
+
+<!----------------------------------------------------------------------- Debug ----------------------------------------------------------------------->
+
+<!-- 
+<div
+    style="
+        position: fixed;
+        top: 50px;
+        left: 0;
+        background: red;
+        color: white;
+        z-index: 10000;
+        padding: 10px;
+    "
+>
+    target_limit from template: {{ target_limit }}<br />
+    simulation_speed from template: {{ simulation_speed }}
+</div> -->
+
+<div
+    id="bot"
+    class="hidden w-96 absolute top-0 left-0 items-center gap-4 scale-75"
+>
+    <div
+        id="bot-deck"
+        class="flex flex-col-reverse justify-center items-center gap-4 w-1/2"
+    >
+        <p class="harry-potter heading tracking-widest" id="bot-cards-count">
+            {{ bot_cards|length }} left
         </p>
         <img
-            src="../../../../../../static/cards/z_base_card.png"
+            src="/static/cards/z_base_card.png"
             alt="random_card"
             class="rotate-180 w-[170.666px] h-[238.666px]"
         />
+    </div>
+    <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
+        <p class="harry-potter text-4xl heading tracking-widest">
+            {{ bot_name }}
+        </p>
+        <img src="{{ bot_image }}" alt="bot-icon" class="h-[70%] w-[70%]" />
     </div>
 </div>
 
 <div
     id="player"
-    class="hidden w-96 absolute bottom-7 right-7 items-center gap-3"
+    class="hidden w-96 absolute bottom-0 right-0 items-center gap-4 scale-75"
 >
-    <div class="relative flex flex-col gap-4 items-center justify-center w-1/2">
+    <div class="relative flex flex-col gap-4 items-center justify-cent  er w-1/2">
         <img
-            src="../../../../../../static/icons/x_color_player.png"
+            src="{{ player_avatar }}"
             alt="player-icon"
-            class="h-[70%] w-[70%]"
+            class="h-[70%] w-[70%] rounded-full border-white border-4"
         />
-        <p class="harry-potter text-4xl heading tracking-widest">Hitler</p>
+        <p class="harry-potter text-4xl heading tracking-widest">
+            {{ player_name }}
+        </p>
     </div>
-    <div id="player-deck" class="flex flex-col justify-center items-center gap-4 w-1/2">
-        <p class="harry-potter heading tracking-widest">
-            {{ playerRecievedCards|length }} left
+    <div
+        id="player-deck"
+        class="flex flex-col justify-center items-center gap-4 w-1/2"
+    >
+        <p class="harry-potter heading tracking-widest" id="player-cards-count">
+            {{ player_cards|length }} left
         </p>
         <img
-            src="../../../../../../static/cards/z_base_card.png"
+            src="/static/cards/z_base_card.png"
             alt="random_card"
             class="w-[170.666px] h-[238.666px]"
         />
@@ -60,11 +98,11 @@
 
 <div class="game-container">
     <div
-        id="bot-cards-recieved"
+        id="bot-cards-received"
         class="flex flex-col justify-center items-center gap-4 w-full"
     >
         <div class="flex flex-row gap-6 items-center justify-center">
-            {% for card in botRecievedCards %}
+            {% for card in bot_cards %}
             <div class="bot-cards">
                 <img
                     src="{{ card.src }}"
@@ -82,7 +120,7 @@
 
     <div class="relative w-full h-64">
         <img
-            src="../../../../../../static/cards/z_base_card.png"
+            src="/static/cards/z_base_card.png"
             alt="random_card"
             class="rotate-90 absolute left-12 top-1/2 transform -translate-y-1/2 w-[170.666px] h-[238.666px]"
         />
@@ -98,16 +136,16 @@
             id="targetValue"
             class="harry-potter text-8xl tracking-widest absolute top-1/2 right-0 transform -translate-y-1/2"
         >
-            -->19<--
+            -->{{ target_value|default(19) }}<--
         </h1>
     </div>
 
     <div
-        id="player-cards-recieved"
+        id="player-cards-received"
         class="flex flex-col justify-center items-center w-full gap-4"
     >
         <div class="flex flex-row gap-6 items-center justify-center">
-            {% for card in playerRecievedCards %}
+            {% for card in player_cards %}
             <div class="player-cards">
                 <img
                     src="{{ card.src }}"
@@ -133,19 +171,6 @@
         class="hidden flex-row gap-8 justify-center items-center absolute bottom-0 left-0 w-full pb-4"
     ></div>
 
-    <div
-        id="player-icon"
-        class="hidden absolute top-7 left-7 items-center gap-3"
-    >
-        <div class="relative flex flex-col gap-4 justify-center">
-            <img
-                src="{{ bot1ImageSrc }}"
-                alt="{{ bot1Name }} icon"
-                class="w-1/2 h-1/2"
-            />
-        </div>
-    </div>
-
-    <script src="../../../../../../static/scripts/1BotGame.js"></script>
-    {% endblock %}
+    <script src="/static/scripts/1BotGame.js"></script>
 </div>
+{% endblock %}

@@ -2,39 +2,218 @@
 endblock %} {% block content %}
 <div class="non-game-container">
     <h1 class="harry-potter title tracking-widest">
-        P<span class="text-8xl">V</span>E
+        P<span class="text-8xl">V</span>E - 3 B<span class="text-7xl">ɸ</span>ts
+        (FFA)
     </h1>
-    <div class="flex flex-col gap-6 items-center justify-center">
-        <a
-            href="/play/pve/2-bot/game"
-            class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest"
-            >Start Game</a
-        >
-        <a
-            href="/play/pve"
-            class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest"
-            >Go Back</a
-        >
+
+    <div class="flex flex-col gap-16 items-center justify-center mt-8">
+        <div class="flex flex-row gap-32 justify-center">
+            <div class="flex flex-col gap-8 w-full max-w-2xl">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    Your Character
+                </h1>
+
+                <div class="flex flex-row gap-12 items-center justify-center">
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="relative w-40 h-40">
+                            <img
+                                id="avatarPreview"
+                                src="/static/icons/z_color_player.png"
+                                alt="Player Avatar"
+                                class="w-40 h-40 object-cover transition-all duration-300"
+                                id="avatarImg"
+                            />
+                            <label
+                                for="avatarUpload"
+                                class="absolute bottom-0 right-0 bg-white rounded-full p-2 cursor-pointer hover:bg-gray-200 transition-colors shadow-md"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6 text-gray-800"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                                    />
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                                    />
+                                </svg>
+                            </label>
+                            <input
+                                type="file"
+                                id="avatarUpload"
+                                accept="image/*"
+                                class="hidden"
+                            />
+                        </div>
+                        <span class="lucida-bright text-lg">Upload Avatar</span>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <label class="lucida-bright text-2xl"
+                            >Enter Your Name:</label
+                        >
+                        <input
+                            type="text"
+                            id="playerName"
+                            placeholder="Harry Potter"
+                            class="p-4 text-xl rounded-lg bg-transparent lucida-bright border-2 border-white text-white placeholder-white placeholder-opacity-60 focus:outline-none transition-colors"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-8 w-full">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    Choose Your Opponent
+                </h1>
+                <div
+                    class="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center"
+                >
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="crookshanks"
+                            class="hidden"
+                            checked
+                        />
+                        <img
+                            src="/static/icons/x_color_crookshanks.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
+                            >Crookshanks</span
+                        >
+                    </label>
+
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="dobby"
+                            class="hidden"
+                        />
+                        <img
+                            src="/static/icons/x_color_dobby.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
+                            >Dobby</span
+                        >
+                    </label>
+
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="hedwig"
+                            class="hidden"
+                        />
+                        <img
+                            src="/static/icons/x_color_hedwig.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
+                            >Hedwig</span
+                        >
+                    </label>
+
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="checkbox"
+                            name="bot"
+                            value="trevor"
+                            class="hidden"
+                        />
+                        <img
+                            src="/static/icons/x_color_trevor.png"
+                            class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
+                        />
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
+                            >Trevor</span
+                        >
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-8 items-center justify-center">
+            <a
+                href="/play/pve"
+                class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest py-4 px-8 whitespace-nowrap"
+            >
+                Go Back
+            </a>
+
+            <div class="flex flex-col gap-4">
+                <form
+                    method="POST"
+                    action="/play/pve/1-bot/game"
+                    id="pveForm"
+                    class="w-full"
+                    enctype="multipart/form-data"
+                >
+                    <input
+                        type="hidden"
+                        name="selectedBot"
+                        id="selectedBotInput"
+                        value="crookshanks"
+                    />
+                    <input
+                        type="hidden"
+                        name="playerName"
+                        id="playerNameInput"
+                        value=""
+                    />
+                    <input
+                        type="hidden"
+                        name="playerAvatar"
+                        id="playerAvatarInput"
+                        value=""
+                    />
+
+                    <button
+                        type="submit"
+                        class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest py-4 px-8 whitespace-nowrap"
+                    >
+                        Start Game
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
+{% include 'components/bot-icons.html' %}
+
 <img
-    src="/static/icons/x_color_crookshanks.png"
-    alt="x_color_crookshanks"
-    class="absolute bottom-4 left-4 w-48 h-48"
+    src="/static/icons/default_avatar.png"
+    alt="default"
+    class="hidden"
+    id="defaultAvatarRef"
 />
-<img
-    src="/static/icons/x_color_dobby.png"
-    alt="x_color_dobby"
-    class="absolute top-4 left-4 w-48 h-48"
-/>
-<img
-    src="/static/icons/x_color_hedwig.png"
-    alt="x_color_hedwig"
-    class="absolute top-4 right-4 w-48 h-48"
-/>
-<img
-    src="/static/icons/x_color_trevor.png"
-    alt="x_color_trevor"
-    class="absolute bottom-4 right-4 w-48 h-48"
-/>
+
+<script
+    type="module"
+    src="../../../../../static/scripts/configure-3-bot.js"
+></script>
+
 {% endblock %}

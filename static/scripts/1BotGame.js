@@ -6,7 +6,7 @@ let gameStarted = false;
 let playerTurn = true;
 let timerInterval = null;
 
-const totalTime = 5000; // Increased to 5 seconds for gameplay
+const totalTime = 5; // Increased to 5 seconds for gameplay
 
 let playerHandCardsElements = [];
 let botHandCardsElements = [];

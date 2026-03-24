@@ -7,10 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     const icons = [
-        document.getElementById("gryffindor"),
-        document.getElementById("hufflepuff"),
-        document.getElementById("ravenclaw"),
-        document.getElementById("slytherin"),
+        document.getElementById("crookshanks"),
+        document.getElementById("dobby"),
+        document.getElementById("hedwig"),
+        document.getElementById("trevor"),
     ];
 
     for (let i = corners.length - 1; i > 0; i--) {

@@ -210,47 +210,51 @@ def play_pve_1_bot():
     return render_template('pages/play/pve/1-bot/page.html')
 
 
-@app.route('/play/pve/1-bot/game')
+
+@app.route('/play/pve/1-bot/game', methods=['POST'])
 def play_pve_1_bot_game():
-    session.clear()
+    player_name = request.form.get('playerName', 'Player')
+    selected_bot = request.form.get('selectedBot', 'crookshanks')
+    
+    bot_mapping = {
+        'crookshanks': {'name': 'Crookshanks', 'image': '/static/icons/x_color_crookshanks.png'},
+        'dobby': {'name': 'Dobby', 'image': '/static/icons/x_color_dobby.png'},
+        'hedwig': {'name': 'Hedwig', 'image': '/static/icons/x_color_hedwig.png'},
+        'trevor': {'name': 'Trevor', 'image': '/static/icons/x_color_trevor.png'}
+    }
+    
+    bot_details = bot_mapping.get(selected_bot, bot_mapping['crookshanks'])
+    bot_name = bot_details['name']
+    bot_image_src = bot_details['image']
     
     player_decks, leftover_deck = deal_cards(num_players=2, cards_per_player=10)
     
-    botInteger = random.randint(1, 4)
-    if botInteger == 1:
-        botName = "Dobby"
-        botImageSrc = "/static/icons/x_color_dobby.png"
-    elif botInteger == 2:
-        botName = "Scabbers"
-        botImageSrc = "/static/icons/x_color_trevor.png"
-    elif botInteger == 3:
-        botName = "Hedwig"
-        botImageSrc = "/static/icons/x_color_hedwig.png"
-    else:  
-        botName = "Crookshanks"
-        botImageSrc = "/static/icons/x_color_crookshanks.png"
+    avatar_data = request.form.get('playerAvatar')
+
+    if avatar_data and avatar_data.startswith("data:image"):
+        player_avatar = avatar_data
+    else:
+        player_avatar = "/static/icons/default_avatar.png"
     
-    session.update({
-        'player': {
-            'name': "Hitler",
-            'cards': player_decks[0],
-            'personal_deck': player_decks[0][2:],  
-            'hand': player_decks[0][:2]
-        },
-        'bot': {
-            'name': botName,
-            'cards': player_decks[1],
-            'personal_deck': player_decks[1][2:],  
-            'hand': player_decks[1][:2]
-        },
-        'leftover_deck': leftover_deck
-    })
+    print(f"Game started - Player: {player_name}, Bot: {bot_name}")
+    print(f"Player hand: {len(player_decks[0][:2])} cards")
+    print(f"Bot hand: {len(player_decks[1][:2])} cards")
+    print(f"Leftover deck: {len(leftover_deck)} cards")
     
-    return render_template('pages/play/pve/1-bot/game/page.html', 
-                         playerRecievedCards=session["player"]["cards"], 
-                         bot1Name=botName, 
-                         bot1ImageSrc=botImageSrc, 
-                         botRecievedCards=session["bot"]["cards"])
+    return render_template(
+        'pages/play/pve/1-bot/game/page.html',
+        player_name=player_name,
+        player_avatar=player_avatar,
+        player_cards=player_decks[0],
+        player_hand=player_decks[0][:2],
+        player_deck=player_decks[0][2:],
+        bot_name=bot_name,
+        bot_image=bot_image_src,
+        bot_cards=player_decks[1],
+        bot_hand=player_decks[1][:2],
+        bot_deck=player_decks[1][2:],
+        leftover_deck=leftover_deck
+    )
 
 
 @app.route('/play/pve/2-bot')

@@ -65,4 +65,4 @@
 
 #### Winning :
 
-- The first player to play all cards from their personal deck and hand wins immediately.
+- The first player to play all cards from their personal deck and hand finishes first and so on.

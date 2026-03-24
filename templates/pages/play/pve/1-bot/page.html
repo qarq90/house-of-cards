@@ -2,198 +2,218 @@
 endblock %} {% block content %}
 <div class="non-game-container">
     <h1 class="harry-potter title tracking-widest">
-        P<span class="text-8xl">V</span>E
+        P<span class="text-8xl">V</span>E - 1 B<span class="text-7xl">ɸ</span>t
+        (1v1)
     </h1>
 
-    <div
-        class="flex flex-col gap-8 items-center justify-center max-w-2xl mx-auto mt-8"
-    >
-        <!-- Bot Selection Section -->
-        <div class="flex flex-col gap-4 w-full">
-            <h1
-                class="lucida-bright uppercase text-3xl tracking-wider text-center"
-            >
-                Choose Your Opponent
-            </h1>
-            <div
-                class="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center"
-            >
-                <label class="bot-option cursor-pointer">
-                    <input
-                        type="radio"
-                        name="bot"
-                        value="crookshanks"
-                        class="hidden"
-                        checked
-                    />
-                    <div class="text-center">
+    <div class="flex flex-col gap-16 items-center justify-center mt-8">
+        <div class="flex flex-row gap-32 justify-center">
+            <div class="flex flex-col gap-8 w-full max-w-2xl">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    Your Character
+                </h1>
+
+                <div class="flex flex-row gap-12 items-center justify-center">
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="relative w-40 h-40">
+                            <img
+                                id="avatarPreview"
+                                src="/static/icons/z_color_player.png"
+                                alt="Player Avatar"
+                                class="w-40 h-40 object-cover transition-all duration-300"
+                                id="avatarImg"
+                            />
+                            <label
+                                for="avatarUpload"
+                                class="absolute bottom-0 right-0 bg-white rounded-full p-2 cursor-pointer hover:bg-gray-200 transition-colors shadow-md"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6 text-gray-800"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                                    />
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                                    />
+                                </svg>
+                            </label>
+                            <input
+                                type="file"
+                                id="avatarUpload"
+                                accept="image/*"
+                                class="hidden"
+                            />
+                        </div>
+                        <span class="lucida-bright text-lg">Upload Avatar</span>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <label class="lucida-bright text-2xl"
+                            >Enter Your Name:</label
+                        >
+                        <input
+                            type="text"
+                            id="playerName"
+                            placeholder="Harry Potter"
+                            class="p-4 text-xl rounded-lg bg-transparent lucida-bright border-2 border-white text-white placeholder-white placeholder-opacity-60 focus:outline-none transition-colors"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-8 w-full">
+                <h1
+                    class="lucida-bright uppercase text-3xl tracking-wider text-center"
+                >
+                    Choose Your Opponent
+                </h1>
+                <div
+                    class="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center"
+                >
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="radio"
+                            name="bot"
+                            value="crookshanks"
+                            class="hidden"
+                            checked
+                        />
                         <img
                             src="/static/icons/x_color_crookshanks.png"
                             class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
                         />
-                        <span class="lucida-bright text-xl mt-2 block"
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
                             >Crookshanks</span
                         >
-                    </div>
-                </label>
+                    </label>
 
-                <label class="bot-option cursor-pointer">
-                    <input
-                        type="radio"
-                        name="bot"
-                        value="dobby"
-                        class="hidden"
-                    />
-                    <div class="text-center">
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="radio"
+                            name="bot"
+                            value="dobby"
+                            class="hidden"
+                        />
                         <img
                             src="/static/icons/x_color_dobby.png"
                             class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
                         />
-                        <span class="lucida-bright text-xl mt-2 block"
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
                             >Dobby</span
                         >
-                    </div>
-                </label>
+                    </label>
 
-                <label class="bot-option cursor-pointer">
-                    <input
-                        type="radio"
-                        name="bot"
-                        value="hedwig"
-                        class="hidden"
-                    />
-                    <div class="text-center">
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="radio"
+                            name="bot"
+                            value="hedwig"
+                            class="hidden"
+                        />
                         <img
                             src="/static/icons/x_color_hedwig.png"
                             class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
                         />
-                        <span class="lucida-bright text-xl mt-2 block"
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
                             >Hedwig</span
                         >
-                    </div>
-                </label>
+                    </label>
 
-                <label class="bot-option cursor-pointer">
-                    <input
-                        type="radio"
-                        name="bot"
-                        value="trevor"
-                        class="hidden"
-                    />
-                    <div class="text-center">
+                    <label class="bot-option cursor-pointer">
+                        <input
+                            type="radio"
+                            name="bot"
+                            value="trevor"
+                            class="hidden"
+                        />
                         <img
                             src="/static/icons/x_color_trevor.png"
                             class="bot-img p-2 w-32 h-32 hover:scale-105 transition-transform"
                         />
-                        <span class="lucida-bright text-xl mt-2 block"
+                        <span
+                            class="lucida-bright text-xl mt-2 block text-center"
                             >Trevor</span
                         >
-                    </div>
-                </label>
+                    </label>
+                </div>
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex flex-col gap-4 w-full">
-            <form
-                method="POST"
-                action="/play/pve/game"
-                id="pveForm"
-                class="w-full"
-            >
-                <input
-                    type="hidden"
-                    name="selectedBot"
-                    id="selectedBotInput"
-                    value="crookshanks"
-                />
-                <button
-                    type="submit"
-                    class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest w-full py-4"
-                >
-                    Start Game
-                </button>
-            </form>
+        <div class="flex flex-row gap-8 items-center justify-center">
             <a
                 href="/play/pve"
-                class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest w-full py-4 text-center"
+                class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest py-4 px-8 whitespace-nowrap"
             >
                 Go Back
             </a>
+
+            <div class="flex flex-col gap-4">
+                <form
+                    method="POST"
+                    action="/play/pve/1-bot/game"
+                    id="pveForm"
+                    class="w-full"
+                    enctype="multipart/form-data"
+                >
+                    <input
+                        type="hidden"
+                        name="selectedBot"
+                        id="selectedBotInput"
+                        value="crookshanks"
+                    />
+                    <input
+                        type="hidden"
+                        name="playerName"
+                        id="playerNameInput"
+                        value=""
+                    />
+                    <input
+                        type="hidden"
+                        name="playerAvatar"
+                        id="playerAvatarInput"
+                        value=""
+                    />
+
+                    <button
+                        type="submit"
+                        class="button-link text-3xl uppercase hover:opacity-75 lucida-bright tracking-widest py-4 px-8 whitespace-nowrap"
+                    >
+                        Start Game
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Decorative Images -->
+{% include 'components/bot-icons.html' %}
+
 <img
-    src="/static/icons/x_color_crookshanks.png"
-    alt="x_color_crookshanks"
-    class="absolute bottom-4 left-4 w-48 h-48 opacity-20"
-/>
-<img
-    src="/static/icons/x_color_dobby.png"
-    alt="x_color_dobby"
-    class="absolute top-4 left-4 w-48 h-48 opacity-20"
-/>
-<img
-    src="/static/icons/x_color_hedwig.png"
-    alt="x_color_hedwig"
-    class="absolute top-4 right-4 w-48 h-48 opacity-20"
-/>
-<img
-    src="/static/icons/x_color_trevor.png"
-    alt="x_color_trevor"
-    class="absolute bottom-4 right-4 w-48 h-48 opacity-20"
+    src="/static/icons/default_avatar.png"
+    alt="default"
+    class="hidden"
+    id="defaultAvatarRef"
 />
 
-<!-- JavaScript for handling bot selection -->
-<script>
-    const botRadios = document.querySelectorAll('input[name="bot"]');
-    const selectedBotInput = document.getElementById("selectedBotInput");
-    const pveForm = document.getElementById("pveForm");
+<script
+    type="module"
+    src="../../../../../static/scripts/configure-1-bot.js"
+></script>
 
-    // Update hidden input when bot is selected
-    botRadios.forEach((radio) => {
-        radio.addEventListener("change", function () {
-            if (this.checked) {
-                selectedBotInput.value = this.value;
-            }
-        });
-    });
-
-    // Optional: Add visual feedback for selected bot
-    botRadios.forEach((radio) => {
-        radio.addEventListener("change", function () {
-            // Remove selected class from all bot options
-            document.querySelectorAll(".bot-option").forEach((option) => {
-                option.classList.remove("selected-bot");
-            });
-            // Add selected class to parent of checked radio
-            if (this.checked) {
-                this.closest(".bot-option").classList.add("selected-bot");
-            }
-        });
-    });
-</script>
-
-<!-- Optional: Add some CSS for selected state -->
-<style>
-    .selected-bot .bot-img {
-        border: 3px solid gold;
-        border-radius: 50%;
-        padding: 2px;
-        box-shadow: 0 0 15px gold;
-    }
-
-    input[type="radio"]:checked + .text-center img {
-        border: 3px solid gold;
-        border-radius: 50%;
-        padding: 2px;
-        box-shadow: 0 0 15px gold;
-    }
-
-    .opacity-20 {
-        opacity: 0.2;
-    }
-</style>
 {% endblock %}

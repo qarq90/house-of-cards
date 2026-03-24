@@ -27,24 +27,5 @@ endblock %} {% block content %}
         >
     </div>
 </div>
-<img
-    src="/static/icons/x_color_crookshanks.png"
-    alt="x_color_crookshanks"
-    class="absolute bottom-4 left-4 w-48 h-48"
-/>
-<img
-    src="/static/icons/x_color_dobby.png"
-    alt="x_color_dobby"
-    class="absolute top-4 left-4 w-48 h-48"
-/>
-<img
-    src="/static/icons/x_color_hedwig.png"
-    alt="x_color_hedwig"
-    class="absolute top-4 right-4 w-48 h-48"
-/>
-<img
-    src="/static/icons/x_color_trevor.png"
-    alt="x_color_trevor.png"
-    class="absolute bottom-4 right-4 w-48 h-48"
-/>
-{% endblock %}
+
+{% include 'components/bot-icons.html' %} {% endblock %}

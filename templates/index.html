@@ -2,7 +2,7 @@
 endblock %} {% block content %}
 <div class="non-game-container z-50">
     <h1 class="harry-potter title tracking-widest">
-        H<span class="text-6xl">ɸ</span>u$e <span class="text-6xl">ɸ</span>f
+        H<span class="text-7xl">ɸ</span>u$e <span class="text-7xl">ɸ</span>f
         Card$
     </h1>
     <div class="flex flex-col gap-6 items-center justify-center">
@@ -34,27 +34,4 @@ endblock %} {% block content %}
     </div>
 </div>
 
-<img
-    id="gryffindor"
-    src="/static/icons/color_gryffindor.png"
-    class="house-icon w-48 h-48 absolute"
-/>
-<img
-    id="hufflepuff"
-    src="/static/icons/color_hufflepuff.png"
-    class="house-icon w-48 h-48 absolute"
-/>
-<img
-    id="ravenclaw"
-    src="/static/icons/color_ravenclaw.png"
-    class="house-icon w-48 h-48 absolute"
-/>
-<img
-    id="slytherin"
-    src="/static/icons/color_slytherin.png"
-    class="house-icon w-48 h-48 absolute"
-/>
-
-<script type="module" src="../static/scripts/house-icons.js"></script>
-
-{% endblock %}
+{% include 'components/house-icons.html' %} {% endblock %}

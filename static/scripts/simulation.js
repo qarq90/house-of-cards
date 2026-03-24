@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const swapEffect = document.getElementById("active_swap_effect");
     const gameContainer = document.querySelector(".game-container");
 
+    const playerTotalCards = {};
+
     let gameInterval = null;
     let leftoverCards = [];
     let currentSum = 0;
@@ -367,21 +369,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateCardsLeftCounter(playerName) {
         const cardsLeftElement = botCardsLeftElements[playerName];
-        const deck = botDecks[playerName];
-        const hand = botHands[playerName];
+        if (!cardsLeftElement) return;
 
-        if (!cardsLeftElement || !deck) return;
+        const totalCardsLeft = playerTotalCards[playerName];
 
-        const unusedDeckCards = deck.filter((card) => !card.used).length;
-        const totalCardsLeft = unusedDeckCards + hand.length;
-
-        const spanElement = cardsLeftElement.querySelector("span");
-        if (spanElement) {
-            cardsLeftElement.innerHTML = `${totalCardsLeft} `;
-            cardsLeftElement.appendChild(spanElement);
-        } else {
-            cardsLeftElement.innerHTML = `${totalCardsLeft} <span class="lucida-bright text-3xl">left</span>`;
-        }
+        cardsLeftElement.innerHTML = `${totalCardsLeft} <span class="lucida-bright text-3xl">left</span>`;
 
         if (totalCardsLeft === 0 && activePlayers.includes(playerName)) {
             eliminatePlayer(playerName);
@@ -522,6 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         deck.push(card);
+        playerTotalCards[otherPlayerName]++;
     }
 
     function handleSpecialCard(playerName, card) {
@@ -740,7 +733,9 @@ document.addEventListener("DOMContentLoaded", () => {
             startPos.y,
             playerName,
         );
+
         removeCardFromHand(playerHand, cardToPlay);
+        playerTotalCards[playerName]--;
         roundDiscardPile.push(cardToPlay);
 
         const previousSum = currentSum;
@@ -840,6 +835,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const drawnCard = leftoverCards.splice(randomIndex, 1)[0];
                 drawnCard.used = false;
                 playerDeck.push(drawnCard);
+                playerTotalCards[playerName]++;
             }
 
             leftoverCards = [...tempDiscardPile];
@@ -880,9 +876,6 @@ document.addEventListener("DOMContentLoaded", () => {
             roundDiscardPile.push(startingCard);
             currentSum += startingCard.data.value || 0;
             updateGameUI();
-            console.log(
-                `Starting card: ${startingCard.data.name} (${startingCard.data.value})`,
-            );
         }
 
         players.forEach((playerName) => {
@@ -908,20 +901,7 @@ document.addEventListener("DOMContentLoaded", () => {
             botDecks[botKey] = createPersonalDeck(botCardElements[botKey]);
             botHands[botKey] = getTwoRandomCards(botDecks[botKey]);
 
-            const isRotated = botKey === "dobby" || botKey === "crookshanks";
-            displayBotHand(
-                botHands[botKey],
-                botHandElements[botKey],
-                `bot_${botKey}_card`,
-                isRotated,
-            );
-
-            if (botHandElements[botKey]) {
-                botHandElements[botKey].classList.remove("hidden");
-                botHandElements[botKey].classList.add("bot-hand");
-            }
-
-            updateCardsLeftCounter(botKey);
+            playerTotalCards[botKey] = botDecks[botKey].length;
         });
 
         console.log("Game initialized with:", {
