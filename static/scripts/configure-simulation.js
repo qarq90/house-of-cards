@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedSpeed = document.getElementById("selectedSpeed");
     const speedValue = document.getElementById("speedValue");
 
+    let selectionOrder = [];
+
     selectedLimit.value = limitSelect.value || "37";
 
     const initialSliderVal = parseInt(speedSlider.value) || 4;
@@ -31,9 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateCheckboxesState() {
         const selectedCount = parseInt(botCountSelect.value);
-        const checkedCount = document.querySelectorAll(
-            'input[name="bot"]:checked',
-        ).length;
 
         if (!selectedCount) {
             botCheckboxes.forEach((cb) => {
@@ -45,36 +44,24 @@ document.addEventListener("DOMContentLoaded", function () {
         botCheckboxes.forEach((cb) => {
             cb.disabled = false;
         });
-
-        if (checkedCount >= selectedCount) {
-            botCheckboxes.forEach((cb) => {
-                if (!cb.checked) {
-                    cb.disabled = true;
-                }
-            });
-        }
     }
 
     botCountSelect.addEventListener("change", function () {
         const count = parseInt(this.value);
         selectedBotCount.value = count || "";
 
-        if (!count) {
-            botCheckboxes.forEach((cb) => {
-                cb.checked = false;
-                cb.disabled = true;
-            });
-        } else {
-            botCheckboxes.forEach((cb) => {
-                cb.disabled = false;
-            });
-            updateCheckboxesState();
-        }
+        selectionOrder = [];
+
+        botCheckboxes.forEach((cb) => {
+            cb.checked = false;
+            cb.disabled = !count;
+        });
     });
 
     botCheckboxes.forEach((checkbox) => {
         checkbox.addEventListener("change", function () {
             const selectedCount = parseInt(botCountSelect.value);
+            const totalBots = botCheckboxes.length;
 
             if (!selectedCount) {
                 this.checked = false;
@@ -82,16 +69,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            const checkedCount = document.querySelectorAll(
-                'input[name="bot"]:checked',
-            ).length;
+            if (this.checked) {
+                selectionOrder = selectionOrder.filter((cb) => cb !== this);
 
-            if (checkedCount > selectedCount) {
-                this.checked = false;
-                alert(`You can only select ${selectedCount} bots!`);
+                selectionOrder.push(this);
+
+                while (
+                    selectedCount !== totalBots &&
+                    selectionOrder.length > selectedCount
+                ) {
+                    const oldest = selectionOrder.shift();
+                    oldest.checked = false;
+                }
+            } else {
+                selectionOrder = selectionOrder.filter((cb) => cb !== this);
             }
 
-            updateCheckboxesState();
+            console.log(
+                "Selected:",
+                selectionOrder.map((cb) => cb.value),
+            );
         });
     });
 

@@ -3,7 +3,6 @@ import json
 import random
 import uuid
 from datetime import datetime
-import random
 
 app = Flask(__name__)
 app.secret_key = '170105245166'
@@ -272,9 +271,47 @@ def play_pve_3_bot():
     return render_template('pages/play/pve/3-bot/page.html')
 
 
-@app.route('/play/pve/3-bot/game')
+@app.route('/play/pve/3-bot/game', methods=["POST"])
 def play_pve_3_bot_game():
-    return render_template('pages/play/pve/3-bot/game/page.html')
+    selected_bots = request.form.get("selectedBot", "")
+    player_name = request.form.get("playerName", "").strip()
+    player_avatar = request.form.get("playerAvatar", "")
+
+    bots_list = [b for b in selected_bots.split(",") if b]
+
+    random.shuffle(BOT_POSITIONS)
+
+    bots_with_positions = {}
+
+    for i, bot_key in enumerate(bots_list[:3]):
+        pos = BOT_POSITIONS[i]
+
+        bots_with_positions[bot_key] = {
+            **get_bot_data(bot_key), 
+            "position": pos,
+            "position_class": POSITION_CLASSES[pos],
+            "hand_class": HAND_CLASSES[pos]
+        }
+
+    if not bots_list:
+        return "No bots selected", 400
+
+    if not player_name:
+        return "Player name required", 400
+
+    if len(bots_list) > 3:
+        bots_list = bots_list[:3]
+
+    print("Player:", player_name)
+    print("Bots:", bots_list)
+    print("Avatar length:", len(player_avatar) if player_avatar else "No avatar")
+
+    return render_template(
+        'pages/play/pve/3-bot/game/page.html',
+        player_name=player_name,
+        bots=bots_list,
+        avatar=player_avatar
+    )
 
 
 @app.route('/play/pvp')
@@ -285,6 +322,7 @@ def play_pvp():
 @app.route('/simulate/configure')
 def play_simulate_configure():
     return render_template('pages/simulate/configure/page.html')
+
 
 @app.route("/simulate/simulation", methods=["POST"])
 def simulate_game():
@@ -305,9 +343,9 @@ def simulate_game():
         selected_bots = []
     
     try:
-        limit = int(limit) if limit else 27
+        limit = int(limit) if limit else 37
     except ValueError:
-        limit = 27
+        limit = 37
     
     try:
         speed = int(speed) if speed else 100

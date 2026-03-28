@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentAvatarData = "";
     let hasCustomAvatar = false;
 
+    let selectedBotsQueue = [];
+    const MAX_BOTS = 3;
+
     function updateAvatarStyling(isCustom) {
         if (isCustom) {
             avatarPreview.classList.add(
@@ -40,24 +43,52 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     botRadios.forEach((radio) => {
-        radio.addEventListener("change", function () {
+        radio.addEventListener("click", function (e) {
+            const botValue = this.value;
+
             if (this.checked) {
-                selectedBotInput.value = this.value;
-
-                document.querySelectorAll(".bot-img").forEach((img) => {
-                    img.classList.remove();
-                });
-
-                const parentLabel = this.closest("label");
-                if (parentLabel) {
-                    const botImg = parentLabel.querySelector(".bot-img");
-                    if (botImg) {
-                        botImg.classList.add();
-                    }
+                if (!selectedBotsQueue.includes(botValue)) {
+                    selectedBotsQueue.push(botValue);
                 }
 
-                console.log(`2-Bot Mode: Selected ${this.value}`);
+                if (selectedBotsQueue.length > MAX_BOTS) {
+                    const removedBot = selectedBotsQueue.shift();
+
+                    const oldRadio = document.querySelector(
+                        `input[name="bot"][value="${removedBot}"]`,
+                    );
+
+                    if (oldRadio) {
+                        oldRadio.checked = false;
+
+                        const oldLabel = oldRadio.closest("label");
+                        const oldImg = oldLabel?.querySelector(".bot-img");
+                        if (oldImg) oldImg.classList.remove("selected");
+                    }
+
+                    console.log(`Removed oldest bot: ${removedBot}`);
+                }
+            } else {
+                selectedBotsQueue = selectedBotsQueue.filter(
+                    (b) => b !== botValue,
+                );
             }
+
+            document.querySelectorAll(".bot-img").forEach((img) => {
+                img.classList.remove("selected");
+            });
+
+            selectedBotsQueue.forEach((bot) => {
+                const r = document.querySelector(
+                    `input[name="bot"][value="${bot}"]`,
+                );
+                const img = r?.closest("label")?.querySelector(".bot-img");
+                if (img) img.classList.add("selected");
+            });
+
+            selectedBotInput.value = selectedBotsQueue.join(",");
+
+            console.log("Selected bots:", selectedBotsQueue);
         });
     });
 
@@ -148,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedBot = document.querySelector('input[name="bot"]:checked');
         const playerName = playerNameInput.value.trim();
 
-        if (!selectedBot) {
+        if (selectedBotsQueue.length === 0) {
             e.preventDefault();
             alert("Please select a bot to play against!");
             return;
@@ -161,30 +192,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         playerNameHidden.value = playerName;
-        selectedBotInput.value = selectedBot.value;
+        selectedBotInput.value = selectedBotsQueue.join(",");
 
         if (hasCustomAvatar && currentAvatarData) {
             playerAvatarInput.value = currentAvatarData;
         } else {
             playerAvatarInput.value = "";
         }
-
-        console.log("=== 2-BOT VERSION FORM SUBMISSION ===");
-        console.log("Player Name:", playerName);
-        console.log("Selected Bot:", selectedBot.value);
-        console.log(
-            "Avatar Type:",
-            hasCustomAvatar
-                ? "Custom uploaded image"
-                : "Default avatar (no border, no roundness)",
-        );
-        if (hasCustomAvatar && currentAvatarData) {
-            console.log(
-                "Avatar Data Size:",
-                `${Math.round(currentAvatarData.length / 1024)} KB`,
-            );
-        }
-        console.log("=====================================");
     });
 
     playerNameHidden.value = playerNameInput.value || "";
