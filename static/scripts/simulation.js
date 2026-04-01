@@ -62,9 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const mirrorEffect = document.getElementById("active_mirror_effect");
     const shieldEffect = document.getElementById("active_shield_effect");
     const swapEffect = document.getElementById("active_swap_effect");
+    const currentTurn = document.getElementById("current_turn");
     const gameContainer = document.querySelector(".game-container");
-
-    const playerTotalCards = {};
 
     let gameInterval = null;
     let leftoverCards = [];
@@ -369,11 +368,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateCardsLeftCounter(playerName) {
         const cardsLeftElement = botCardsLeftElements[playerName];
-        if (!cardsLeftElement) return;
+        const deck = botDecks[playerName];
+        const hand = botHands[playerName];
 
-        const totalCardsLeft = playerTotalCards[playerName];
+        if (!cardsLeftElement || !deck) return;
 
-        cardsLeftElement.innerHTML = `${totalCardsLeft} <span class="lucida-bright text-3xl">left</span>`;
+        const unusedDeckCards = deck.filter((card) => !card.used).length;
+        const totalCardsLeft = unusedDeckCards + hand.length;
+
+        const spanElement = cardsLeftElement.querySelector("span");
+        if (spanElement) {
+            cardsLeftElement.innerHTML = `${totalCardsLeft} `;
+            cardsLeftElement.appendChild(spanElement);
+        } else {
+            cardsLeftElement.innerHTML = `${totalCardsLeft} <span class="lucida-bright text-3xl">left</span>`;
+        }
 
         if (totalCardsLeft === 0 && activePlayers.includes(playerName)) {
             eliminatePlayer(playerName);
@@ -514,7 +523,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         deck.push(card);
-        playerTotalCards[otherPlayerName]++;
     }
 
     function handleSpecialCard(playerName, card) {
@@ -733,9 +741,7 @@ document.addEventListener("DOMContentLoaded", () => {
             startPos.y,
             playerName,
         );
-
         removeCardFromHand(playerHand, cardToPlay);
-        playerTotalCards[playerName]--;
         roundDiscardPile.push(cardToPlay);
 
         const previousSum = currentSum;
@@ -785,6 +791,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         updateCardsLeftCounter(playerName);
         updateGameUI();
+        currentTurn.textContent = playerName.toUpperCase();
 
         return true;
     }
@@ -835,7 +842,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const drawnCard = leftoverCards.splice(randomIndex, 1)[0];
                 drawnCard.used = false;
                 playerDeck.push(drawnCard);
-                playerTotalCards[playerName]++;
             }
 
             leftoverCards = [...tempDiscardPile];
@@ -876,6 +882,9 @@ document.addEventListener("DOMContentLoaded", () => {
             roundDiscardPile.push(startingCard);
             currentSum += startingCard.data.value || 0;
             updateGameUI();
+            console.log(
+                `Starting card: ${startingCard.data.name} (${startingCard.data.value})`,
+            );
         }
 
         players.forEach((playerName) => {
@@ -901,7 +910,20 @@ document.addEventListener("DOMContentLoaded", () => {
             botDecks[botKey] = createPersonalDeck(botCardElements[botKey]);
             botHands[botKey] = getTwoRandomCards(botDecks[botKey]);
 
-            playerTotalCards[botKey] = botDecks[botKey].length;
+            const isRotated = botKey === "dobby" || botKey === "crookshanks";
+            displayBotHand(
+                botHands[botKey],
+                botHandElements[botKey],
+                `bot_${botKey}_card`,
+                isRotated,
+            );
+
+            if (botHandElements[botKey]) {
+                botHandElements[botKey].classList.remove("hidden");
+                botHandElements[botKey].classList.add("bot-hand");
+            }
+
+            updateCardsLeftCounter(botKey);
         });
 
         console.log("Game initialized with:", {

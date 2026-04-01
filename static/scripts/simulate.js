@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     let currentSum = 0;
-    let limit = 29;
+    let limit = 39;
     let currentRound = 1;
     let players = ["dobby", "crookshanks", "hedwig", "trevor"];
     let activePlayers = [...players];
