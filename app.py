@@ -209,49 +209,55 @@ def play_pve_1_bot():
     return render_template('pages/play/pve/1-bot/page.html')
 
 
-
 @app.route('/play/pve/1-bot/game', methods=['POST'])
 def play_pve_1_bot_game():
-    player_name = request.form.get('playerName', 'Player')
-    selected_bot = request.form.get('selectedBot', 'crookshanks')
-    
-    bot_mapping = {
-        'crookshanks': {'name': 'Crookshanks', 'image': '/static/icons/x_color_crookshanks.png'},
-        'dobby': {'name': 'Dobby', 'image': '/static/icons/x_color_dobby.png'},
-        'hedwig': {'name': 'Hedwig', 'image': '/static/icons/x_color_hedwig.png'},
-        'trevor': {'name': 'Trevor', 'image': '/static/icons/x_color_trevor.png'}
-    }
-    
-    bot_details = bot_mapping.get(selected_bot, bot_mapping['crookshanks'])
-    bot_name = bot_details['name']
-    bot_image_src = bot_details['image']
-    
-    player_decks, leftover_deck = deal_cards(num_players=2, cards_per_player=10)
-    
-    avatar_data = request.form.get('playerAvatar')
+    player_name = request.form.get('playerName')
+    avatar_data = request.form.get('avatar')
 
     if avatar_data and avatar_data.startswith("data:image"):
         player_avatar = avatar_data
     else:
         player_avatar = "/static/icons/default_avatar.png"
-    
-    print(f"Game started - Player: {player_name}, Bot: {bot_name}")
-    print(f"Player hand: {len(player_decks[0][:2])} cards")
-    print(f"Bot hand: {len(player_decks[1][:2])} cards")
-    print(f"Leftover deck: {len(leftover_deck)} cards")
-    
+
+    bot_name = "Hedwig"
+    bot_image_src = "/static/icons/x_color_hedwig.png"
+
+    player_decks, leftover_deck = deal_cards(
+        num_players=2,
+        cards_per_player=10
+    )
+
+    player_cards = player_decks[0]
+    player_hand = player_cards[:2]
+    player_deck = player_cards[2:]
+
+    bot_cards = player_decks[1]
+    bot_hand = bot_cards[:2]
+    bot_deck = bot_cards[2:]
+
+    print("===== GAME STARTED =====")
+    print("Player:", player_name)
+    print("Bot:", bot_name)
+    print("Player Hand:", len(player_hand))
+    print("Bot Hand:", len(bot_hand))
+    print("Leftover Deck:", len(leftover_deck))
+    print("========================")
+
     return render_template(
         'pages/play/pve/1-bot/game/page.html',
+
         player_name=player_name,
         player_avatar=player_avatar,
-        player_cards=player_decks[0],
-        player_hand=player_decks[0][:2],
-        player_deck=player_decks[0][2:],
+        player_cards=player_cards,
+        player_hand=player_hand,
+        player_deck=player_deck,
+
         bot_name=bot_name,
         bot_image=bot_image_src,
-        bot_cards=player_decks[1],
-        bot_hand=player_decks[1][:2],
-        bot_deck=player_decks[1][2:],
+        bot_cards=bot_cards,
+        bot_hand=bot_hand,
+        bot_deck=bot_deck,
+
         leftover_deck=leftover_deck
     )
 
@@ -261,9 +267,51 @@ def play_pve_2_bot():
     return render_template('pages/play/pve/2-bot/page.html')
 
 
-@app.route('/play/pve/2-bot/game')
+@app.route('/play/pve/2-bot/game', methods=['POST'])
 def play_pve_2_bot_game():
-    return render_template('pages/play/pve/2-bot/game/page.html')
+    player_name = request.form.get('playerName', '').strip()
+    player_avatar = request.form.get('playerAvatar', '')
+    
+    if not player_name:
+        player_name = "Player"
+    
+    if not player_avatar:
+        player_avatar = "/static/icons/default_avatar.png"
+    
+    # Deal cards for 3 players total (Player + 2 bots)
+    player_decks, leftover_deck = deal_cards(num_players=3, cards_per_player=10)
+    
+    # Player gets first deck
+    player_cards = player_decks[0]
+    player_hand = player_cards[:2]
+    player_deck = player_cards[2:]
+    
+    # Bots get the remaining decks
+    bots_data = {
+        'hedwig': {
+            'cards': player_decks[1],
+            'hand': player_decks[1][:2],
+            'deck': player_decks[1][2:]
+        },
+        'crookshanks': {
+            'cards': player_decks[2],
+            'hand': player_decks[2][:2],
+            'deck': player_decks[2][2:]
+        }
+    }
+    
+    return render_template(
+        'pages/play/pve/2-bot/game/page.html',
+        player_name=player_name,
+        player_avatar=player_avatar,
+        player_cards=player_cards,
+        player_hand=player_hand,
+        player_deck=player_deck,
+        bots_data=bots_data,
+        leftover_deck=leftover_deck,
+        target_limit=27
+    )
+
 
 
 @app.route('/play/pve/3-bot')
@@ -271,47 +319,56 @@ def play_pve_3_bot():
     return render_template('pages/play/pve/3-bot/page.html')
 
 
-@app.route('/play/pve/3-bot/game', methods=["POST"])
+@app.route('/play/pve/3-bot/game', methods=['POST'])
 def play_pve_3_bot_game():
-    selected_bots = request.form.get("selectedBot", "")
-    player_name = request.form.get("playerName", "").strip()
-    player_avatar = request.form.get("playerAvatar", "")
-
-    bots_list = [b for b in selected_bots.split(",") if b]
-
-    random.shuffle(BOT_POSITIONS)
-
-    bots_with_positions = {}
-
-    for i, bot_key in enumerate(bots_list[:3]):
-        pos = BOT_POSITIONS[i]
-
-        bots_with_positions[bot_key] = {
-            **get_bot_data(bot_key), 
-            "position": pos,
-            "position_class": POSITION_CLASSES[pos],
-            "hand_class": HAND_CLASSES[pos]
-        }
-
-    if not bots_list:
-        return "No bots selected", 400
-
+    player_name = request.form.get('playerName', '').strip()
+    player_avatar = request.form.get('playerAvatar', '')
+    
     if not player_name:
-        return "Player name required", 400
-
-    if len(bots_list) > 3:
-        bots_list = bots_list[:3]
-
-    print("Player:", player_name)
-    print("Bots:", bots_list)
-    print("Avatar length:", len(player_avatar) if player_avatar else "No avatar")
-
+        player_name = "Player"
+    
+    if not player_avatar:
+        player_avatar = "/static/icons/default_avatar.png"
+    
+    # Deal cards for 4 players total (Player + 3 bots)
+    player_decks, leftover_deck = deal_cards(num_players=4, cards_per_player=10)
+    
+    # Player gets first deck
+    player_cards = player_decks[0]
+    player_hand = player_cards[:2]
+    player_deck = player_cards[2:]
+    
+    # Bots get the remaining decks
+    bots_data = {
+        'hedwig': {
+            'cards': player_decks[1],
+            'hand': player_decks[1][:2],
+            'deck': player_decks[1][2:]
+        },
+        'crookshanks': {
+            'cards': player_decks[2],
+            'hand': player_decks[2][:2],
+            'deck': player_decks[2][2:]
+        },
+        'dobby': {
+            'cards': player_decks[3],
+            'hand': player_decks[3][:2],
+            'deck': player_decks[3][2:]
+        }
+    }
+    
     return render_template(
         'pages/play/pve/3-bot/game/page.html',
         player_name=player_name,
-        bots=bots_list,
-        avatar=player_avatar
+        player_avatar=player_avatar,
+        player_cards=player_cards,
+        player_hand=player_hand,
+        player_deck=player_deck,
+        bots_data=bots_data,
+        leftover_deck=leftover_deck,
+        target_limit=27
     )
+
 
 
 @app.route('/play/pvp')

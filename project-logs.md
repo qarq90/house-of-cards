@@ -12,7 +12,7 @@
 | 17/01/2026 | Code                      | Rules Page 1.0                              |
 | 22/01/2026 | Code                      | Created game pages                          |
 | 24/01/2026 | Bots                      | Rules Page 1.5, Designed Bots               |
-| 25/01/2026 | Deployed                  | URL : https://tipu.pythonanywhere.com/       |
+| 25/01/2026 | Deployed                  | URL : https://tipu.pythonanywhere.com/      |
 | 26/01/2026 | Designing                 | Added a line to distinguish 6 and 9         |
 | 26/01/2026 | Code                      | Game Layout                                 |
 | 08/02/2026 | Designing                 | Bot Trevor                                  |
@@ -26,6 +26,9 @@
 | 15/03/2026 | Bots                      | Bot Choices Completed                       |
 | 17/03/2026 | Code                      | Simulation Logic Completed Final, Bug Fixes |
 | 18/03/2026 | Code                      | Pause and Play Simulation, Scaling          |
+| 24/03/2026 | Code                      | Logic Bugged again                          |
+| 28/03/2026 | Code                      | Trying to fix Logic                         |
+| 01/04/2026 | Code                      | Final Logic with Turns                      |
 
 ### Planned
 
