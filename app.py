@@ -235,30 +235,22 @@ def play_pve_1_bot_game():
     bot_hand = bot_cards[:2]
     bot_deck = bot_cards[2:]
 
-    print("===== GAME STARTED =====")
-    print("Player:", player_name)
-    print("Bot:", bot_name)
-    print("Player Hand:", len(player_hand))
-    print("Bot Hand:", len(bot_hand))
-    print("Leftover Deck:", len(leftover_deck))
-    print("========================")
-
     return render_template(
         'pages/play/pve/1-bot/game/page.html',
 
-        player_name=player_name,
-        player_avatar=player_avatar,
-        player_cards=player_cards,
-        player_hand=player_hand,
-        player_deck=player_deck,
+        player_name = player_name,
+        player_avatar = player_avatar,
+        player_cards = player_cards,
+        player_hand = player_hand,
+        player_deck = player_deck,
 
-        bot_name=bot_name,
-        bot_image=bot_image_src,
-        bot_cards=bot_cards,
-        bot_hand=bot_hand,
-        bot_deck=bot_deck,
+        bot_name = bot_name,
+        bot_image = bot_image_src,
+        bot_cards = bot_cards,
+        bot_hand = bot_hand,
+        bot_deck = bot_deck,
 
-        leftover_deck=leftover_deck
+        leftover_deck = leftover_deck
     )
 
 
@@ -270,7 +262,7 @@ def play_pve_2_bot():
 @app.route('/play/pve/2-bot/game', methods=['POST'])
 def play_pve_2_bot_game():
     player_name = request.form.get('playerName', '').strip()
-    player_avatar = request.form.get('playerAvatar', '')
+    player_avatar = request.form.get('avatar', '')
     
     if not player_name:
         player_name = "Player"
@@ -278,40 +270,49 @@ def play_pve_2_bot_game():
     if not player_avatar:
         player_avatar = "/static/icons/default_avatar.png"
     
-    # Deal cards for 3 players total (Player + 2 bots)
     player_decks, leftover_deck = deal_cards(num_players=3, cards_per_player=10)
     
-    # Player gets first deck
     player_cards = player_decks[0]
     player_hand = player_cards[:2]
     player_deck = player_cards[2:]
     
-    # Bots get the remaining decks
-    bots_data = {
-        'hedwig': {
-            'cards': player_decks[1],
-            'hand': player_decks[1][:2],
-            'deck': player_decks[1][2:]
-        },
-        'crookshanks': {
-            'cards': player_decks[2],
-            'hand': player_decks[2][:2],
-            'deck': player_decks[2][2:]
-        }
-    }
+    hedwig_cards = player_decks[1]
+    hedwig_hand = player_decks[1][:2]
+    hedwig_deck = player_decks[1][2:]
+    hedwig_name = "Hedwig"
+    hedwig_image_src = "/static/icons/x_color_hedwig.png"
+
+    crookshanks_cards = player_decks[2]
+    crookshanks_hand = player_decks[2][:2]
+    crookshanks_deck = player_decks[2][2:]
+    crookshanks_name = "Crookshanks"
+    crookshanks_image_src = "/static/icons/x_color_crookshanks.png"
     
     return render_template(
         'pages/play/pve/2-bot/game/page.html',
-        player_name=player_name,
-        player_avatar=player_avatar,
-        player_cards=player_cards,
-        player_hand=player_hand,
-        player_deck=player_deck,
-        bots_data=bots_data,
-        leftover_deck=leftover_deck,
+
+        player_name = player_name,
+        player_avatar = player_avatar,
+        player_cards = player_cards,
+        player_hand = player_hand,
+        player_deck = player_deck,
+
+        hedwig_name = hedwig_name,
+        hedwig_image = hedwig_image_src,
+        hedwig_cards = hedwig_cards,
+        hedwig_hand = hedwig_hand,
+        hedwig_deck = hedwig_deck,
+
+        crookshanks_name = crookshanks_name,
+        crookshanks_image = crookshanks_image_src,
+        crookshanks_cards = crookshanks_cards,
+        crookshanks_hand = crookshanks_hand,
+        crookshanks_deck = crookshanks_deck,
+        
+        leftover_deck = leftover_deck,
+
         target_limit=27
     )
-
 
 
 @app.route('/play/pve/3-bot')
@@ -322,7 +323,7 @@ def play_pve_3_bot():
 @app.route('/play/pve/3-bot/game', methods=['POST'])
 def play_pve_3_bot_game():
     player_name = request.form.get('playerName', '').strip()
-    player_avatar = request.form.get('playerAvatar', '')
+    player_avatar = request.form.get('avatar', '')
     
     if not player_name:
         player_name = "Player"
@@ -330,45 +331,62 @@ def play_pve_3_bot_game():
     if not player_avatar:
         player_avatar = "/static/icons/default_avatar.png"
     
-    # Deal cards for 4 players total (Player + 3 bots)
     player_decks, leftover_deck = deal_cards(num_players=4, cards_per_player=10)
     
-    # Player gets first deck
     player_cards = player_decks[0]
     player_hand = player_cards[:2]
     player_deck = player_cards[2:]
     
-    # Bots get the remaining decks
-    bots_data = {
-        'hedwig': {
-            'cards': player_decks[1],
-            'hand': player_decks[1][:2],
-            'deck': player_decks[1][2:]
-        },
-        'crookshanks': {
-            'cards': player_decks[2],
-            'hand': player_decks[2][:2],
-            'deck': player_decks[2][2:]
-        },
-        'dobby': {
-            'cards': player_decks[3],
-            'hand': player_decks[3][:2],
-            'deck': player_decks[3][2:]
-        }
-    }
+    hedwig_cards= player_decks[1]
+    hedwig_hand= player_decks[1][:2]
+    hedwig_deck= player_decks[1][2:]
+    hedwig_name = "Hedwig"
+    hedwig_image_src = "/static/icons/x_color_hedwig.png"
+
+    crookshanks_cards= player_decks[2]
+    crookshanks_hand= player_decks[2][:2]
+    crookshanks_deck= player_decks[2][2:]
+    crookshanks_name = "Crookshanks"
+    crookshanks_image_src = "/static/icons/x_color_crookshanks.png"
+    
+    dobby_cards= player_decks[3]
+    dobby_hand= player_decks[3][:2]
+    dobby_deck= player_decks[3][2:]
+    dobby_name = "Dobby"
+    dobby_image_src = "/static/icons/x_color_dobby.png"
     
     return render_template(
         'pages/play/pve/3-bot/game/page.html',
-        player_name=player_name,
-        player_avatar=player_avatar,
-        player_cards=player_cards,
-        player_hand=player_hand,
-        player_deck=player_deck,
-        bots_data=bots_data,
-        leftover_deck=leftover_deck,
-        target_limit=27
-    )
 
+        player_name = player_name,
+        player_avatar = player_avatar,
+        player_cards = player_cards,
+        player_hand = player_hand,
+        player_deck = player_deck,
+
+        hedwig_name = hedwig_name,
+        hedwig_image = hedwig_image_src,
+        hedwig_cards = hedwig_cards,
+        hedwig_hand = hedwig_hand,
+        hedwig_deck = hedwig_deck,
+
+        crookshanks_name = crookshanks_name,
+        crookshanks_image = crookshanks_image_src,
+        crookshanks_cards = crookshanks_cards,
+        crookshanks_hand = crookshanks_hand,
+        crookshanks_deck = crookshanks_deck,
+
+
+        dobby_name = dobby_name,
+        dobby_image = dobby_image_src,
+        dobby_cards = dobby_cards,
+        dobby_hand = dobby_hand,
+        dobby_deck = dobby_deck,
+
+        leftover_deck = leftover_deck,
+
+        target_limit = 27
+    )
 
 
 @app.route('/play/pvp')
