@@ -59,6 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    const timerIndicator = document.getElementById("timer-indicator");
+    const timerIndicatorBG = document.getElementById("timer-indicator-bg");
     const currentValueElement = document.getElementById("current_value");
     const targetValueElement = document.getElementById("target_value");
     const currentRoundElement = document.getElementById("current_round");
@@ -86,97 +88,78 @@ document.addEventListener("DOMContentLoaded", () => {
     let mirrorBlocked = false;
     let lastPlayedCard = null;
 
-    let isPaused = false;
-    let pauseButton = null;
-    let pauseIcon = null;
-    let pauseText = null;
-
     let isWaitingForPlayerMove = false;
     let playerTimeout = null;
     let playerCardsClickHandlers = [];
     let isProcessingTurn = false;
     let isTurnInProgress = false;
 
-    let timerDisplay = null;
+    let timerAnimationId = null;
+    let timerStartTime = null;
+    let timerDuration = 7250;
+    let isTimerRunning = false;
 
-    function createTimerDisplay() {
-        timerDisplay = document.createElement("div");
-        timerDisplay.id = "player-timer";
-        timerDisplay.className =
-            "fixed top-24 right-8 bg-black bg-opacity-75 text-white px-6 py-3 rounded-xl text-3xl font-bold harry-potter z-50";
-        timerDisplay.textContent = "5s";
-        document.body.appendChild(timerDisplay);
-    }
+    function startTimerAnimation() {
+        stopTimerAnimation();
 
-    function updateTimerDisplay(seconds) {
-        if (timerDisplay) {
-            timerDisplay.textContent = `${seconds}s`;
-            if (seconds <= 2) {
-                timerDisplay.style.color = "#ff4444";
+        if (!timerIndicator || !timerIndicatorBG) return;
+
+        timerIndicatorBG.style.backgroundColor = "#262626";
+
+        timerIndicator.style.width = "100%";
+        timerIndicator.style.backgroundColor = "#262626";
+        timerIndicator.style.transition = "width 0.05s linear";
+
+        timerStartTime = performance.now();
+        isTimerRunning = true;
+
+        function updateTimer(currentTime) {
+            if (!isTimerRunning) {
+                return;
+            }
+
+            const elapsed = currentTime - timerStartTime;
+            const remaining = Math.max(0, timerDuration - elapsed);
+            const percentage = (remaining / timerDuration) * 100;
+
+            timerIndicator.style.width = `${percentage}%`;
+
+            if (percentage <= 20) {
+                timerIndicator.style.backgroundColor = "#c22727";
+            } else if (percentage <= 50) {
+                timerIndicator.style.backgroundColor = "#d0a729";
             } else {
-                timerDisplay.style.color = "white";
+                timerIndicator.style.backgroundColor = "#dddddd";
+            }
+
+            if (elapsed < timerDuration) {
+                timerAnimationId = requestAnimationFrame(updateTimer);
+            } else {
+                isTimerRunning = false;
+                timerIndicator.style.width = "0%";
+                console.log("Timer completed!");
             }
         }
+
+        timerAnimationId = requestAnimationFrame(updateTimer);
     }
 
-    function hideTimerDisplay() {
-        if (timerDisplay) {
-            timerDisplay.style.display = "none";
+    function stopTimerAnimation() {
+        if (timerAnimationId) {
+            cancelAnimationFrame(timerAnimationId);
+            timerAnimationId = null;
+        }
+        isTimerRunning = false;
+        if (timerIndicator) {
+            timerIndicator.style.width = "100%";
         }
     }
 
-    function showTimerDisplay() {
-        if (timerDisplay) {
-            timerDisplay.style.display = "block";
-        }
-    }
-
-    function setupPauseButton() {
-        pauseButton = document.querySelector("button.absolute.left-28");
-        if (!pauseButton) return;
-
-        pauseIcon = pauseButton.querySelector("img");
-        pauseText = pauseButton.querySelector("h1");
-
-        pauseButton.addEventListener("click", togglePause);
-
-        const pauseIndicator = document.createElement("div");
-        pauseIndicator.id = "pause-indicator";
-        pauseIndicator.className =
-            "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-75 text-white px-12 py-6 rounded-2xl text-6xl harry-potter tracking-widest z-[9999999] hidden";
-        pauseIndicator.textContent = "PAUSED";
-        document.body.appendChild(pauseIndicator);
-    }
-
-    function togglePause() {
-        isPaused = !isPaused;
-
-        if (isPaused) {
-            if (pauseIcon)
-                pauseIcon.src = "../../../../static/icons/z_play.png";
-            if (pauseText) pauseText.textContent = "Play";
-
-            const pauseIndicator = document.getElementById("pause-indicator");
-            if (pauseIndicator) pauseIndicator.classList.remove("hidden");
-
-            console.log("Game paused");
-        } else {
-            if (pauseIcon)
-                pauseIcon.src = "../../../../static/icons/z_pause.png";
-            if (pauseText) pauseText.textContent = "Pause";
-
-            const pauseIndicator = document.getElementById("pause-indicator");
-            if (pauseIndicator) pauseIndicator.classList.add("hidden");
-
-            console.log("Game resumed");
-
-            if (
-                !isWaitingForPlayerMove &&
-                !isProcessingTurn &&
-                activePlayers.length > 1
-            ) {
-                processNextTurn();
-            }
+    function resetTimer() {
+        stopTimerAnimation();
+        if (timerIndicator) {
+            timerIndicator.style.width = "100%";
+            timerIndicator.style.backgroundColor = "white";
         }
     }
 
@@ -219,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 isWaitingForPlayerMove = false;
-                hideTimerDisplay();
+                stopTimerAnimation();
                 clearPlayerClickHandlers();
 
                 playPlayerCard(playerName, cardToPlay, index);
@@ -463,12 +446,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function startPlayerTurn(playerName) {
-        if (
-            isPaused ||
-            isProcessingTurn ||
-            isTurnInProgress ||
-            isWaitingForPlayerMove
-        )
+        if (isProcessingTurn || isTurnInProgress || isWaitingForPlayerMove)
             return false;
 
         const playerHand = botHands[playerName];
@@ -490,23 +468,12 @@ document.addEventListener("DOMContentLoaded", () => {
         currentTurn.textContent = playerName.toUpperCase();
 
         isWaitingForPlayerMove = true;
-        showTimerDisplay();
+
+        timerDuration = 5000;
+        resetTimer();
+        startTimerAnimation();
+
         enablePlayerCardClick(playerName);
-
-        let timeLeft = 5;
-        updateTimerDisplay(timeLeft);
-
-        const timerInterval = setInterval(() => {
-            if (!isWaitingForPlayerMove) {
-                clearInterval(timerInterval);
-                return;
-            }
-            timeLeft--;
-            updateTimerDisplay(timeLeft);
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-            }
-        }, 1000);
 
         if (playerTimeout) {
             clearTimeout(playerTimeout);
@@ -521,25 +488,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(
                     `${playerName} did not play in time - auto-playing random card`,
                 );
-                clearInterval(timerInterval);
                 isWaitingForPlayerMove = false;
-                hideTimerDisplay();
+                stopTimerAnimation();
                 disablePlayerCardClick(playerName);
                 autoPlayPlayerTurn(playerName);
                 playerTimeout = null;
             }
-        }, 5000);
+        }, timerDuration);
 
         return true;
     }
 
     function processNextTurn() {
-        if (
-            isPaused ||
-            isProcessingTurn ||
-            isTurnInProgress ||
-            isWaitingForPlayerMove
-        ) {
+        if (isProcessingTurn || isTurnInProgress || isWaitingForPlayerMove) {
             return;
         }
 
@@ -720,7 +681,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isWaitingForPlayerMove && playerName === PLAYER_BOT) {
             isWaitingForPlayerMove = false;
-            hideTimerDisplay();
+            stopTimerAnimation();
             if (playerTimeout) {
                 clearTimeout(playerTimeout);
                 playerTimeout = null;
@@ -764,7 +725,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (gameInterval) {
                 clearInterval(gameInterval);
             }
-            hideTimerDisplay();
+            stopTimerAnimation();
             displayRankings();
             return true;
         }
@@ -1367,9 +1328,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function startGame() {
         addHandStyles();
-        setupPauseButton();
-        createTimerDisplay();
-        hideTimerDisplay();
 
         leftoverCards = createPersonalDeck(leftoverDeckElement);
 
