@@ -1,4 +1,6 @@
-![alt text](/static/imgs/image.png)
+
+<img width="1870" height="1000" alt="image" src="https://github.com/user-attachments/assets/e5500483-ba0c-4b38-abe7-6b5165d9ad7a" />
+
 
 ### A strategic multiplayer card game where players compete to be the first to empty their personal deck by playing numerical and special cards, while managing their hand and avoiding exceeding the limit.
 
