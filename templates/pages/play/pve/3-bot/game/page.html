@@ -64,7 +64,7 @@ Player vs 3 Bots{% endblock %} {% block content %}
 <!----------------------------------------------------------------------- Crookshanks (Top Right) ----------------------------------------------------------------------->
 <div
     id="bot_crookshanks"
-    class="w-96 flex flex-row-reverse absolute top-0 right-0 items-center gap-4 scale-75"
+    class="w-96 flex flex-row absolute top-0 right-0 items-center gap-4 scale-75"
 >
     <div class="flex flex-col items-center gap-4 w-1/2 mb-16">
         <p class="lucida-bright text-2xl uppercase tracking-wider">Hedwig</p>
@@ -119,13 +119,13 @@ Player vs 3 Bots{% endblock %} {% block content %}
     id="bot_dobby"
     class="w-96 flex flex-row-reverse absolute bottom-0 left-0 items-center gap-4 scale-75"
 >
-    <div class="flex flex-col items-center gap-4 w-1/2 mb-16">
+    <div class="flex flex-col-reverse items-center gap-4 w-1/2 mt-16">
         <p class="lucida-bright text-2xl uppercase tracking-wider">Dobby</p>
         <img src="/static/icons/x_color_dobby.png" class="h-[70%] w-[70%]" />
     </div>
     <div
         id="bot_dobby_deck"
-        class="flex flex-col-reverse justify-center items-center gap-4 w-1/2"
+        class="flex flex-col justify-center items-center gap-4 w-1/2"
     >
         {% for card in dobby_cards %}
         <div class="bot_dobby_cards hidden">
@@ -146,7 +146,10 @@ Player vs 3 Bots{% endblock %} {% block content %}
             />
         </div>
         {% endfor %}
-        <p id="bot_dobby_cards_left" class="harry-potter heading tracking-wide">
+        <p
+            id="bot_dobby_cards_left"
+            class="harry-potter heading tracking-wide"
+        >
             {{ dobby_cards|length }}
             <span class="lucida-bright text-3xl">left</span>
         </p>
