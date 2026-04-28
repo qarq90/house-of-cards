@@ -30,6 +30,7 @@
         - 3 players → x = 12 || 10 each
         - 4 players → x = 10 each
         The rest form the leftover deck.
+        The number of cards or limit can be decided by players before the game starts, but the total number of cards distributed at the beginning must be less than 60 to ensure enough cards in the leftover deck for gameplay.
     4. Each player looks at their cards once, then shuffles and places them face down as their personal deck.
     5. Finally each player draws the top two cards to form their hand. The rest stay face down beside them.
 
