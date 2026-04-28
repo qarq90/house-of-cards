@@ -311,7 +311,7 @@ def play_pve_2_bot_game():
         
         leftover_deck = leftover_deck,
 
-        target_limit=27
+        target_limit=23
     )
 
 

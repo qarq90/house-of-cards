@@ -271,7 +271,7 @@ const mlModel = new GameReinforcementLearningModel("GPT-4.5-GameNet-v2.1");
 
 document.addEventListener("DOMContentLoaded", () => {
     const configDiv = document.getElementById("game-config");
-    const TARGET_LIMIT = parseInt(configDiv?.dataset.targetLimit || "27");
+    const TARGET_LIMIT = 27;
     const SIMULATION_SPEED = parseInt(
         configDiv?.dataset.simulationSpeed || "100",
     );
@@ -532,6 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         deck.push(card);
+        card.used = false;
     }
 
     function swapTopCardWithHand(playerName) {
