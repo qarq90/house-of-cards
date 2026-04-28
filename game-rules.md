@@ -1,4 +1,6 @@
-## House of Cards
+![alt text](/static/imgs/image.png)
+
+### A strategic multiplayer card game where players compete to be the first to empty their personal deck by playing numerical and special cards, while managing their hand and avoiding exceeding the limit.
 
 #### Components :
 
@@ -7,7 +9,7 @@
         - Each house has 2 copies of numbers 0–9.
 
     - 20 Special cards: 4 per house (Hallows, Shield, Echo, Mirror, Swap)
-        - Hallows : Instantly hit the limit; others draw two, you reshuffle, new round starts.
+        - Hallows : Instantly hit the limit; others draw two, you reshuffle.
         - Shield : Cancels the effect of Echo or Mirror just played.
         - Echo : Next number card played counts double toward the sum.
         - Mirror : Add the same number as the last played number card.
@@ -20,12 +22,12 @@
 
     1. Choose player count (2–4).
     2. Set limit based on players:
-        - 2 players → limit = 19
-        - 3 players → limit = 21
-        - 4 players → limit = 37
+        - 2 players → limit = 19 || 21
+        - 3 players → limit = 21 || 23
+        - 4 players → limit = 27 || 31
     3. Distribute each player x cards:
-        - 2 players → x = 15 each
-        - 3 players → x = 12 each
+        - 2 players → x = 15 || 10 each
+        - 3 players → x = 12 || 10 each
         - 4 players → x = 10 each
         The rest form the leftover deck.
     4. Each player looks at their cards once, then shuffles and places them face down as their personal deck.
