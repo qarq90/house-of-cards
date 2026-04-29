@@ -6,11 +6,7 @@
         <title>{% block title %}House of Cards{% endblock %}</title>
         <link href="/static/styles/globals.css" rel="stylesheet" />
         <link href="/static/styles/index.css" rel="stylesheet" />
-        <link
-            rel="icon"
-            type="image/svg+xml"
-            href="/static/icons/favicon.ico"
-        />
+        <link rel="icon" type="image/svg+xml" href="/templates/favicon.ico" />
         <link
             href="{{ url_for('static', filename='output.css') }}"
             rel="stylesheet"
@@ -28,7 +24,7 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         />
     </head>
-    <body>
+    <body class="overflow-hidden">
         <div>{% block content %}{% endblock %}</div>
     </body>
 </html>

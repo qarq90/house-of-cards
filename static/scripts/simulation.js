@@ -523,6 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         deck.push(card);
+        card.used = false;
     }
 
     function handleSpecialCard(playerName, card) {

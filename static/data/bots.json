@@ -1,27 +1,37 @@
 [
     {
         "name": "dobby",
+        "display_name": "Dobby",
         "color_icon": "/static/icons/x_color_dobby.png",
-        "base_icon": "/static/icons/x_bot_dobby.png"
+        "base_icon": "/static/icons/x_bot_dobby.png",
+        "theme": "#ffc9a9"
     },
     {
         "name": "crookshanks",
+        "display_name": "Crookshanks",
         "color_icon": "/static/icons/x_color_crookshanks.png",
-        "base_icon": "/static/icons/x_bot_crookshanks.png"
+        "base_icon": "/static/icons/x_bot_crookshanks.png",
+        "theme": "#d1622b"
     },
     {
         "name": "hedwig",
+        "display_name": "Hedwig",
         "color_icon": "/static/icons/x_color_hedwig.png",
-        "base_icon": "/static/icons/x_bot_hedwig.png"
+        "base_icon": "/static/icons/x_bot_hedwig.png",
+        "theme": "#fffafa"
     },
     {
         "name": "trevor",
+        "display_name": "Trevor",
         "color_icon": "/static/icons/x_color_trevor.png",
-        "base_icon": "/static/icons/x_bot_trevor.png"
+        "base_icon": "/static/icons/x_bot_trevor.png",
+        "theme": "#633f02"
     },
     {
         "name": "scabbers",
+        "display_name": "Scabbers",
         "color_icon": "/static/icons/x_color_scabbers.png",
-        "base_icon": "/static/icons/x_bot_scabbers.png"
+        "base_icon": "/static/icons/x_bot_scabbers.png",
+        "theme": "#4b3c39"
     }
 ]

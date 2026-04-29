@@ -1,0 +1,177 @@
+[
+    {
+        "house": "ravenclaw",
+        "name": "0",
+        "value": 0,
+        "src": "/static/cards/ravenclaw_0_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "0",
+        "value": 0,
+        "src": "/static/cards/ravenclaw_0_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "1",
+        "value": 1,
+        "src": "/static/cards/ravenclaw_1_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "1",
+        "value": 1,
+        "src": "/static/cards/ravenclaw_1_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "2",
+        "value": 2,
+        "src": "/static/cards/ravenclaw_2_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "2",
+        "value": 2,
+        "src": "/static/cards/ravenclaw_2_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "3",
+        "value": 3,
+        "src": "/static/cards/ravenclaw_3_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "3",
+        "value": 3,
+        "src": "/static/cards/ravenclaw_3_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "4",
+        "value": 4,
+        "src": "/static/cards/ravenclaw_4_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "4",
+        "value": 4,
+        "src": "/static/cards/ravenclaw_4_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "5",
+        "value": 5,
+        "src": "/static/cards/ravenclaw_5_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "5",
+        "value": 5,
+        "src": "/static/cards/ravenclaw_5_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "6",
+        "value": 6,
+        "src": "/static/cards/ravenclaw_6_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "6",
+        "value": 6,
+        "src": "/static/cards/ravenclaw_6_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "7",
+        "value": 7,
+        "src": "/static/cards/ravenclaw_7_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "7",
+        "value": 7,
+        "src": "/static/cards/ravenclaw_7_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "8",
+        "value": 8,
+        "src": "/static/cards/ravenclaw_8_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "8",
+        "value": 8,
+        "src": "/static/cards/ravenclaw_8_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "9",
+        "value": 9,
+        "src": "/static/cards/ravenclaw_9_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "9",
+        "value": 9,
+        "src": "/static/cards/ravenclaw_9_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "mirror",
+        "value": 0,
+        "src": "/static/cards/ravenclaw_mirror.png",
+        "type": "special"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "hallows",
+        "value": 0,
+        "src": "/static/cards/ravenclaw_hallows.png",
+        "type": "special"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "echo",
+        "value": 0,
+        "src": "/static/cards/ravenclaw_echo.png",
+        "type": "special"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "shield",
+        "value": 0,
+        "src": "/static/cards/ravenclaw_shield.png",
+        "type": "special"
+    },
+    {
+        "house": "ravenclaw",
+        "name": "swap",
+        "value": 0,
+        "src": "/static/cards/ravenclaw_swap.png",
+        "type": "special"
+    }
+]

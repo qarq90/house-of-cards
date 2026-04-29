@@ -1,5 +1,5 @@
 class GameReinforcementLearningModel {
-    constructor(modelVersion = "GPT-4.5-GameNet-v2.0") {
+    constructor(modelVersion = "B170105S24D51D66") {
         this.modelVersion = modelVersion;
         this.modelWeights = this.initializeWeights();
         this.temperature = 0.7;

@@ -1,0 +1,177 @@
+[
+    {
+        "house": "gryffindor",
+        "name": "0",
+        "value": 0,
+        "src": "/static/cards/gryffindor_0_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "0",
+        "value": 0,
+        "src": "/static/cards/gryffindor_0_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "1",
+        "value": 1,
+        "src": "/static/cards/gryffindor_1_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "1",
+        "value": 1,
+        "src": "/static/cards/gryffindor_1_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "2",
+        "value": 2,
+        "src": "/static/cards/gryffindor_2_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "2",
+        "value": 2,
+        "src": "/static/cards/gryffindor_2_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "3",
+        "value": 3,
+        "src": "/static/cards/gryffindor_3_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "3",
+        "value": 3,
+        "src": "/static/cards/gryffindor_3_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "4",
+        "value": 4,
+        "src": "/static/cards/gryffindor_4_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "4",
+        "value": 4,
+        "src": "/static/cards/gryffindor_4_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "5",
+        "value": 5,
+        "src": "/static/cards/gryffindor_5_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "5",
+        "value": 5,
+        "src": "/static/cards/gryffindor_5_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "6",
+        "value": 6,
+        "src": "/static/cards/gryffindor_6_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "6",
+        "value": 6,
+        "src": "/static/cards/gryffindor_6_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "7",
+        "value": 7,
+        "src": "/static/cards/gryffindor_7_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "7",
+        "value": 7,
+        "src": "/static/cards/gryffindor_7_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "8",
+        "value": 8,
+        "src": "/static/cards/gryffindor_8_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "8",
+        "value": 8,
+        "src": "/static/cards/gryffindor_8_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "9",
+        "value": 9,
+        "src": "/static/cards/gryffindor_9_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "9",
+        "value": 9,
+        "src": "/static/cards/gryffindor_9_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "gryffindor",
+        "name": "mirror",
+        "value": 0,
+        "src": "/static/cards/gryffindor_mirror.png",
+        "type": "special"
+    },
+    {
+        "house": "gryffindor",
+        "name": "hallows",
+        "value": 0,
+        "src": "/static/cards/gryffindor_hallows.png",
+        "type": "special"
+    },
+    {
+        "house": "gryffindor",
+        "name": "echo",
+        "value": 0,
+        "src": "/static/cards/gryffindor_echo.png",
+        "type": "special"
+    },
+    {
+        "house": "gryffindor",
+        "name": "shield",
+        "value": 0,
+        "src": "/static/cards/gryffindor_shield.png",
+        "type": "special"
+    },
+    {
+        "house": "gryffindor",
+        "name": "swap",
+        "value": 0,
+        "src": "/static/cards/gryffindor_swap.png",
+        "type": "special"
+    }
+]

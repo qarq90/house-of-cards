@@ -1,0 +1,177 @@
+[
+    {
+        "house": "slytherin",
+        "name": "0",
+        "value": 0,
+        "src": "/static/cards/slytherin_0_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "0",
+        "value": 0,
+        "src": "/static/cards/slytherin_0_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "1",
+        "value": 1,
+        "src": "/static/cards/slytherin_1_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "1",
+        "value": 1,
+        "src": "/static/cards/slytherin_1_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "2",
+        "value": 2,
+        "src": "/static/cards/slytherin_2_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "2",
+        "value": 2,
+        "src": "/static/cards/slytherin_2_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "3",
+        "value": 3,
+        "src": "/static/cards/slytherin_3_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "3",
+        "value": 3,
+        "src": "/static/cards/slytherin_3_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "4",
+        "value": 4,
+        "src": "/static/cards/slytherin_4_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "4",
+        "value": 4,
+        "src": "/static/cards/slytherin_4_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "5",
+        "value": 5,
+        "src": "/static/cards/slytherin_5_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "5",
+        "value": 5,
+        "src": "/static/cards/slytherin_5_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "6",
+        "value": 6,
+        "src": "/static/cards/slytherin_6_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "6",
+        "value": 6,
+        "src": "/static/cards/slytherin_6_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "7",
+        "value": 7,
+        "src": "/static/cards/slytherin_7_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "7",
+        "value": 7,
+        "src": "/static/cards/slytherin_7_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "8",
+        "value": 8,
+        "src": "/static/cards/slytherin_8_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "8",
+        "value": 8,
+        "src": "/static/cards/slytherin_8_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "9",
+        "value": 9,
+        "src": "/static/cards/slytherin_9_1.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "9",
+        "value": 9,
+        "src": "/static/cards/slytherin_9_2.png",
+        "type": "numerical"
+    },
+    {
+        "house": "slytherin",
+        "name": "mirror",
+        "value": 0,
+        "src": "/static/cards/slytherin_mirror.png",
+        "type": "special"
+    },
+    {
+        "house": "slytherin",
+        "name": "hallows",
+        "value": 0,
+        "src": "/static/cards/slytherin_hallows.png",
+        "type": "special"
+    },
+    {
+        "house": "slytherin",
+        "name": "echo",
+        "value": 0,
+        "src": "/static/cards/slytherin_echo.png",
+        "type": "special"
+    },
+    {
+        "house": "slytherin",
+        "name": "shield",
+        "value": 0,
+        "src": "/static/cards/slytherin_shield.png",
+        "type": "special"
+    },
+    {
+        "house": "slytherin",
+        "name": "swap",
+        "value": 0,
+        "src": "/static/cards/slytherin_swap.png",
+        "type": "special"
+    }
+]
